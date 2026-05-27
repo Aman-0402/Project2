@@ -215,7 +215,7 @@ PUT    /api/admin/settings/          Bulk update settings ({settings: {key: valu
 
 ## PROGRESS
 
-**Overall Progress: 50%**
+**Overall Progress: 62%**
 
 | Phase | Name                    | Status      | Progress |
 |-------|-------------------------|-------------|----------|
@@ -223,13 +223,13 @@ PUT    /api/admin/settings/          Bulk update settings ({settings: {key: valu
 | 2     | Backend Foundation      | COMPLETE    | 100%     |
 | 3     | Frontend Foundation     | COMPLETE    | 100%     |
 | 4     | Admin System            | COMPLETE    | 100%     |
-| 5     | Frontend Pages          | Pending     | 0%       |
-| 6     | WhatsApp Integration    | Pending     | 0%       |
+| 5     | Frontend Pages          | COMPLETE    | 100%     |
+| 6     | WhatsApp Integration    | COMPLETE    | 100%     |
 | 7     | Responsive + Polish     | Pending     | 0%       |
 | 8     | Deployment Preparation  | Pending     | 0%       |
 
-**Current Phase:** Phase 4 complete - waiting for NEXT to start Phase 5
-**Next Phase:** Phase 5 - Frontend Pages
+**Current Phase:** Phase 5+6 complete - waiting for NEXT to start Phase 7
+**Next Phase:** Phase 7 - Responsive + Polish
 
 ---
 
@@ -293,13 +293,26 @@ PUT    /api/admin/settings/          Bulk update settings ({settings: {key: valu
 - [x] ConfirmModal used for delete confirmation
 - [x] npm run build: PASS — 9 routes, 0 TypeScript errors, middleware 26.9 kB
 
-### Phase 5 - Frontend Pages
-- [ ] Homepage (9 sections with Framer Motion)
-- [ ] Collections page
-- [ ] Product detail page
-- [ ] About + Contact pages
+### Phase 5 - Frontend Pages [DONE]
+- [x] HeroSection — parallax, scroll-fade, cinematic entrance, dual CTAs
+- [x] FeaturedPerfumes — API-driven, skeleton loading, 4-col grid
+- [x] BrandStory — decorative frame, dark bg, stat counters
+- [x] CustomFragranceCTA — bespoke CTA with WhatsApp link
+- [x] ProductShowcase — API-driven, category filter tabs, 8 products
+- [x] Testimonials — animated carousel with dot navigation
+- [x] WhatsAppCTASection — dark cinematic, dual CTAs
+- [x] /collections — full grid, category filter, count badges
+- [x] /products/[slug] — image, price, fragrance pyramid, Buy+Ask buttons
+- [x] /about — pillars grid, philosophy text, CTA section
+- [x] /contact — 3 WhatsApp contact cards + general CTA
+- [x] npm run build: PASS — 12 routes, 0 errors
 
-### Phase 6 - WhatsApp Integration
+### Phase 6 - WhatsApp Integration [DONE]
+- [x] utils/whatsapp.ts — 4 URL builder functions
+- [x] WhatsAppButton — floating sticky (spring animation)
+- [x] WhatsAppCTALink — Buy Now + Ask Details on product pages
+- [x] All pages wired to WhatsApp number from env
+
 ### Phase 7 - Responsive + Polish
 ### Phase 8 - Deployment Preparation
 
