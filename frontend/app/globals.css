@@ -101,6 +101,12 @@
 }
 
 @layer utilities {
+  /* Admin login dot pattern background */
+  .bg-dot-pattern {
+    background-image: radial-gradient(circle at 2px 2px, #B08D57 1px, transparent 0);
+    background-size: 32px 32px;
+  }
+
   /* Text gradient gold */
   .text-gradient-gold {
     background: linear-gradient(135deg, #B08D57, #C9A96E, #8C6D3F);
@@ -112,13 +118,13 @@
   /* Glass morphism */
   .glass {
     background: rgba(248, 244, 236, 0.85);
-    backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
   }
 
   .glass-dark {
     background: rgba(74, 52, 40, 0.85);
-    backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
   }
 }
