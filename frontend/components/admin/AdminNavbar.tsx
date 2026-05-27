@@ -17,15 +17,30 @@ function getBreadcrumb(pathname: string): string {
   return 'Admin'
 }
 
-export default function AdminNavbar() {
+interface AdminNavbarProps {
+  onMenuToggle?: () => void
+}
+
+export default function AdminNavbar({ onMenuToggle }: AdminNavbarProps) {
   const pathname = usePathname()
   const breadcrumb = getBreadcrumb(pathname)
 
   return (
-    <header className="h-14 bg-ivory border-b border-beige-dark flex items-center justify-between px-6">
-      <div className="flex items-center gap-2">
-        <span className="text-brown/40 text-xs font-sans uppercase tracking-luxury">Admin</span>
-        <span className="text-brown/30 text-xs">/</span>
+    <header className="h-14 bg-ivory border-b border-beige-dark flex items-center justify-between px-4 md:px-6">
+      <div className="flex items-center gap-3">
+        {/* Mobile hamburger */}
+        <button
+          type="button"
+          onClick={onMenuToggle}
+          className="lg:hidden p-1 text-brown/50 hover:text-brown transition-colors"
+          aria-label="Toggle sidebar"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-5 h-5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+        </button>
+        <span className="text-brown/40 text-xs font-sans uppercase tracking-luxury hidden sm:inline">Admin</span>
+        <span className="text-brown/30 text-xs hidden sm:inline">/</span>
         <span className="text-brown text-xs font-sans uppercase tracking-luxury">{breadcrumb}</span>
       </div>
 

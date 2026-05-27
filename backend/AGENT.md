@@ -215,7 +215,7 @@ PUT    /api/admin/settings/          Bulk update settings ({settings: {key: valu
 
 ## PROGRESS
 
-**Overall Progress: 62%**
+**Overall Progress: 87%**
 
 | Phase | Name                    | Status      | Progress |
 |-------|-------------------------|-------------|----------|
@@ -225,11 +225,11 @@ PUT    /api/admin/settings/          Bulk update settings ({settings: {key: valu
 | 4     | Admin System            | COMPLETE    | 100%     |
 | 5     | Frontend Pages          | COMPLETE    | 100%     |
 | 6     | WhatsApp Integration    | COMPLETE    | 100%     |
-| 7     | Responsive + Polish     | Pending     | 0%       |
+| 7     | Responsive + Polish     | COMPLETE    | 100%     |
 | 8     | Deployment Preparation  | Pending     | 0%       |
 
-**Current Phase:** Phase 5+6 complete - waiting for NEXT to start Phase 7
-**Next Phase:** Phase 7 - Responsive + Polish
+**Current Phase:** Phase 7 complete - waiting for NEXT to start Phase 8
+**Next Phase:** Phase 8 - Deployment Preparation
 
 ---
 
@@ -313,7 +313,19 @@ PUT    /api/admin/settings/          Bulk update settings ({settings: {key: valu
 - [x] WhatsAppCTALink — Buy Now + Ask Details on product pages
 - [x] All pages wired to WhatsApp number from env
 
-### Phase 7 - Responsive + Polish
+### Phase 7 - Responsive + Polish [DONE]
+- [x] Admin mobile sidebar — AnimatePresence slide-in overlay, backdrop, route-change close
+- [x] AdminLayoutClient.tsx — manages sidebarOpen state, passes toggle to AdminNavbar
+- [x] AdminNavbar — mobile hamburger button (lg:hidden), type="button" set
+- [x] Admin layout — now server component wrapping AdminLayoutClient
+- [x] Collections — server wrapper + CollectionsClient.tsx (metadata export works)
+- [x] Product detail — server wrapper + ProductDetailClient.tsx + generateMetadata (dynamic OG)
+- [x] app/not-found.tsx — branded 404 page on dark bg, Home + Collections CTAs
+- [x] loading.tsx — public route, collections, product detail skeleton loaders
+- [x] app/sitemap.ts — static routes + dynamic product routes from API
+- [x] app/robots.ts — disallow /admin/*, sitemap link
+- [x] npm run build: PASS — 14 routes, sitemap.xml, robots.txt, 0 errors
+
 ### Phase 8 - Deployment Preparation
 
 ---
