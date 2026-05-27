@@ -15,19 +15,19 @@
 ## ARCHITECTURE
 
 ```
-[Next.js Frontend] ←→ [DRF Backend API] ←→ [MySQL Database]
-        ↓                     ↓
+[Next.js Frontend] <-> [DRF Backend API] <-> [MySQL Database: project1]
+        |                     |
    Vercel Deploy         VPS / Render
-        ↓                     ↓
+        |                     |
   /admin routes         Cloudinary (images)
   (JWT protected)       SimpleJWT (auth)
 ```
 
 - Frontend: Next.js 14 App Router, Tailwind CSS, Framer Motion
 - Backend: Django 5, Django REST Framework
-- Database: MySQL
-- Image Storage: Cloudinary
-- Auth: JWT via SimpleJWT (admin-only)
+- Database: MySQL (DB: project1, User: root)
+- Image Storage: Cloudinary (dev: local FileSystem)
+- Auth: JWT via SimpleJWT (admin-only, is_staff=True)
 - Frontend Deploy: Vercel
 - Backend Deploy: VPS or Render
 
@@ -73,84 +73,89 @@ Animation:
 
 ## DATABASE STRUCTURE
 
-### categories
+### categories (table: categories_category)
 | Column      | Type         | Notes          |
 |-------------|--------------|----------------|
-| id          | INT PK AI    |                |
-| name        | VARCHAR(100) | e.g. "Oud"     |
-| slug        | VARCHAR(100) | unique, indexed|
+| id          | BIGINT PK AI |                |
+| name        | VARCHAR(100) | unique         |
+| slug        | VARCHAR(100) | unique, auto   |
 | description | TEXT         | nullable       |
-| created_at  | DATETIME     | auto           |
+| created_at  | DATETIME(6)  | auto           |
 
-### products
+### products (table: products_product)
 | Column          | Type           | Notes                    |
 |-----------------|----------------|--------------------------|
-| id              | INT PK AI      |                          |
+| id              | BIGINT PK AI   |                          |
 | name            | VARCHAR(255)   |                          |
 | slug            | VARCHAR(255)   | unique, auto-generated   |
-| description     | TEXT           |                          |
+| description     | TEXT           | nullable                 |
 | price           | DECIMAL(10,2)  |                          |
 | volume          | VARCHAR(50)    | e.g. "50ml", "100ml"     |
-| category_id     | INT FK         | → categories.id          |
+| category_id     | BIGINT FK      | -> categories_category.id|
 | fragrance_notes | JSON           | {top, middle, base}      |
 | image           | VARCHAR(500)   | Cloudinary URL           |
-| is_featured     | BOOLEAN        | default False            |
-| is_active       | BOOLEAN        | default True             |
-| created_at      | DATETIME       | auto                     |
-| updated_at      | DATETIME       | auto_now                 |
+| is_featured     | TINYINT(1)     | default 0                |
+| is_active       | TINYINT(1)     | default 1                |
+| created_at      | DATETIME(6)    | auto                     |
+| updated_at      | DATETIME(6)    | auto_now                 |
 
-### site_settings
-| Column     | Type         | Notes              |
-|------------|--------------|--------------------|
-| id         | INT PK AI    |                    |
-| key        | VARCHAR(100) | unique             |
-| value      | TEXT         |                    |
-| updated_at | DATETIME     | auto_now           |
+### site_settings (table: site_settings_sitesetting)
+| Column     | Type         | Notes   |
+|------------|--------------|---------|
+| id         | BIGINT PK AI |         |
+| key        | VARCHAR(100) | unique  |
+| value      | LONGTEXT     | nullable|
+| updated_at | DATETIME(6)  | auto    |
 
-**Initial seed data:**
-- categories: Oud, Floral, Citrus, Oriental, Woody, Fresh
-- site_settings: brand_name, tagline, about_text, whatsapp_number
+**Seeded site_settings keys:** brand_name, tagline, about_text, whatsapp_number, hero_headline, hero_subheadline
+**Seeded categories:** Oud, Floral, Citrus, Oriental, Woody, Fresh
+**Admin user:** username=admin, password=admin123 (CHANGE IN PRODUCTION)
 
 ---
 
 ## API STRUCTURE
 
+### Base URL (dev): http://localhost:8000
+
 ### Public Endpoints
 ```
-GET  /api/products/              List active products (filterable by category)
+GET  /api/products/              List active products (filterable: ?category=slug)
 GET  /api/products/featured/     Featured products for homepage
 GET  /api/products/{slug}/       Product detail
 GET  /api/categories/            List all categories
-GET  /api/settings/              Site settings (brand_name, tagline, etc.)
+GET  /api/settings/              Site settings (flat key:value dict)
 ```
 
 ### Auth Endpoints
 ```
-POST /api/auth/login/            Admin login → {access, refresh}
-POST /api/auth/token/refresh/    Refresh access token
-POST /api/auth/logout/           Logout (blacklist refresh token)
+POST /api/auth/login/            Admin login -> {access, refresh, user}
+POST /api/auth/token/refresh/    Refresh access token -> {access, refresh}
+POST /api/auth/logout/           Logout (blacklists refresh token)
+GET  /api/auth/me/               Get current admin user info (JWT required)
 ```
 
-### Admin Endpoints (JWT required)
+### Admin Endpoints (JWT Bearer required, is_staff=True)
 ```
+GET    /api/admin/products/          List ALL products (incl. inactive)
 POST   /api/admin/products/          Create product
-PUT    /api/admin/products/{id}/     Update product
+GET    /api/admin/products/{id}/     Get product by ID
+PUT    /api/admin/products/{id}/     Full update
 PATCH  /api/admin/products/{id}/     Partial update
 DELETE /api/admin/products/{id}/     Delete product
 
-POST   /api/admin/categories/        Create category
+POST   /api/categories/              Create category
 PUT    /api/admin/categories/{id}/   Update category
 DELETE /api/admin/categories/{id}/   Delete category
 
-PUT    /api/admin/settings/          Update site settings
+PUT    /api/admin/settings/          Bulk update settings ({settings: {key: value}})
 ```
 
 ### Response Format
 ```json
 {
   "success": true,
+  "message": "Success",
   "data": { ... },
-  "message": "...",
   "errors": null
 }
 ```
@@ -179,7 +184,7 @@ PUT    /api/admin/settings/          Update site settings
 ```
 
 ### Homepage Sections
-1. Navbar (sticky, transparent → solid on scroll)
+1. Navbar (sticky, transparent -> solid on scroll)
 2. Hero Section (full-screen, cinematic)
 3. Featured Perfumes (3-4 products, horizontal scroll on mobile)
 4. Brand Story (text + elegant imagery)
@@ -193,158 +198,140 @@ PUT    /api/admin/settings/          Update site settings
 
 ## REUSABLE COMPONENTS
 
-### UI Components (frontend/components/ui/)
-- `Button` — variants: primary (golden), secondary (outline), ghost
-- `Card` — luxury card with hover shadow
-- `Input` — styled form input with label
-- `Modal` — confirm/alert modal
-- `Badge` — category badge
-- `LoadingSpinner` — elegant gold spinner
+### Backend Utils
+- `utils/response.py` — success_response, error_response, created_response, not_found_response, unauthorized_response, forbidden_response
+- `utils/validators.py` — validate_price, validate_phone_number
+- `services/cloudinary_service.py` — upload_image, delete_image, extract_public_id
+- `apps.authentication.permissions.IsAdminUser` — DRF permission class for all admin endpoints
 
-### Navigation
-- `Navbar` — sticky, responsive, mobile hamburger
-- `Footer` — brand footer with links
-- `MobileMenu` — slide-in mobile nav
-
-### Product Components
-- `ProductCard` — image, name, price, category, WhatsApp CTA
-- `ProductGrid` — responsive grid layout
-- `ProductImageGallery` — lightbox-style image viewer
-
-### WhatsApp Components
-- `WhatsAppButton` — floating sticky button (bottom-right)
-- `WhatsAppCTALink` — product-specific buy/ask links
-
-### Admin Components
-- `AdminSidebar` — navigation sidebar
-- `AdminNavbar` — top admin nav
-- `ProductForm` — create/edit form with Cloudinary upload
+### Frontend UI Components (Phase 3+)
+- Button, Card, Input, Modal, Badge, LoadingSpinner
+- Navbar, Footer, MobileMenu
+- ProductCard, ProductGrid, ProductImageGallery
+- WhatsAppButton (floating), WhatsAppCTALink
+- AdminSidebar, AdminNavbar, ProductForm
 
 ---
 
 ## PROGRESS
 
-**Overall Progress: 12%**
+**Overall Progress: 25%**
 
 | Phase | Name                    | Status      | Progress |
 |-------|-------------------------|-------------|----------|
-| 1     | Project Setup           | ✅ Complete  | 100%     |
-| 2     | Backend Foundation      | 🔄 Pending   | 0%       |
-| 3     | Frontend Foundation     | 🔄 Pending   | 0%       |
-| 4     | Admin System            | 🔄 Pending   | 0%       |
-| 5     | Frontend Pages          | 🔄 Pending   | 0%       |
-| 6     | WhatsApp Integration    | 🔄 Pending   | 0%       |
-| 7     | Responsive + Polish     | 🔄 Pending   | 0%       |
-| 8     | Deployment Preparation  | 🔄 Pending   | 0%       |
+| 1     | Project Setup           | COMPLETE    | 100%     |
+| 2     | Backend Foundation      | COMPLETE    | 100%     |
+| 3     | Frontend Foundation     | Pending     | 0%       |
+| 4     | Admin System            | Pending     | 0%       |
+| 5     | Frontend Pages          | Pending     | 0%       |
+| 6     | WhatsApp Integration    | Pending     | 0%       |
+| 7     | Responsive + Polish     | Pending     | 0%       |
+| 8     | Deployment Preparation  | Pending     | 0%       |
 
-**Current Phase:** Phase 1 complete — waiting for NEXT to start Phase 2
-**Next Phase:** Phase 2 — Backend Foundation
+**Current Phase:** Phase 2 complete - waiting for NEXT to start Phase 3
+**Next Phase:** Phase 3 - Frontend Foundation
 
 ---
 
 ## COMPLETED TASKS
 
-### Phase 1 — Project Setup ✅
-- [x] Root folder structure created (frontend/, backend/, assets/, docs/)
-- [x] docs/superpowers/plans/ created with plan document
-- [x] .gitignore created (Python + Node + env coverage)
-- [x] backend/AGENT.md created (this file)
-- [x] backend/.env.example created
-- [x] backend/requirements.txt created
-- [x] frontend/.env.local.example created
+### Phase 1 - Project Setup [DONE]
+- [x] Root folder structure (frontend/, backend/, assets/, docs/)
+- [x] .gitignore, AGENT.md, requirements.txt, .env.example files
 - [x] Initial git commit
+
+### Phase 2 - Backend Foundation [DONE]
+- [x] Python venv created (backend/venv/)
+- [x] All packages installed (Django 5.0.6, DRF, SimpleJWT, etc.)
+- [x] Django project with split settings (base/development/production)
+- [x] MySQL connected (DB: project1, root, no password)
+- [x] 4 apps created: authentication, products, categories, site_settings
+- [x] Models: Category, Product (with JSON fragrance_notes), SiteSetting
+- [x] Migrations created and applied - 15 tables in MySQL
+- [x] Seed data: 6 categories, 6 site settings, admin user
+- [x] Authentication APIs: login, logout, refresh, /me
+- [x] Products APIs: public list/featured/detail, admin CRUD
+- [x] Categories APIs: public list, admin create/update/delete
+- [x] Site Settings APIs: public GET, admin PUT (bulk)
+- [x] Standardized response format (utils/response.py)
+- [x] IsAdminUser permission class
+- [x] Cloudinary service helper
+- [x] 21 tests written and passing (auth: 5, products: 9, categories: 7)
 
 ---
 
 ## PENDING TASKS
 
-### Phase 2 — Backend Foundation
-- [ ] Django project scaffold with split settings
-- [ ] MySQL database connection
-- [ ] All 4 apps created (authentication, products, categories, site_settings)
-- [ ] Models built and migrated
-- [ ] Management command: seed categories + create admin
-- [ ] All REST API endpoints
-- [ ] API tests
-- [ ] CORS configured
+### Phase 3 - Frontend Foundation
+- [ ] Next.js 14 project init (App Router, TypeScript, Tailwind)
+- [ ] Luxury Tailwind theme config (colors, fonts, spacing)
+- [ ] Google Fonts setup (Cormorant Garamond + Poppins)
+- [ ] Design system constants (colors.ts, config.ts)
+- [ ] Reusable UI components: Button, Card, Input, Badge, LoadingSpinner
+- [ ] Navbar (sticky, responsive, transparent->solid)
+- [ ] Footer
+- [ ] AuthContext (admin JWT state management)
+- [ ] API service (Axios with JWT interceptors)
+- [ ] TypeScript types (Product, Category, ApiResponse)
 
-### Phase 3 — Frontend Foundation
-- [ ] Next.js 14 project init
-- [ ] Tailwind luxury theme config
-- [ ] Google Fonts setup
-- [ ] Design system constants
-- [ ] Reusable UI components
-- [ ] Navbar + Footer
-- [ ] AuthContext + API service
+### Phase 4 - Admin System
+- [ ] Admin login page with luxury UI
+- [ ] JWT storage + Next.js middleware protection
+- [ ] Admin dashboard layout (sidebar + topnav)
+- [ ] Products CRUD pages
+- [ ] Cloudinary image upload in form
+- [ ] Categories management page
 
-### Phase 4 — Admin System
-- [ ] Admin login page
-- [ ] Protected route middleware
-- [ ] Dashboard layout
-- [ ] Product CRUD pages
-- [ ] Cloudinary image upload
-- [ ] Category management
-
-### Phase 5 — Frontend Pages
-- [ ] Homepage (9 sections)
+### Phase 5 - Frontend Pages
+- [ ] Homepage (9 sections with Framer Motion)
 - [ ] Collections page
 - [ ] Product detail page
-- [ ] About page
-- [ ] Contact page
-- [ ] Framer Motion animations
+- [ ] About + Contact pages
 
-### Phase 6 — WhatsApp Integration
-- [ ] WhatsApp URL utility
-- [ ] Floating sticky button
-- [ ] Product buy/ask buttons
-- [ ] Homepage CTA section
-
-### Phase 7 — Responsive + Polish
-- [ ] Mobile-first audit
-- [ ] Image optimization
-- [ ] SEO meta tags
-- [ ] Loading states
-- [ ] Performance optimization
-
-### Phase 8 — Deployment Preparation
-- [ ] Vercel config
-- [ ] Django production settings
-- [ ] CORS production config
-- [ ] Security audit
+### Phase 6 - WhatsApp Integration
+### Phase 7 - Responsive + Polish
+### Phase 8 - Deployment Preparation
 
 ---
 
 ## KNOWN ISSUES
 
-None — Phase 1 complete, no issues identified.
+- Staticfiles directory needed (whitenoise warning in tests) - created as empty dir
+- Backend .env is committed to git (dev only) - excluded via .gitignore in production
 
 ---
 
 ## TESTING STATUS
 
-| Phase | Test Type      | Status  | Notes              |
-|-------|----------------|---------|--------------------|
-| 1     | Structure check| ✅ Pass  | All files created  |
-| 2     | API tests      | Pending |                    |
-| 3     | Build check    | Pending |                    |
-| 4     | Auth flow      | Pending |                    |
-| 5     | UI visual      | Pending |                    |
-| 6     | WhatsApp links | Pending |                    |
+| Phase | Test Suite          | Tests | Passed | Failed | Status   |
+|-------|---------------------|-------|--------|--------|----------|
+| 1     | Structure check     | -     | -      | -      | PASS     |
+| 2     | Auth API tests      | 5     | 5      | 0      | PASS     |
+| 2     | Products API tests  | 9     | 9      | 0      | PASS     |
+| 2     | Categories tests    | 7     | 7      | 0      | PASS     |
+| 3     | Build check         | -     | -      | -      | Pending  |
+| 4     | Admin flow          | -     | -      | -      | Pending  |
+| 5     | UI visual           | -     | -      | -      | Pending  |
 
 ---
 
 ## DEVELOPMENT NOTES
 
-- Django settings split into base/development/production — use `DJANGO_SETTINGS_MODULE=config.settings.development` in dev
-- Fragrance notes stored as JSON field: `{"top": ["bergamot"], "middle": ["rose"], "base": ["oud"]}`
-- Admin route protection: Next.js `middleware.ts` checks for valid JWT in cookies, redirects to /admin/login if missing
-- WhatsApp URL format: `https://wa.me/{PHONE}?text=Hello%2C%20I%20am%20interested%20in%20{PRODUCT_NAME}`
-- Cloudinary images: store URL in DB after upload; delete from Cloudinary on product delete
+- Run backend: `cd backend && venv/Scripts/python manage.py runserver`
+- Run tests: `venv/Scripts/python manage.py test tests --verbosity=2`
+- Seed data: `venv/Scripts/python manage.py seed_data`
+- Dev settings: DJANGO_SETTINGS_MODULE=config.settings.development (default in manage.py)
+- Prod settings: DJANGO_SETTINGS_MODULE=config.settings.production (set in wsgi.py/asgi.py)
+- Cloudinary disabled in dev (uses local FileSystem storage)
+- CORS in dev: allow all origins
+- Admin credentials: admin / admin123 - CHANGE BEFORE PRODUCTION
+- fragrance_notes JSON format: {"top": ["bergamot"], "middle": ["rose"], "base": ["oud"]}
 
 ---
 
 ## GIT COMMIT HISTORY
 
-| Hash | Message | Phase | Date |
-|------|---------|-------|------|
-| (see git log) | feat: phase 1 - project setup and architecture | 1 | 2026-05-27 |
+| Hash        | Message                                      | Phase | Date       |
+|-------------|----------------------------------------------|-------|------------|
+| d369089     | feat: phase 1 - project setup and architecture | 1   | 2026-05-27 |
+| (phase 2)   | feat: phase 2 - backend foundation complete  | 2     | 2026-05-27 |
