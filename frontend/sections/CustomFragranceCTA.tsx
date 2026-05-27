@@ -32,17 +32,23 @@ export default function CustomFragranceCTA() {
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <a
+                href="/create-fragrance"
+                className="inline-flex items-center gap-3 bg-brown text-ivory px-10 py-4 text-xs font-sans uppercase tracking-luxury hover:bg-brown-dark transition-colors duration-300"
+              >
+                Design Your Fragrance
+              </a>
+              <a
                 href={buildCustomFragranceUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 bg-brown text-ivory px-10 py-4 text-xs font-sans uppercase tracking-luxury hover:bg-brown-dark transition-colors duration-300"
+                className="inline-flex items-center gap-3 border border-brown text-brown px-8 py-4 text-xs font-sans uppercase tracking-luxury hover:border-gold hover:text-gold transition-colors duration-300"
               >
-                Begin Your Journey
+                WhatsApp Us
               </a>
             </div>
 
             <p className="font-sans text-xs text-brown/30 mt-6 tracking-luxury uppercase">
-              Via WhatsApp Consultation
+              5-step interactive experience · Direct consultation
             </p>
           </motion.div>
         </div>

@@ -8,6 +8,7 @@ import { CONFIG, ROUTES } from '@/constants/config'
 
 const NAV_LINKS = [
   { label: 'Collections', href: ROUTES.collections },
+  { label: 'Create Fragrance', href: ROUTES.createFragrance },
   { label: 'About', href: ROUTES.about },
   { label: 'Contact', href: ROUTES.contact },
 ]
@@ -74,6 +75,7 @@ export default function Navbar() {
 
             {/* Mobile hamburger */}
             <button
+              type="button"
               className="md:hidden flex flex-col gap-1.5 p-2"
               onClick={() => setIsMobileOpen((prev) => !prev)}
               aria-label="Toggle menu"

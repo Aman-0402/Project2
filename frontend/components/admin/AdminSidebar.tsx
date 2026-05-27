@@ -35,6 +35,15 @@ const NAV_ITEMS = [
       </svg>
     ),
   },
+  {
+    label: 'Inquiries',
+    href: ROUTES.adminInquiries,
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-4 h-4">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1 1 .03 2.798-1.399 2.798H4.198c-1.429 0-2.4-1.798-1.4-2.798L4 14.5" />
+      </svg>
+    ),
+  },
 ]
 
 export default function AdminSidebar() {
@@ -93,6 +102,7 @@ export default function AdminSidebar() {
           </p>
         )}
         <button
+          type="button"
           onClick={logout}
           className="flex items-center gap-2 text-ivory/40 hover:text-red-400 text-xs font-sans uppercase tracking-luxury transition-colors duration-200"
         >
