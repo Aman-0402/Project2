@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-ivory: #F8F4EC;
+  --color-gold: #B08D57;
+  --color-gold-light: #C9A96E;
+  --color-gold-dark: #8C6D3F;
+  --color-brown: #4A3428;
+  --color-brown-light: #6B4C3B;
+  --color-beige: #E8DED1;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-ivory);
+    color: var(--color-brown);
+    font-family: var(--font-poppins), system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-cormorant), Georgia, serif;
+    color: var(--color-brown);
+    font-weight: 400;
+  }
+
+  ::selection {
+    background-color: var(--color-gold);
+    color: var(--color-ivory);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-ivory);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-gold);
+    border-radius: 3px;
+  }
+}
+
+@layer components {
+  /* Luxury section spacing */
+  .section-padding {
+    @apply py-20 px-4 md:px-8 lg:px-16;
+  }
+
+  .container-luxury {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Gold divider line */
+  .gold-divider {
+    @apply w-16 h-px bg-gold my-6;
+  }
+
+  /* Luxury heading style */
+  .heading-luxury {
+    @apply font-serif text-4xl md:text-5xl lg:text-6xl text-brown tracking-wide leading-tight;
+  }
+
+  .subheading-luxury {
+    @apply font-serif text-2xl md:text-3xl text-brown tracking-wide;
+  }
+
+  /* Label style */
+  .label-luxury {
+    @apply text-gold text-xs font-sans uppercase tracking-luxury font-medium;
+  }
+
+  /* Gold border */
+  .border-gold {
+    @apply border border-gold/30;
+  }
+
+  /* Luxury card hover */
+  .card-hover {
+    @apply transition-all duration-500 hover:shadow-2xl hover:-translate-y-1;
+  }
+
+  /* Image overlay gradient */
+  .image-overlay {
+    @apply absolute inset-0 bg-gradient-to-t from-brown/60 to-transparent;
+  }
+}
+
+@layer utilities {
+  /* Text gradient gold */
+  .text-gradient-gold {
+    background: linear-gradient(135deg, #B08D57, #C9A96E, #8C6D3F);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Glass morphism */
+  .glass {
+    background: rgba(248, 244, 236, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .glass-dark {
+    background: rgba(74, 52, 40, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
