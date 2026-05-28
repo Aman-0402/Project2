@@ -425,6 +425,18 @@
   .testimonials-card-shadow {
     box-shadow: 0 8px 40px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04);
   }
+  .testimonials-card {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.10);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 48px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.07);
+    transition: border-color 0.45s ease, box-shadow 0.45s ease;
+  }
+  .testimonials-card:hover {
+    border-color: rgba(198,161,110,0.40);
+    box-shadow: 0 12px 56px rgba(0,0,0,0.60), 0 0 32px rgba(198,161,110,0.10), inset 0 1px 0 rgba(255,255,255,0.09);
+  }
   .testimonials-quote-bg {
     font-size: clamp(12rem, 30vw, 22rem);
   }
@@ -462,6 +474,6 @@
 }
 
 @keyframes testimonials-scroll {
-  from { translate: 0% 0%; }
-  to   { translate: -50% 0%; }
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
 }

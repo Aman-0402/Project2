@@ -10,6 +10,7 @@ const BREADCRUMB_MAP: Record<string, string> = {
   '/admin/products/new': 'New Product',
   '/admin/categories': 'Categories',
   '/admin/inquiries': 'Fragrance Inquiries',
+  '/admin/settings': 'Settings',
 }
 
 function getBreadcrumb(pathname: string): string {

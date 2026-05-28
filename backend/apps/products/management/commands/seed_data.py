@@ -23,16 +23,17 @@ CATEGORIES = [
 ]
 
 INITIAL_SETTINGS = {
-    'brand_name': 'LUXE PARFUM',
+    'brand_name': 'M.M ATTARWALA',
     'tagline': 'The Art of Scent',
     'about_text': (
-        'LUXE PARFUM is a boutique fragrance house dedicated to crafting '
-        'extraordinary scents that tell stories, evoke memories, and '
-        'define moments. Each bottle is a masterpiece of artistry and passion.'
+        'M.M Attarwala is a traditional Indian fragrance house based in Vadodara, Gujarat. '
+        'Crafting authentic Indian attars, perfume sprays, deodorant sprays, room fresheners, '
+        'car sprays, and agarbatti with timeless artistry since generations. '
+        'Trusted by fragrance lovers across India and beyond.'
     ),
-    'whatsapp_number': os.environ.get('WHATSAPP_NUMBER', '+1234567890'),
-    'hero_headline': 'Discover Your Signature Scent',
-    'hero_subheadline': 'Luxury fragrances crafted for the discerning few.',
+    'whatsapp_number': os.environ.get('WHATSAPP_NUMBER', '+919724586101'),
+    'hero_headline': 'The Essence of Paradise',
+    'hero_subheadline': 'Traditional Indian attars, perfumes & agarbatti — crafted with timeless artistry in Vadodara.',
 }
 
 
@@ -52,7 +53,7 @@ class Command(BaseCommand):
         )
         parser.add_argument(
             '--admin-email',
-            default='admin@luxeparfum.com',
+            default='mmattarwala2008@rediff.com',
             help='Admin email',
         )
 

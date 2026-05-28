@@ -19,6 +19,7 @@ export const ROUTES = {
   adminProductEdit: (id: number) => `/admin/products/${id}/edit`,
   adminCategories: '/admin/categories',
   adminInquiries: '/admin/inquiries',
+  adminSettings: '/admin/settings',
 } as const
 
 export const AUTH_TOKEN_KEY = 'luxe_access_token'
