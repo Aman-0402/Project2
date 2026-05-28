@@ -297,15 +297,19 @@ export default function HeroSection() {
           ) : nameLine1}
         </motion.h1>
 
-        {/* Italic subtitle */}
-        <motion.p
-          className="font-display text-lg md:text-xl text-ivory/85 italic font-normal tracking-wide"
+        {/* Tagline */}
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.5, ease: [0.4, 0, 0.2, 1] }}
         >
-          Crafted for Those Who Wear Presence
-        </motion.p>
+          <p className="font-devanagari text-2xl md:text-3xl text-gold/90 leading-relaxed">
+            जनत का एहसास
+          </p>
+          <p className="font-display text-sm md:text-base text-ivory/55 italic tracking-wide mt-1">
+            The Essence of Paradise
+          </p>
+        </motion.div>
 
         {/* Gold divider — left-aligned on desktop */}
         <motion.div
@@ -322,8 +326,8 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.0 }}
         >
-          Rare ingredients. Timeless compositions.<br />
-          Fragrances for those who define their own essence.
+          Traditional Indian attars, perfumes & agarbatti —<br />
+          crafted with timeless artistry in Vadodara since generations.
         </motion.p>
 
         {/* CTAs */}

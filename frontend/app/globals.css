@@ -368,6 +368,11 @@
   }
 }
 
+/* Devanagari tagline */
+.font-devanagari {
+  font-family: var(--font-devanagari), serif;
+}
+
 /* Bottle brand lockup text */
 .bottle-text-tracked {
   letter-spacing: 3.8px;
