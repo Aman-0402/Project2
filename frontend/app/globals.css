@@ -259,6 +259,11 @@
     background: linear-gradient(135deg, #2A1812 0%, #3B2419 60%, #4A2D20 100%);
   }
 
+  /* Hero background — deeper, more directional than bg-depth */
+  .bg-hero {
+    background: linear-gradient(160deg, #1C0F0A 0%, #2A1812 45%, #3B2419 80%, #2A1812 100%);
+  }
+
   /* Glass morphism */
   .glass {
     background: rgba(248, 244, 236, 0.85);
