@@ -3,12 +3,48 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { productService } from '@/services/products'
 import { categoryService } from '@/services/categories'
 import { formatPrice } from '@/utils/formatters'
 import { ROUTES } from '@/constants/config'
 import type { ProductListItem, Category } from '@/types'
+
+const MOOD_TAGS: Record<string, string[]> = {
+  oud:      ['Smoky', 'Warm', 'Bold'],
+  floral:   ['Romantic', 'Fresh', 'Soft'],
+  citrus:   ['Bright', 'Zesty', 'Clean'],
+  oriental: ['Exotic', 'Spicy', 'Rich'],
+  woody:    ['Earthy', 'Deep', 'Grounded'],
+  fresh:    ['Airy', 'Crisp', 'Light'],
+}
+
+function getMoodTags(categorySlug?: string): string[] {
+  if (!categorySlug) return []
+  const key = categorySlug.toLowerCase()
+  for (const [k, tags] of Object.entries(MOOD_TAGS)) {
+    if (key.includes(k)) return tags
+  }
+  return []
+}
+
+function LuxuryPlaceholder({ initial }: { initial: string }) {
+  return (
+    <div className="absolute inset-0 bg-[#1C0F0A] flex items-center justify-center overflow-hidden">
+      <svg viewBox="0 0 200 280" fill="none" className="w-full h-full opacity-40" aria-hidden="true">
+        <circle cx="100" cy="140" r="70" stroke="#C6A16E" strokeWidth="0.6" />
+        <circle cx="100" cy="140" r="50" stroke="#C6A16E" strokeWidth="0.4" />
+        <circle cx="100" cy="140" r="30" stroke="#C6A16E" strokeWidth="0.3" />
+        <line x1="100" y1="70" x2="100" y2="20"  stroke="#C6A16E" strokeWidth="0.5" />
+        <line x1="170" y1="140" x2="190" y2="140" stroke="#C6A16E" strokeWidth="0.5" />
+        <line x1="100" y1="210" x2="100" y2="260" stroke="#C6A16E" strokeWidth="0.5" />
+        <line x1="30"  y1="140" x2="10"  y2="140" stroke="#C6A16E" strokeWidth="0.5" />
+        <polygon points="100,100 120,130 100,160 80,130" stroke="#C6A16E" strokeWidth="0.5" fill="#C6A16E" fillOpacity="0.06" />
+      </svg>
+      <span className="absolute font-serif text-4xl text-gold/50 italic">{initial}</span>
+    </div>
+  )
+}
 
 export default function ProductShowcase() {
   const [products, setProducts] = useState<ProductListItem[]>([])
@@ -30,8 +66,10 @@ export default function ProductShowcase() {
     : products
 
   return (
-    <section className="section-padding bg-ivory">
-      <div className="container-luxury">
+    <section className="section-padding bg-ivory relative overflow-hidden">
+      <div className="absolute inset-0 bg-dot-pattern opacity-[0.02] pointer-events-none" />
+
+      <div className="relative container-luxury">
         <motion.div
           className="text-center mb-12"
           initial={{ opacity: 0, y: 30 }}
@@ -85,51 +123,77 @@ export default function ProductShowcase() {
         {isLoading ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="bg-beige animate-pulse">
-                <div className="aspect-[3/4]" />
-                <div className="p-4 space-y-2">
-                  <div className="h-4 bg-beige-dark rounded w-3/4" />
-                  <div className="h-3 bg-beige-dark rounded w-1/2" />
-                </div>
-              </div>
+              <div key={i} className="aspect-[3/4] bg-[#1C0F0A] animate-pulse" />
             ))}
           </div>
         ) : filtered.length === 0 ? (
           <p className="text-center font-sans text-brown/40 text-sm py-12">No products in this category.</p>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {filtered.map((product, i) => (
-              <motion.div
-                key={product.id}
-                layout
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.07, duration: 0.5 }}
-              >
-                <Link href={ROUTES.product(product.slug)} className="group block">
-                  <div className="relative aspect-[3/4] bg-beige overflow-hidden mb-3">
-                    {product.image ? (
-                      <Image
-                        src={product.image}
-                        alt={product.name}
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-105"
-                        sizes="(max-width: 768px) 50vw, 25vw"
-                      />
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="font-serif text-3xl text-brown/20">{product.name[0]}</span>
+            <AnimatePresence mode="popLayout">
+              {filtered.map((product, i) => {
+                const moodTags = getMoodTags(product.category?.slug)
+                return (
+                  <motion.div
+                    key={product.id}
+                    layout
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ delay: i * 0.06, duration: 0.45 }}
+                    whileHover={{ y: -6, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } }}
+                  >
+                    <Link href={ROUTES.product(product.slug)} className="group block cursor-pointer">
+                      <div className="relative aspect-[3/4] overflow-hidden">
+                        {product.image ? (
+                          <Image
+                            src={product.image}
+                            alt={product.name}
+                            fill
+                            className="object-cover transition-transform duration-700 group-hover:scale-105"
+                            sizes="(max-width: 768px) 50vw, 25vw"
+                          />
+                        ) : (
+                          <LuxuryPlaceholder initial={product.name[0]} />
+                        )}
+
+                        {/* Always-visible bottom gradient */}
+                        <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-[#1C0F0A] via-[#1C0F0A]/60 to-transparent pointer-events-none" />
+
+                        {/* Featured badge */}
+                        {product.is_featured && (
+                          <div className="absolute top-3 left-3 bg-gold/90 backdrop-blur-sm px-2.5 py-1">
+                            <span className="font-sans text-[9px] uppercase tracking-luxury text-brown font-semibold">Featured</span>
+                          </div>
+                        )}
+
+                        {/* Always-visible name + price at bottom */}
+                        <div className="absolute inset-x-0 bottom-0 p-4">
+                          <h3 className="font-serif text-base text-ivory leading-tight mb-1">{product.name}</h3>
+                          <p className="font-sans text-xs text-gold/80">{formatPrice(product.price)}</p>
+                        </div>
+
+                        {/* Hover overlay — mood tags + explore CTA */}
+                        <div className="absolute inset-0 bg-[#1C0F0A]/72 backdrop-blur-[2px] flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          {moodTags.length > 0 && (
+                            <div className="flex flex-wrap justify-center gap-1.5 px-4">
+                              {moodTags.map((tag) => (
+                                <span key={tag} className="font-sans text-[10px] uppercase tracking-luxury text-ivory/70 border border-gold/30 px-2 py-0.5">
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                          <span className="inline-flex items-center gap-2 font-sans text-xs uppercase tracking-luxury text-gold border-b border-gold/40 pb-px mt-1">
+                            Explore <span>&rarr;</span>
+                          </span>
+                        </div>
                       </div>
-                    )}
-                    <div className="absolute inset-0 bg-brown/0 group-hover:bg-brown/15 transition-colors duration-500" />
-                  </div>
-                  <p className="font-serif text-base text-brown group-hover:text-gold transition-colors duration-300">
-                    {product.name}
-                  </p>
-                  <p className="font-sans text-xs text-brown/50 mt-1">{formatPrice(product.price)}</p>
-                </Link>
-              </motion.div>
-            ))}
+                    </Link>
+                  </motion.div>
+                )
+              })}
+            </AnimatePresence>
           </div>
         )}
 
@@ -141,9 +205,10 @@ export default function ProductShowcase() {
         >
           <Link
             href={ROUTES.collections}
-            className="inline-flex items-center gap-2 bg-transparent text-brown border border-brown px-8 py-3 text-xs font-sans uppercase tracking-luxury hover:bg-brown hover:text-ivory transition-all duration-300"
+            className="inline-flex items-center gap-3 bg-transparent text-brown border border-brown/40 px-10 py-4 text-xs font-sans uppercase tracking-luxury hover:bg-brown hover:text-ivory hover:border-brown transition-all duration-300"
           >
-            View All Products
+            View All Fragrances
+            <span>&rarr;</span>
           </Link>
         </motion.div>
       </div>
