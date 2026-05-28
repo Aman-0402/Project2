@@ -45,12 +45,12 @@ export default function CustomFragranceCTA() {
             transition={{ duration: 0.7 }}
           >
             <p className="label-luxury mb-4">Bespoke Service</p>
-            <h2 className="heading-luxury text-brown mb-6">
+            <h2 className="font-display text-4xl md:text-6xl lg:text-7xl text-brown font-bold leading-[1.05] tracking-tight mb-6">
               Your Signature<br />
               <em className="not-italic text-gradient-gold">Fragrance</em>
             </h2>
             <div className="gold-divider mx-auto" />
-            <p className="font-sans text-brown/60 text-sm leading-relaxed mt-6 mb-10 max-w-md mx-auto">
+            <p className="font-sans text-brown/60 text-base leading-relaxed mt-6 mb-10 max-w-md mx-auto">
               Work directly with our master perfumer to craft a completely unique fragrance
               that belongs only to you. Your story, your scent.
             </p>
