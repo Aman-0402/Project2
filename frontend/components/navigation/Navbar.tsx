@@ -28,6 +28,7 @@ export default function Navbar() {
   useEffect(() => { setIsMobileOpen(false) }, [pathname])
 
   const isHomepage = pathname === '/'
+  const isDarkNav = isHomepage && !isScrolled
 
   return (
     <>
@@ -45,7 +46,7 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-18 md:h-20">
             {/* Logo */}
             <Link href={ROUTES.home} className="group flex flex-col items-start">
-              <span className="font-serif text-xl md:text-2xl text-brown tracking-wide leading-none">
+              <span className={`font-serif text-xl md:text-2xl tracking-wide leading-none transition-colors duration-500 ${isDarkNav ? 'text-ivory' : 'text-brown'}`}>
                 {CONFIG.brandName}
               </span>
               <span className="label-luxury text-[9px] tracking-wide-luxury opacity-60 group-hover:opacity-100 transition-opacity">
@@ -61,7 +62,7 @@ export default function Navbar() {
                   href={link.href}
                   className={`
                     label-luxury text-[11px] transition-colors duration-300 relative group
-                    ${pathname === link.href ? 'text-gold' : 'text-brown hover:text-gold'}
+                    ${pathname === link.href ? 'text-gold' : isDarkNav ? 'text-ivory/80 hover:text-gold' : 'text-brown hover:text-gold'}
                   `}
                 >
                   {link.label}
@@ -76,12 +77,12 @@ export default function Navbar() {
             {/* Mobile hamburger */}
             <button
               type="button"
-              className="md:hidden flex flex-col gap-1.5 p-2"
+              className="md:hidden flex flex-col gap-1.5 p-2 cursor-pointer"
               onClick={() => setIsMobileOpen((prev) => !prev)}
               aria-label="Toggle menu"
             >
               <motion.span
-                className="block w-6 h-px bg-brown origin-center"
+                className={`block w-6 h-px origin-center transition-colors duration-500 ${isDarkNav ? 'bg-ivory' : 'bg-brown'}`}
                 animate={isMobileOpen ? { rotate: 45, y: 4 } : { rotate: 0, y: 0 }}
                 transition={{ duration: 0.3 }}
               />
@@ -91,7 +92,7 @@ export default function Navbar() {
                 transition={{ duration: 0.2 }}
               />
               <motion.span
-                className="block w-6 h-px bg-brown origin-center"
+                className={`block w-6 h-px origin-center transition-colors duration-500 ${isDarkNav ? 'bg-ivory' : 'bg-brown'}`}
                 animate={isMobileOpen ? { rotate: -45, y: -4 } : { rotate: 0, y: 0 }}
                 transition={{ duration: 0.3 }}
               />

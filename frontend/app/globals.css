@@ -3,13 +3,14 @@
 @tailwind utilities;
 
 :root {
-  --color-ivory: #F8F4EC;
-  --color-gold: #B08D57;
-  --color-gold-light: #C9A96E;
-  --color-gold-dark: #8C6D3F;
-  --color-brown: #4A3428;
-  --color-brown-light: #6B4C3B;
-  --color-beige: #E8DED1;
+  --color-ivory: #F5EFE7;
+  --color-gold: #C6A16E;
+  --color-gold-light: #D4AF7F;
+  --color-gold-dark: #A07848;
+  --color-brown: #3B2419;
+  --color-brown-light: #5C3A2A;
+  --color-brown-dark: #2A1812;
+  --color-beige: #E9DED1;
 }
 
 @layer base {
@@ -38,6 +39,16 @@
 
   * {
     box-sizing: border-box;
+  }
+
+  /* Respect reduced-motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 
   /* Custom scrollbar */
@@ -109,10 +120,15 @@
 
   /* Text gradient gold */
   .text-gradient-gold {
-    background: linear-gradient(135deg, #B08D57, #C9A96E, #8C6D3F);
+    background: linear-gradient(135deg, #C6A16E, #D4AF7F, #A07848);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+  }
+
+  /* Depth gradient — dark sections with layered shadow */
+  .bg-depth {
+    background: linear-gradient(135deg, #2A1812 0%, #3B2419 60%, #4A2D20 100%);
   }
 
   /* Glass morphism */

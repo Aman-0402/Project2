@@ -1,8 +1,9 @@
 'use client'
 
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { buildCustomFragranceUrl } from '@/utils/whatsapp'
-import { CONFIG } from '@/constants/config'
+import { ROUTES } from '@/constants/config'
 
 export default function CustomFragranceCTA() {
   return (
@@ -31,12 +32,12 @@ export default function CustomFragranceCTA() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a
-                href="/create-fragrance"
+              <Link
+                href={ROUTES.createFragrance}
                 className="inline-flex items-center gap-3 bg-brown text-ivory px-10 py-4 text-xs font-sans uppercase tracking-luxury hover:bg-brown-dark transition-colors duration-300"
               >
                 Design Your Fragrance
-              </a>
+              </Link>
               <a
                 href={buildCustomFragranceUrl()}
                 target="_blank"

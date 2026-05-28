@@ -28,7 +28,7 @@ export default function Testimonials() {
   const [active, setActive] = useState(0)
 
   return (
-    <section className="section-padding bg-beige overflow-hidden">
+    <section className="section-padding bg-beige overflow-hidden relative">
       {/* Top line */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
 
@@ -70,18 +70,21 @@ export default function Testimonials() {
           </div>
 
           {/* Navigation dots */}
-          <div className="flex items-center justify-center gap-3 mt-12">
+          <div className="flex items-center justify-center mt-12">
             {TESTIMONIALS.map((_, i) => (
               <button
                 key={i}
+                type="button"
                 onClick={() => setActive(i)}
-                className={`transition-all duration-300 ${
+                aria-label={`Testimonial ${i + 1}`}
+                className="min-w-[44px] min-h-[44px] flex items-center justify-center cursor-pointer focus:outline-none"
+              >
+                <span className={`block transition-all duration-300 ${
                   i === active
                     ? 'w-8 h-px bg-gold'
                     : 'w-2 h-2 rounded-full bg-gold/30 hover:bg-gold/60'
-                }`}
-                aria-label={`Testimonial ${i + 1}`}
-              />
+                }`} />
+              </button>
             ))}
           </div>
         </div>

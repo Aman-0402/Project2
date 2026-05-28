@@ -12,25 +12,26 @@ const config: Config = {
     extend: {
       colors: {
         ivory: {
-          DEFAULT: '#F8F4EC',
-          50: '#FDFCF8',
-          100: '#F8F4EC',
-          200: '#F0E8D4',
+          DEFAULT: '#F5EFE7',
+          50: '#FDFCF9',
+          100: '#F5EFE7',
+          200: '#EDE3D5',
         },
         gold: {
-          DEFAULT: '#B08D57',
-          light: '#C9A96E',
-          dark: '#8C6D3F',
+          DEFAULT: '#C6A16E',
+          light: '#D4AF7F',
+          dark: '#A07848',
         },
         brown: {
-          DEFAULT: '#4A3428',
-          light: '#6B4C3B',
-          dark: '#2E1F17',
+          DEFAULT: '#3B2419',
+          light: '#5C3A2A',
+          dark: '#2A1812',
+          deeper: '#1C0F0A',
         },
         beige: {
-          DEFAULT: '#E8DED1',
-          light: '#F2EDE4',
-          dark: '#D4C4B0',
+          DEFAULT: '#E9DED1',
+          light: '#F0E8DC',
+          dark: '#D0BDA8',
         },
       },
       fontFamily: {
@@ -38,9 +39,10 @@ const config: Config = {
         sans: ['var(--font-poppins)', 'system-ui', 'sans-serif'],
       },
       backgroundImage: {
-        'luxury-gradient': 'linear-gradient(135deg, #F8F4EC 0%, #E8DED1 50%, #F8F4EC 100%)',
-        'gold-gradient': 'linear-gradient(135deg, #B08D57 0%, #C9A96E 50%, #8C6D3F 100%)',
-        'dark-gradient': 'linear-gradient(180deg, #2E1F17 0%, #4A3428 100%)',
+        'luxury-gradient': 'linear-gradient(135deg, #F5EFE7 0%, #E9DED1 50%, #F5EFE7 100%)',
+        'gold-gradient': 'linear-gradient(135deg, #C6A16E 0%, #D4AF7F 50%, #A07848 100%)',
+        'dark-gradient': 'linear-gradient(135deg, #2A1812 0%, #3B2419 60%, #4A2D20 100%)',
+        'depth-gradient': 'linear-gradient(180deg, #1C0F0A 0%, #2A1812 40%, #3B2419 100%)',
       },
       animation: {
         'fade-in': 'fadeIn 0.8s ease-in-out forwards',

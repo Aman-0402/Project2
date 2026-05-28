@@ -5,7 +5,7 @@ import { CONFIG } from '@/constants/config'
 
 export default function BrandStory() {
   return (
-    <section className="section-padding bg-brown overflow-hidden">
+    <section className="section-padding bg-depth overflow-hidden">
       <div className="container-luxury">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Visual side */}

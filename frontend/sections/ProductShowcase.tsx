@@ -54,8 +54,9 @@ export default function ProductShowcase() {
             transition={{ delay: 0.2 }}
           >
             <button
+              type="button"
               onClick={() => setActiveCategory(null)}
-              className={`px-5 py-2 text-xs font-sans uppercase tracking-luxury border transition-all duration-300 ${
+              className={`px-5 py-2 text-xs font-sans uppercase tracking-luxury border transition-all duration-300 cursor-pointer ${
                 !activeCategory
                   ? 'bg-brown text-ivory border-brown'
                   : 'bg-transparent text-brown border-brown/30 hover:border-brown'
@@ -65,9 +66,10 @@ export default function ProductShowcase() {
             </button>
             {categories.map((cat) => (
               <button
+                type="button"
                 key={cat.slug}
                 onClick={() => setActiveCategory(cat.slug)}
-                className={`px-5 py-2 text-xs font-sans uppercase tracking-luxury border transition-all duration-300 ${
+                className={`px-5 py-2 text-xs font-sans uppercase tracking-luxury border transition-all duration-300 cursor-pointer ${
                   activeCategory === cat.slug
                     ? 'bg-brown text-ivory border-brown'
                     : 'bg-transparent text-brown border-brown/30 hover:border-brown'

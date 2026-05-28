@@ -6,7 +6,7 @@ import { CONFIG } from '@/constants/config'
 
 export default function WhatsAppCTASection() {
   return (
-    <section className="relative py-28 bg-brown overflow-hidden">
+    <section className="relative py-28 bg-depth overflow-hidden">
       {/* Ambient glow */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(176,141,87,0.1)_0%,_transparent_70%)]" />
       <div className="absolute inset-0 bg-dot-pattern opacity-5" />
