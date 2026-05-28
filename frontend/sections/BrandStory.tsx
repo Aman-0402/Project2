@@ -3,6 +3,15 @@
 import { motion } from 'framer-motion'
 import { CONFIG } from '@/constants/config'
 
+const stagger = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.13, delayChildren: 0.25 } },
+}
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.4, 0, 0.2, 1] } },
+}
+
 // Fixed particle positions — no hydration mismatch
 const ART_PARTICLES = [
   { id: 0,  cx: 45,  cy: 60,  r: 1.5, delay: 0,   dur: 9  },
@@ -215,21 +224,21 @@ export default function BrandStory() {
             </motion.div>
           </motion.div>
 
-          {/* ── Text side ── */}
+          {/* ── Text side ── staggered reveal */}
           <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.9, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
+            variants={stagger}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: '-80px' }}
           >
-            <p className="label-luxury text-gold mb-4">Our Story</p>
-            <h2 className="font-display text-4xl md:text-5xl lg:text-6xl text-ivory leading-[1.1] font-bold mb-6">
+            <motion.p variants={fadeUp} className="label-luxury text-gold mb-4">Our Story</motion.p>
+            <motion.h2 variants={fadeUp} className="font-display text-4xl md:text-5xl lg:text-6xl text-ivory leading-[1.1] font-bold mb-6">
               Crafting Scents<br />
               <em className="not-italic text-gradient-gold">That Define Moments</em>
-            </h2>
-            <div className="w-12 h-px bg-gold mb-8" />
+            </motion.h2>
+            <motion.div variants={fadeUp} className="w-12 h-px bg-gold mb-8" />
 
-            <div className="space-y-5 font-sans text-ivory/60 text-base md:text-lg leading-[1.8]">
+            <motion.div variants={fadeUp} className="space-y-5 font-sans text-ivory/60 text-base md:text-lg leading-[1.8]">
               <p>
                 Born from passion for rare ingredients and ancient perfumery traditions,{' '}
                 {CONFIG.brandName} is a boutique fragrance house dedicated to the art of extraordinary scent.
@@ -243,10 +252,10 @@ export default function BrandStory() {
                 We believe a truly exceptional fragrance does not just smell beautiful —
                 it tells a story, evokes a memory, and defines who you are.
               </p>
-            </div>
+            </motion.div>
 
             {/* Stats row */}
-            <div className="mt-10 flex items-center gap-8">
+            <motion.div variants={fadeUp} className="mt-10 flex items-center gap-8">
               {[
                 { n: '100+', label: 'Rare Ingredients' },
                 { n: 'Bespoke', label: 'Creations' },
@@ -260,7 +269,7 @@ export default function BrandStory() {
                   </div>
                 </div>
               ))}
-            </div>
+            </motion.div>
           </motion.div>
 
         </div>
