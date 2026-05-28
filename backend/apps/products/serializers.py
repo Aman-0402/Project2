@@ -11,7 +11,7 @@ class ProductListSerializer(serializers.ModelSerializer):
         model = Product
         fields = [
             'id', 'name', 'slug', 'price', 'volume',
-            'category', 'image', 'is_featured', 'created_at',
+            'category', 'image', 'images', 'is_featured', 'created_at',
         ]
 
 
@@ -23,7 +23,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         model = Product
         fields = [
             'id', 'name', 'slug', 'description', 'price', 'volume',
-            'category', 'fragrance_notes', 'image', 'is_featured',
+            'category', 'fragrance_notes', 'image', 'images', 'is_featured',
             'is_active', 'created_at', 'updated_at',
         ]
 
@@ -35,7 +35,7 @@ class ProductWriteSerializer(serializers.ModelSerializer):
         model = Product
         fields = [
             'name', 'description', 'price', 'volume',
-            'category', 'fragrance_notes', 'image',
+            'category', 'fragrance_notes', 'image', 'images',
             'is_featured', 'is_active',
         ]
 
@@ -50,3 +50,16 @@ class ProductWriteSerializer(serializers.ModelSerializer):
                 'fragrance_notes must be a JSON object with top/middle/base keys.'
             )
         return value
+
+    def validate_images(self, value):
+        if not isinstance(value, list):
+            raise serializers.ValidationError('images must be a list of URLs.')
+        if len(value) > 4:
+            raise serializers.ValidationError('Maximum 4 images allowed.')
+        return value
+
+    def validate(self, data):
+        images = data.get('images', [])
+        if images:
+            data['image'] = images[0]
+        return data

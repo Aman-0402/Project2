@@ -43,4 +43,13 @@ export const productService = {
     const { data } = await api.delete(`/admin/products/${id}/`)
     return data
   },
+
+  adminUploadImage: async (file: File): Promise<ApiResponse<{ url: string }>> => {
+    const fd = new FormData()
+    fd.append('image', file)
+    const { data } = await api.post('/admin/upload-image/', fd, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+    return data
+  },
 }

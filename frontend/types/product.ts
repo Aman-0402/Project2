@@ -16,6 +16,7 @@ export interface Product {
   category: Category | null
   fragrance_notes: FragranceNotes
   image: string | null
+  images: string[]
   is_featured: boolean
   is_active: boolean
   created_at: string
@@ -30,6 +31,7 @@ export interface ProductListItem {
   volume: string | null
   category: Category | null
   image: string | null
+  images: string[]
   is_featured: boolean
   created_at: string
 }
@@ -42,6 +44,7 @@ export interface ProductFormData {
   category: number | null
   fragrance_notes: FragranceNotes
   image: string
+  images: string[]
   is_featured: boolean
   is_active: boolean
 }

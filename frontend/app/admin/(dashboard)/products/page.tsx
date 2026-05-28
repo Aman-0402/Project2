@@ -8,7 +8,7 @@ import { productService } from '@/services/products'
 import { ROUTES } from '@/constants/config'
 import { formatPrice } from '@/utils/formatters'
 import { ConfirmModal } from '@/components/ui/Modal'
-import Badge from '@/components/ui/Badge'
+import NeoToggle from '@/components/admin/NeoToggle'
 import type { Product } from '@/types'
 
 export default function AdminProductsPage() {
@@ -19,6 +19,7 @@ export default function AdminProductsPage() {
   const [error, setError] = useState('')
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive' | 'featured'>('all')
+  const [toggling, setToggling] = useState<Record<string, boolean>>({})
 
   const loadProducts = useCallback(async () => {
     setIsLoading(true)
@@ -40,6 +41,31 @@ export default function AdminProductsPage() {
     } else {
       setError('Failed to delete product.')
     }
+  }
+
+  async function handleToggle(
+    productId: number,
+    field: 'is_active' | 'is_featured',
+    value: boolean
+  ) {
+    const key = `${productId}-${field}`
+    if (toggling[key]) return
+    setToggling((prev) => ({ ...prev, [key]: true }))
+
+    // Optimistic update
+    setProducts((prev) =>
+      prev.map((p) => (p.id === productId ? { ...p, [field]: value } : p))
+    )
+
+    const res = await productService.adminUpdate(productId, { [field]: value })
+    if (!res.success) {
+      // Revert on failure
+      setProducts((prev) =>
+        prev.map((p) => (p.id === productId ? { ...p, [field]: !value } : p))
+      )
+      setError(`Failed to update ${field === 'is_active' ? 'status' : 'featured'}.`)
+    }
+    setToggling((prev) => ({ ...prev, [key]: false }))
   }
 
   const filtered = useMemo(() => {
@@ -146,15 +172,18 @@ export default function AdminProductsPage() {
               <p className="font-sans text-[10px] text-brown/40 uppercase tracking-luxury">
                 {filtered.length} of {products.length} products
               </p>
+              <p className="font-sans text-[9px] text-brown/25 uppercase tracking-luxury hidden sm:block">
+                Toggle to change status instantly
+              </p>
             </div>
             <table className="w-full">
               <thead>
-                <tr className="border-b border-beige-dark">
+                <tr className="border-b border-beige-dark bg-beige/20">
                   <th className="text-left px-5 py-3 label-luxury text-[10px]">Product</th>
                   <th className="text-left px-5 py-3 label-luxury text-[10px] hidden md:table-cell">Category</th>
                   <th className="text-left px-5 py-3 label-luxury text-[10px]">Price</th>
-                  <th className="text-left px-5 py-3 label-luxury text-[10px] hidden lg:table-cell">Status</th>
-                  <th className="text-left px-5 py-3 label-luxury text-[10px] hidden lg:table-cell">Featured</th>
+                  <th className="text-center px-4 py-3 label-luxury text-[10px]">Active</th>
+                  <th className="text-center px-4 py-3 label-luxury text-[10px]">Featured</th>
                   <th className="text-right px-5 py-3 label-luxury text-[10px]">Actions</th>
                 </tr>
               </thead>
@@ -162,64 +191,89 @@ export default function AdminProductsPage() {
                 {filtered.map((product, i) => (
                   <motion.tr
                     key={product.id}
-                    className="border-b border-beige/60 last:border-0 hover:bg-beige/20 transition-colors"
+                    className="border-b border-beige/50 last:border-0 hover:bg-beige/25 transition-colors group"
                     initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.03 }}
                   >
-                    <td className="px-5 py-3.5">
+                    {/* Product */}
+                    <td className="px-5 py-4">
                       <div className="flex items-center gap-3">
                         {product.image ? (
-                          <div className="w-10 h-10 relative flex-shrink-0 bg-beige overflow-hidden">
+                          <div className="w-11 h-11 relative flex-shrink-0 overflow-hidden border border-beige-dark">
                             <Image
                               src={product.image}
                               alt={product.name}
                               fill
                               className="object-cover"
-                              sizes="40px"
+                              sizes="44px"
                             />
                           </div>
                         ) : (
-                          <div className="w-10 h-10 bg-beige flex-shrink-0 flex items-center justify-center border border-beige-dark">
+                          <div className="w-11 h-11 bg-beige flex-shrink-0 flex items-center justify-center border border-beige-dark">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1} className="w-4 h-4 text-brown/20">
                               <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
                             </svg>
                           </div>
                         )}
-                        <div>
-                          <p className="font-sans text-sm text-brown font-medium">{product.name}</p>
+                        <div className="min-w-0">
+                          <p className="font-sans text-sm text-brown font-medium truncate max-w-[200px]">{product.name}</p>
                           {product.volume && (
                             <p className="font-sans text-xs text-brown/35 mt-0.5">{product.volume}</p>
                           )}
                         </div>
                       </div>
                     </td>
-                    <td className="px-5 py-3.5 font-sans text-sm text-brown/55 hidden md:table-cell">
-                      {product.category?.name ?? '—'}
+
+                    {/* Category */}
+                    <td className="px-5 py-4 font-sans text-sm text-brown/55 hidden md:table-cell">
+                      {product.category?.name ?? <span className="text-brown/25">—</span>}
                     </td>
-                    <td className="px-5 py-3.5 font-sans text-sm text-brown font-medium">
+
+                    {/* Price */}
+                    <td className="px-5 py-4 font-sans text-sm text-brown font-medium whitespace-nowrap">
                       {formatPrice(product.price)}
                     </td>
-                    <td className="px-5 py-3.5 hidden lg:table-cell">
-                      <Badge variant={product.is_active ? 'success' : 'beige'}>
-                        {product.is_active ? 'Active' : 'Inactive'}
-                      </Badge>
+
+                    {/* Active toggle */}
+                    <td className="px-4 py-4 text-center">
+                      <div className="flex justify-center" className="neo-toggle-cell">
+                        <NeoToggle
+                          id={`active-${product.id}`}
+                          checked={product.is_active}
+                          onChange={(val) => handleToggle(product.id, 'is_active', val)}
+                          variant="active"
+                          disabled={!!toggling[`${product.id}-is_active`]}
+                        />
+                      </div>
                     </td>
-                    <td className="px-5 py-3.5 hidden lg:table-cell">
-                      {product.is_featured && <Badge variant="gold">Featured</Badge>}
+
+                    {/* Featured toggle */}
+                    <td className="px-4 py-4 text-center">
+                      <div className="flex justify-center" className="neo-toggle-cell">
+                        <NeoToggle
+                          id={`featured-${product.id}`}
+                          checked={product.is_featured}
+                          onChange={(val) => handleToggle(product.id, 'is_featured', val)}
+                          variant="featured"
+                          disabled={!!toggling[`${product.id}-is_featured`]}
+                        />
+                      </div>
                     </td>
-                    <td className="px-5 py-3.5 text-right">
+
+                    {/* Actions */}
+                    <td className="px-5 py-4 text-right">
                       <div className="flex items-center justify-end gap-4">
                         <Link
                           href={ROUTES.adminProductEdit(product.id)}
-                          className="text-brown/45 hover:text-gold text-xs font-sans uppercase tracking-luxury transition-colors"
+                          className="text-brown/40 hover:text-gold text-xs font-sans uppercase tracking-luxury transition-colors"
                         >
                           Edit
                         </Link>
                         <button
                           type="button"
                           onClick={() => setDeleteTarget(product)}
-                          className="text-brown/45 hover:text-red-500 text-xs font-sans uppercase tracking-luxury transition-colors"
+                          className="text-brown/40 hover:text-red-500 text-xs font-sans uppercase tracking-luxury transition-colors"
                         >
                           Delete
                         </button>

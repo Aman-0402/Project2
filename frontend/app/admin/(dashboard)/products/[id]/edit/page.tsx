@@ -67,6 +67,11 @@ export default function EditProductPage() {
     category: product.category?.id ?? null,
     fragrance_notes: product.fragrance_notes,
     image: product.image ?? '',
+    images: product.images?.length
+      ? product.images
+      : product.image
+      ? [product.image]
+      : [],
     is_featured: product.is_featured,
     is_active: product.is_active,
   }

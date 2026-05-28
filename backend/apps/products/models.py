@@ -18,7 +18,8 @@ class Product(models.Model):
     )
     # Fragrance notes stored as JSON: {"top": [...], "middle": [...], "base": [...]}
     fragrance_notes = models.JSONField(default=dict, blank=True)
-    image = models.CharField(max_length=500, blank=True, null=True, help_text='Cloudinary URL')
+    image = models.CharField(max_length=500, blank=True, null=True, help_text='Primary Cloudinary URL (auto-set from images[0])')
+    images = models.JSONField(default=list, blank=True, help_text='Array of up to 4 Cloudinary URLs')
     is_featured = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)

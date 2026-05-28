@@ -5,6 +5,7 @@ from .views import (
     ProductDetailView,
     AdminProductListView,
     AdminProductDetailView,
+    AdminImageUploadView,
 )
 
 urlpatterns = [
@@ -16,4 +17,5 @@ urlpatterns = [
     # Admin — all require IsAdminUser
     path('admin/products/', AdminProductListView.as_view(), name='admin-product-list'),
     path('admin/products/<int:pk>/', AdminProductDetailView.as_view(), name='admin-product-detail'),
+    path('admin/upload-image/', AdminImageUploadView.as_view(), name='admin-image-upload'),
 ]

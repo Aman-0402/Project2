@@ -6,6 +6,10 @@ from utils.response import (
 )
 from .models import Product
 from .serializers import ProductListSerializer, ProductDetailSerializer, ProductWriteSerializer
+from services.cloudinary_service import upload_image
+
+MAX_IMAGE_SIZE = 2 * 1024 * 1024  # 2 MB
+ALLOWED_IMAGE_TYPES = ('image/jpeg', 'image/jpg', 'image/png', 'image/webp')
 
 
 class ProductListView(APIView):
@@ -114,3 +118,26 @@ class AdminProductDetailView(APIView):
             return not_found_response('Product not found.')
         product.delete()
         return success_response(message='Product deleted.')
+
+
+class AdminImageUploadView(APIView):
+    """POST /api/admin/upload-image/ — upload one image to Cloudinary (admin only)."""
+    permission_classes = [IsAdminUser]
+
+    def post(self, request):
+        file = request.FILES.get('image')
+        if not file:
+            return error_response(message='No image file provided.')
+
+        if file.content_type not in ALLOWED_IMAGE_TYPES:
+            return error_response(message='Invalid file type. Use JPEG, PNG, or WebP.')
+
+        if file.size > MAX_IMAGE_SIZE:
+            return error_response(message='Image exceeds 2 MB limit.')
+
+        try:
+            url = upload_image(file, folder='mm-attarwala/products')
+        except Exception as exc:
+            return error_response(message=f'Upload failed: {str(exc)}')
+
+        return success_response(data={'url': url}, message='Image uploaded.')
