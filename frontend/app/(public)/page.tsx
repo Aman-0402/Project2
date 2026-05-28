@@ -8,7 +8,7 @@ import Testimonials from '@/sections/Testimonials'
 import WhatsAppCTASection from '@/sections/WhatsAppCTASection'
 
 export const metadata: Metadata = {
-  title: 'LUXE PARFUM — The Art of Scent',
+  title: 'M M ATTARWALA — The Art of Scent',
   description: 'Discover extraordinary luxury fragrances. Oud, Floral, Oriental, and rare perfumes crafted for the discerning few.',
 }
 

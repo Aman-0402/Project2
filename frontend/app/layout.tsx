@@ -29,16 +29,16 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: {
-    default: 'LUXE PARFUM — The Art of Scent',
-    template: '%s | LUXE PARFUM',
+    default: 'M M ATTARWALA — The Art of Scent',
+    template: '%s | M M ATTARWALA',
   },
   description:
-    'LUXE PARFUM is a boutique luxury fragrance house crafting extraordinary scents. Discover our exclusive collection of Oud, Floral, Oriental, and rare perfumes.',
-  keywords: ['luxury perfume', 'boutique fragrance', 'oud perfume', 'luxury scent', 'parfum'],
+    'M M ATTARWALA is a boutique luxury fragrance house crafting extraordinary scents. Discover our exclusive collection of Oud, Floral, Oriental, and rare perfumes.',
+  keywords: ['luxury perfume', 'boutique fragrance', 'oud perfume', 'luxury scent', 'attar', 'M M ATTARWALA'],
   openGraph: {
     type: 'website',
-    siteName: 'LUXE PARFUM',
-    title: 'LUXE PARFUM — The Art of Scent',
+    siteName: 'M M ATTARWALA',
+    title: 'M M ATTARWALA — The Art of Scent',
     description: 'Discover extraordinary luxury fragrances crafted for the discerning few.',
   },
 }
