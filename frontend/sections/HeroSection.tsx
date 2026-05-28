@@ -52,44 +52,92 @@ function GhostBottle() {
       aria-hidden="true"
     >
       <defs>
-        <filter id="hero-glow">
+        {/* Subtle edge glow */}
+        <filter id="hero-glow" x="-40%" y="-40%" width="180%" height="180%">
           <feGaussianBlur stdDeviation="2.5" result="blur" />
           <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
         </filter>
-        <linearGradient id="hero-shine" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="#C6A16E" stopOpacity="0" />
-          <stop offset="50%" stopColor="#C6A16E" stopOpacity="0.6" />
-          <stop offset="100%" stopColor="#C6A16E" stopOpacity="0" />
+        {/* Stronger outer glow for body */}
+        <filter id="body-glow" x="-25%" y="-12%" width="150%" height="125%">
+          <feGaussianBlur stdDeviation="5" result="blur" />
+          <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+        </filter>
+        {/* Glass side fill — left-to-right gradient so edges appear denser */}
+        <linearGradient id="glass-fill" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%"   stopColor="#C6A16E" stopOpacity="0.12" />
+          <stop offset="35%"  stopColor="#C6A16E" stopOpacity="0.04" />
+          <stop offset="100%" stopColor="#C6A16E" stopOpacity="0.09" />
         </linearGradient>
       </defs>
+
       {/* Nozzle */}
-      <rect x="54" y="2" width="12" height="5" rx="3" stroke="#C6A16E" strokeWidth="0.8" filter="url(#hero-glow)" />
-      <rect x="58" y="2" width="4" height="10" rx="2" stroke="#C6A16E" strokeWidth="0.8" />
+      <rect x="54" y="2" width="12" height="5" rx="3" stroke="#C6A16E" strokeWidth="1" strokeOpacity="0.9" filter="url(#hero-glow)" />
+      <rect x="58" y="2" width="4" height="10" rx="2" stroke="#C6A16E" strokeWidth="0.9" strokeOpacity="0.8" />
+
       {/* Cap */}
-      <rect x="38" y="7" width="44" height="20" rx="6" stroke="#C6A16E" strokeWidth="0.9" filter="url(#hero-glow)" />
-      <rect x="43" y="11" width="12" height="12" rx="2" stroke="#C6A16E" strokeWidth="0.5" strokeOpacity="0.5" />
+      <rect x="38" y="7" width="44" height="20" rx="6" stroke="#C6A16E" strokeWidth="1.2" strokeOpacity="0.95" filter="url(#hero-glow)" />
+      <rect x="43" y="11" width="12" height="12" rx="2" stroke="#C6A16E" strokeWidth="0.5" strokeOpacity="0.55" />
+      {/* Cap highlight top edge */}
+      <line x1="40" y1="8" x2="80" y2="8" stroke="#C6A16E" strokeWidth="0.4" strokeOpacity="0.6" />
+
       {/* Neck */}
-      <rect x="49" y="27" width="22" height="22" stroke="#C6A16E" strokeWidth="0.8" />
+      <rect x="49" y="27" width="22" height="22" stroke="#C6A16E" strokeWidth="1" strokeOpacity="0.9" />
+
       {/* Shoulder */}
-      <path d="M49 49 Q33 54 18 58 L102 58 Q87 54 71 49 Z" stroke="#C6A16E" strokeWidth="0.8" strokeOpacity="0.9" />
-      {/* Body */}
-      <rect x="18" y="58" width="84" height="128" rx="10" stroke="#C6A16E" strokeWidth="1.4" fill="#C6A16E" fillOpacity="0.04" filter="url(#hero-glow)" />
-      {/* Glass reflection streak */}
-      <rect x="26" y="70" width="6" height="100" rx="3" fill="#C6A16E" fillOpacity="0.12" />
-      {/* Second highlight */}
-      <rect x="34" y="80" width="2.5" height="70" rx="1.25" fill="#C6A16E" fillOpacity="0.06" />
-      {/* Brand letter */}
-      <text x="60" y="130" textAnchor="middle" fontFamily="Georgia, serif" fontSize="36" fontStyle="italic" fill="#C6A16E" fillOpacity="0.55">
-        {CONFIG.brandName[0]}
+      <path d="M49 49 Q33 54 18 58 L102 58 Q87 54 71 49 Z" stroke="#C6A16E" strokeWidth="1" strokeOpacity="0.9" />
+
+      {/* Body — gradient fill + outer glow */}
+      <rect x="18" y="58" width="84" height="128" rx="10" stroke="#C6A16E" strokeWidth="2" strokeOpacity="1" fill="url(#glass-fill)" filter="url(#body-glow)" />
+      {/* Inner rim — faint inset edge */}
+      <rect x="19.5" y="59.5" width="81" height="125" rx="9" stroke="#C6A16E" strokeWidth="0.35" strokeOpacity="0.35" fill="none" />
+
+      {/* Glass reflections — left bright streak */}
+      <rect x="26" y="70" width="6" height="100" rx="3" fill="#C6A16E" fillOpacity="0.30" />
+      {/* Secondary left */}
+      <rect x="34" y="80" width="3" height="70" rx="1.5" fill="#C6A16E" fillOpacity="0.14" />
+      {/* Right edge reflection */}
+      <rect x="95" y="70" width="3.5" height="80" rx="1.75" fill="#C6A16E" fillOpacity="0.14" />
+      {/* Caustic pool at base of body */}
+      <ellipse cx="60" cy="178" rx="28" ry="3.5" fill="#C6A16E" fillOpacity="0.07" />
+
+      {/* ── Brand lockup inside bottle ── */}
+      {/* Top ornament line */}
+      <line x1="34" y1="96" x2="86" y2="96" stroke="#C6A16E" strokeWidth="0.35" strokeOpacity="0.45" />
+      {/* Diamond accent */}
+      <polygon points="60,84 63,90 60,96 57,90" fill="#C6A16E" fillOpacity="0.55" />
+
+      {/* M.M — dominant italic, fits within bottle width */}
+      <text x="60" y="122" textAnchor="middle" fontFamily="Georgia, serif" fontSize="30" fontStyle="italic" fill="#C6A16E" fillOpacity="0.78">
+        M.M
       </text>
+
+      {/* Separator */}
+      <line x1="28" y1="129" x2="92" y2="129" stroke="#C6A16E" strokeWidth="0.4" strokeOpacity="0.4" />
+
+      {/* ATTARWALA — small tracked caps */}
+      <text x="60" y="142" textAnchor="middle" fontFamily="Georgia, serif" fontSize="8" fill="#C6A16E" fillOpacity="0.65" className="bottle-text-tracked">
+        ATTARWALA
+      </text>
+
+      {/* Bottom ornament line */}
+      <line x1="34" y1="149" x2="86" y2="149" stroke="#C6A16E" strokeWidth="0.35" strokeOpacity="0.35" />
+
       {/* Base ellipse */}
-      <ellipse cx="60" cy="192" rx="42" ry="6" stroke="#C6A16E" strokeWidth="0.9" filter="url(#hero-glow)" />
+      <ellipse cx="60" cy="192" rx="42" ry="6" stroke="#C6A16E" strokeWidth="1.2" strokeOpacity="0.95" filter="url(#hero-glow)" />
+      <ellipse cx="60" cy="192" rx="38" ry="4" fill="#C6A16E" fillOpacity="0.06" />
     </svg>
   )
 }
 
+function splitBrandName(name: string): [string, string] {
+  const idx = name.lastIndexOf(' ')
+  if (idx < 0) return [name, '']
+  return [name.slice(0, idx), name.slice(idx + 1)]
+}
+
 export default function HeroSection() {
   const ref = useRef<HTMLElement>(null)
+  const [nameLine1, nameLine2] = splitBrandName(CONFIG.brandName)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
   const dotY      = useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
   const contentOp = useTransform(scrollYProgress, [0, 0.6], [1, 0])
@@ -116,7 +164,7 @@ export default function HeroSection() {
   }, [mouseX, mouseY])
 
   return (
-    <section ref={ref} className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden bg-hero">
+    <section ref={ref} className="relative h-screen min-h-[700px] flex items-center justify-center lg:justify-start overflow-hidden bg-hero">
 
       {/* ── Layer 1: Parallax dot texture ── */}
       <motion.div
@@ -186,20 +234,20 @@ export default function HeroSection() {
         ))}
       </div>
 
-      {/* ── Layer 8: Ghost bottle + smoke ── */}
+      {/* ── Layer 8: Bottle — left half on desktop, centered bg on mobile ── */}
       <motion.div
         style={{ y: bottleY }}
-        className="absolute inset-0 flex items-center justify-center pointer-events-none"
+        className="absolute inset-0 lg:left-auto lg:w-1/2 flex items-center justify-center pointer-events-none"
         aria-hidden="true"
       >
-        {/* Gold bloom behind bottle */}
-        <div className="absolute w-[220px] h-[220px] md:w-[280px] md:h-[280px] lg:w-[340px] lg:h-[340px] rounded-full bg-[radial-gradient(ellipse_at_center,_rgba(198,161,110,0.14)_0%,_transparent_70%)] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+        {/* Gold bloom */}
+        <div className="absolute w-[240px] h-[240px] lg:w-[400px] lg:h-[400px] rounded-full bg-[radial-gradient(ellipse_at_center,_rgba(198,161,110,0.22)_0%,_transparent_70%)]" />
 
         {/* Bottle */}
-        <div className="opacity-[0.20] w-[240px] h-[360px] md:w-[300px] md:h-[450px] lg:w-[360px] lg:h-[540px] relative">
+        <div className="opacity-[0.35] lg:opacity-[0.65] w-[200px] h-[300px] md:w-[260px] md:h-[390px] lg:w-[340px] lg:h-[510px] relative">
           <GhostBottle />
 
-          {/* Smoke wisps — overlay on same viewBox */}
+          {/* Smoke wisps */}
           <svg
             viewBox="0 0 120 212"
             className="absolute inset-0 w-full h-full overflow-visible pointer-events-none"
@@ -214,49 +262,44 @@ export default function HeroSection() {
                 strokeLinecap="round"
                 fill="none"
                 initial={{ pathLength: 0, opacity: 0 }}
-                animate={{ pathLength: [0, 1, 1, 0], opacity: [0, 0.35, 0.18, 0] }}
+                animate={{ pathLength: [0, 1, 1, 0], opacity: [0, 0.4, 0.2, 0] }}
                 transition={{ duration: w.dur, delay: w.delay, repeat: Infinity, ease: 'easeInOut' }}
               />
             ))}
           </svg>
         </div>
 
-        {/* Animated shine sweep across bottle */}
+        {/* Shine sweep */}
         <motion.div
-          className="absolute w-[4px] h-[360px] md:h-[450px] lg:h-[540px] bg-gradient-to-b from-transparent via-gold/30 to-transparent"
-          animate={{ x: ['-160px', '160px'], opacity: [0, 0.5, 0] }}
+          className="absolute w-[4px] h-[300px] lg:h-[510px] bg-gradient-to-b from-transparent via-gold/30 to-transparent"
+          animate={{ x: ['-120px', '120px'], opacity: [0, 0.5, 0] }}
           transition={{ duration: 4, delay: 2, repeat: Infinity, repeatDelay: 6, ease: [0.4, 0, 0.2, 1] }}
         />
       </motion.div>
 
-      {/* ── Layer 9: Main content ── */}
+      {/* ── Layer 9: Text — right half on desktop, centered on mobile ── */}
       <motion.div
         style={{ opacity: contentOp }}
-        className="relative z-10 text-center px-6 max-w-5xl mx-auto"
+        className="relative z-10 w-full px-6 text-center lg:text-left lg:w-1/2 lg:mr-auto lg:pl-16 lg:pr-8"
       >
-        {/* Eyebrow label */}
-        <motion.p
-          className="font-sans text-gold/55 text-[10px] uppercase mb-8 tracking-[0.55em]"
-          initial={{ opacity: 0, letterSpacing: '0.75em' }}
-          animate={{ opacity: 1, letterSpacing: '0.55em' }}
-          transition={{ duration: 1.6, ease: [0.4, 0, 0.2, 1] }}
-        >
-          {CONFIG.brandTagline}
-        </motion.p>
-
         {/* Brand name */}
         <motion.h1
-          className="font-serif text-[clamp(4rem,11vw,9.5rem)] text-ivory leading-[0.95] tracking-[0.12em] mb-6"
+          className="font-serif text-[clamp(2.8rem,6.5vw,6.5rem)] text-ivory leading-[1.0] tracking-[0.08em] mb-8"
           initial={{ opacity: 0, y: 60 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.1, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
         >
-          {CONFIG.brandName}
+          {nameLine2 ? (
+            <>
+              <span className="block">{nameLine1}</span>
+              <span className="block">{nameLine2}</span>
+            </>
+          ) : nameLine1}
         </motion.h1>
 
-        {/* Italic subtitle — bigger + more contrast */}
+        {/* Italic subtitle */}
         <motion.p
-          className="font-display text-xl md:text-3xl text-ivory/90 italic font-normal tracking-wide"
+          className="font-display text-lg md:text-xl text-ivory/85 italic font-normal tracking-wide"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.5, ease: [0.4, 0, 0.2, 1] }}
@@ -264,17 +307,17 @@ export default function HeroSection() {
           Crafted for Those Who Wear Presence
         </motion.p>
 
-        {/* Gold divider */}
+        {/* Gold divider — left-aligned on desktop */}
         <motion.div
-          className="w-24 h-px bg-gradient-to-r from-transparent via-gold to-transparent mx-auto my-8"
+          className="w-24 h-px bg-gradient-to-r from-gold via-gold/60 to-transparent mx-auto lg:mx-0 my-8"
           initial={{ scaleX: 0, opacity: 0 }}
           animate={{ scaleX: 1, opacity: 1 }}
           transition={{ duration: 1.1, delay: 0.8 }}
         />
 
-        {/* Body copy — improved contrast + width */}
+        {/* Body copy */}
         <motion.p
-          className="font-sans text-ivory/80 text-base md:text-lg leading-[1.9] max-w-sm mx-auto"
+          className="font-sans text-ivory/75 text-sm md:text-base leading-[1.9] max-w-sm mx-auto lg:mx-0"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.0 }}
@@ -285,7 +328,7 @@ export default function HeroSection() {
 
         {/* CTAs */}
         <motion.div
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10"
+          className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mt-10"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.2 }}
@@ -301,9 +344,9 @@ export default function HeroSection() {
           </Link>
         </motion.div>
 
-        {/* Trust markers — improved contrast */}
+        {/* Trust markers */}
         <motion.div
-          className="flex flex-wrap justify-center gap-x-8 gap-y-1 mt-10"
+          className="flex flex-wrap justify-center lg:justify-start gap-x-8 gap-y-1 mt-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.6, duration: 0.8 }}

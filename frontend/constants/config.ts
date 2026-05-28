@@ -1,7 +1,7 @@
 export const CONFIG = {
   apiUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api',
   whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '+9852104967',
-  brandName: process.env.NEXT_PUBLIC_BRAND_NAME || 'M M ATTARWALA',
+  brandName: process.env.NEXT_PUBLIC_BRAND_NAME || 'M.M ATTARWALA',
   brandTagline: 'The Art of Scent',
 } as const
 

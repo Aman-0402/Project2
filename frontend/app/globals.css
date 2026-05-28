@@ -368,6 +368,11 @@
   }
 }
 
+/* Bottle brand lockup text */
+.bottle-text-tracked {
+  letter-spacing: 3.8px;
+}
+
 /* WhatsApp floating button */
 .wa-tooltip {
   box-shadow: 0 4px 16px rgba(37, 211, 102, 0.25);
