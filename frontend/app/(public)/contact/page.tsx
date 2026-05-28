@@ -47,7 +47,7 @@ export default function ContactPage() {
           <div className="text-center mb-16">
             <p className="label-luxury mb-3">How Can We Help</p>
             <h2 className="heading-luxury">Get in Touch</h2>
-            <div className="gold-divider mx-auto mt-6" />
+            <div className="gold-divider mx-auto" />
             <p className="font-sans text-sm text-brown/60 mt-6 max-w-md mx-auto">
               We are available via WhatsApp for all inquiries. Select the option that best describes your need.
             </p>

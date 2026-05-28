@@ -34,7 +34,7 @@ export default function Testimonials() {
 
       <div className="container-luxury">
         <motion.div
-          className="text-center mb-16"
+          className="text-center mb-12"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -42,12 +42,12 @@ export default function Testimonials() {
         >
           <p className="label-luxury mb-3">Voices</p>
           <h2 className="heading-luxury">What Our Clients Say</h2>
-          <div className="gold-divider mx-auto mt-6" />
+          <div className="gold-divider mx-auto" />
         </motion.div>
 
         <div className="max-w-3xl mx-auto">
           {/* Quote display */}
-          <div className="relative min-h-[200px] flex items-center justify-center">
+          <div className="relative min-h-[260px] flex items-center justify-center">
             <AnimatePresence mode="wait">
               <motion.div
                 key={active}
@@ -70,7 +70,7 @@ export default function Testimonials() {
           </div>
 
           {/* Navigation dots */}
-          <div className="flex items-center justify-center mt-12">
+          <div className="flex items-center justify-center mt-8">
             {TESTIMONIALS.map((_, i) => (
               <button
                 key={i}

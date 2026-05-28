@@ -79,13 +79,13 @@ export default function ProductShowcase() {
         >
           <p className="label-luxury mb-3">The Collection</p>
           <h2 className="heading-luxury">All Fragrances</h2>
-          <div className="gold-divider mx-auto mt-6" />
+          <div className="gold-divider mx-auto" />
         </motion.div>
 
         {/* Category filter */}
         {categories.length > 0 && (
           <motion.div
-            className="flex flex-wrap items-center justify-center gap-2 mb-12"
+            className="flex flex-wrap items-center justify-center gap-2 mb-10"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}

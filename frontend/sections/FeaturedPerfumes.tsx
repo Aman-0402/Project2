@@ -78,7 +78,7 @@ export default function FeaturedPerfumes() {
         >
           <p className="label-luxury mb-3">Curated Selection</p>
           <h2 className="heading-luxury">Featured Fragrances</h2>
-          <div className="gold-divider mx-auto mt-6" />
+          <div className="gold-divider mx-auto" />
         </motion.div>
 
         {isLoading ? (

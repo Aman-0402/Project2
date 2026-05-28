@@ -73,7 +73,7 @@ export default function AboutPage() {
           <div className="text-center mb-14">
             <p className="label-luxury mb-3">What We Stand For</p>
             <h2 className="heading-luxury">Our Pillars</h2>
-            <div className="gold-divider mx-auto mt-6" />
+            <div className="gold-divider mx-auto" />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {PILLARS.map((pillar, i) => (
