@@ -45,11 +45,6 @@
     box-sizing: border-box;
   }
 
-  /* Custom cursor — hide native on pointer:fine (mouse) devices */
-  @media (pointer: fine) {
-    *, *::before, *::after { cursor: none !important; }
-  }
-
   /* Film grain overlay — entire viewport, subtle texture depth */
   @media (prefers-reduced-motion: no-preference) {
     body::after {
