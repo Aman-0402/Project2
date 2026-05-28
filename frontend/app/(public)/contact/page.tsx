@@ -68,7 +68,7 @@ export default function ContactPage() {
                   href={option.action}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-gold border-b border-gold/30 pb-1 text-xs font-sans uppercase tracking-luxury hover:border-gold transition-colors duration-300 self-start"
+                  className="inline-flex items-center gap-2 text-gold border-b border-gold/30 pb-1 text-xs font-sans uppercase tracking-luxury hover:border-gold transition-colors duration-300 self-start whitespace-nowrap"
                 >
                   {option.label}
                   <span className="text-xs">&rarr;</span>

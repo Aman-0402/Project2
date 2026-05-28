@@ -130,7 +130,7 @@ export default function HeroSection() {
       {/* ── Layer 3: Static ambient glows ── */}
       <motion.div
         style={{ opacity: glowOp }}
-        className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_55%_65%_at_50%_52%,_rgba(198,161,110,0.16)_0%,_transparent_70%)]"
+        className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_55%_65%_at_50%_52%,_rgba(198,161,110,0.08)_0%,_transparent_70%)]"
       />
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_80%_50%_at_50%_85%,_rgba(28,15,10,0.7)_0%,_transparent_70%)]" />
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_80%_40%_at_50%_8%,_rgba(28,15,10,0.55)_0%,_transparent_70%)]" />
@@ -256,7 +256,7 @@ export default function HeroSection() {
 
         {/* Italic subtitle — bigger + more contrast */}
         <motion.p
-          className="font-display text-xl md:text-3xl text-ivory/65 italic font-normal tracking-wide"
+          className="font-display text-xl md:text-3xl text-ivory/90 italic font-normal tracking-wide"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.5, ease: [0.4, 0, 0.2, 1] }}
@@ -274,7 +274,7 @@ export default function HeroSection() {
 
         {/* Body copy — improved contrast + width */}
         <motion.p
-          className="font-sans text-ivory/72 text-base md:text-lg leading-[1.9] max-w-sm mx-auto"
+          className="font-sans text-ivory/80 text-base md:text-lg leading-[1.9] max-w-sm mx-auto"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.0 }}

@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
 import { CONFIG, ROUTES } from '@/constants/config'
 import { buildWhatsAppUrl } from '@/utils/whatsapp'
+import SocialCard from '@/components/ui/SocialCard'
 
 const NAV_LINKS = [
   { label: 'Home',        href: ROUTES.home },
@@ -30,18 +30,7 @@ function DiamondMark() {
 }
 
 export default function Footer() {
-  const [email, setEmail] = useState('')
-  const [submitted, setSubmitted] = useState(false)
-
   const year = new Date().getFullYear()
-
-  const handleNewsletter = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (email) {
-      setSubmitted(true)
-      setEmail('')
-    }
-  }
 
   return (
     <footer className="relative bg-[#0E0704] overflow-hidden">
@@ -125,47 +114,26 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Newsletter */}
+          {/* Admin + Social */}
           <div>
-            <h4 className="label-luxury text-gold mb-6">Exclusive Access</h4>
+            <h4 className="label-luxury text-gold mb-6">Manage</h4>
             <p className="font-sans text-sm text-ivory/40 leading-relaxed mb-5">
-              Join our inner circle for rare launches and private fragrance previews.
+              Admin access for store management and product updates.
             </p>
 
-            {submitted ? (
-              <div className="border border-gold/30 px-4 py-3">
-                <p className="font-sans text-xs text-gold/70 tracking-luxury uppercase">Welcomed to the circle</p>
-              </div>
-            ) : (
-              <form onSubmit={handleNewsletter} className="flex flex-col gap-2">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Your email"
-                  required
-                  className="bg-transparent border border-ivory/15 px-4 py-2.5 font-sans text-xs text-ivory/70 placeholder-ivory/25 focus:outline-none focus:border-gold/50 transition-colors duration-300"
-                />
-                <button
-                  type="submit"
-                  className="border border-gold/40 text-gold/70 hover:border-gold hover:text-gold font-sans text-xs uppercase tracking-luxury px-4 py-2.5 transition-all duration-300 hover:-translate-y-px cursor-pointer"
-                >
-                  Subscribe
-                </button>
-              </form>
-            )}
+            <Link
+              href="/admin"
+              className="inline-flex items-center gap-2 border border-ivory/15 text-ivory/40 hover:border-gold/50 hover:text-gold font-sans text-xs uppercase tracking-luxury px-4 py-2.5 transition-all duration-300 hover:-translate-y-px whitespace-nowrap"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-3.5 h-3.5 flex-shrink-0">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+              </svg>
+              Admin Login
+            </Link>
 
-            {/* Social placeholder */}
-            <div className="mt-6 flex items-center gap-3">
-              <span className="font-sans text-[10px] text-ivory/20 uppercase tracking-luxury">Follow</span>
-              <span className="flex-1 h-px bg-ivory/8" />
-              <div className="flex gap-2">
-                {['IG', 'TT'].map((s) => (
-                  <span key={s} className="w-7 h-7 border border-ivory/12 flex items-center justify-center font-sans text-[9px] text-ivory/25 hover:border-gold/30 hover:text-gold/50 transition-colors duration-300 cursor-pointer">
-                    {s}
-                  </span>
-                ))}
-              </div>
+            {/* Social card */}
+            <div className="mt-6">
+              <SocialCard />
             </div>
           </div>
         </div>

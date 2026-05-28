@@ -203,7 +203,7 @@
     box-shadow: 0 6px 32px rgba(198,161,110,0.25);
   }
 
-  /* WhatsApp green button */
+  /* WhatsApp green button — simple variant (used elsewhere) */
   .btn-whatsapp {
     @apply inline-flex items-center justify-center gap-3
            font-sans text-xs uppercase tracking-luxury
@@ -216,6 +216,83 @@
   }
   .btn-whatsapp:hover {
     box-shadow: 0 6px 32px rgba(37,211,102,0.4);
+  }
+
+  /* WhatsApp luxury ripple-fill — gold theme, dark base, gold fills on hover */
+  .btn-whatsapp-luxury {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    color: #C6A16E;
+    padding: 1rem 2.5rem;
+    font-family: var(--font-poppins), sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: #1C0F0A;
+    border: 1px solid rgba(198, 161, 110, 0.35);
+    cursor: pointer;
+    transition: color 0.35s ease, border-color 0.35s ease;
+    box-shadow: 0 2px 24px rgba(0, 0, 0, 0.4);
+  }
+  .btn-whatsapp-luxury::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%) scaleY(1) scaleX(1.25);
+    top: 100%;
+    width: 140%;
+    height: 180%;
+    background-color: rgba(198, 161, 110, 0.1);
+    border-radius: 50%;
+    display: block;
+    transition: all 0.5s 0.08s cubic-bezier(0.55, 0, 0.1, 1);
+    z-index: -1;
+  }
+  .btn-whatsapp-luxury::after {
+    content: "";
+    position: absolute;
+    left: 55%;
+    transform: translateX(-50%) scaleY(1) scaleX(1.45);
+    top: 180%;
+    width: 160%;
+    height: 190%;
+    background-color: #C6A16E;
+    border-radius: 50%;
+    display: block;
+    transition: all 0.5s 0.08s cubic-bezier(0.55, 0, 0.1, 1);
+    z-index: -1;
+  }
+  .btn-whatsapp-luxury:hover {
+    color: #2A1812;
+    border-color: #C6A16E;
+    box-shadow: 0 6px 36px rgba(198, 161, 110, 0.35);
+  }
+  .btn-whatsapp-luxury:hover::before {
+    top: -35%;
+    background-color: #C6A16E;
+    transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
+  }
+  .btn-whatsapp-luxury:hover::after {
+    top: -45%;
+    background-color: #C6A16E;
+    transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
+  }
+  .btn-whatsapp-luxury:active {
+    box-shadow: inset 0 2px 12px rgba(0, 0, 0, 0.3);
+  }
+  .btn-whatsapp-luxury > svg {
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0;
+  }
+  .btn-whatsapp-luxury > span {
+    position: relative;
+    z-index: 2;
   }
 
   /* Glass — for CTAs overlaid on images/dark sections */
@@ -271,4 +348,39 @@
     -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
   }
+
+  /* Testimonials carousel */
+  .testimonials-track {
+    animation: testimonials-scroll 60s linear infinite;
+    will-change: translate;
+  }
+  .testimonials-track-paused {
+    animation-play-state: paused;
+  }
+  .testimonials-card-shadow {
+    box-shadow: 0 8px 40px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+  .testimonials-quote-bg {
+    font-size: clamp(12rem, 30vw, 22rem);
+  }
+  .testimonials-quote-mark {
+    font-size: 4.5rem;
+  }
+}
+
+/* WhatsApp floating button */
+.wa-tooltip {
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.25);
+}
+.wa-btn {
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.25);
+  transition: box-shadow 0.3s ease;
+}
+.wa-btn:hover {
+  box-shadow: 0 8px 28px rgba(37, 211, 102, 0.45);
+}
+
+@keyframes testimonials-scroll {
+  from { translate: 0% 0%; }
+  to   { translate: -50% 0%; }
 }
