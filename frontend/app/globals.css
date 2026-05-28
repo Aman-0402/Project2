@@ -24,12 +24,16 @@
     background-color: var(--color-ivory);
     color: var(--color-brown);
     font-family: var(--font-poppins), system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.7;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-cormorant), Georgia, serif;
     color: var(--color-brown);
-    font-weight: 400;
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: 0.02em;
   }
 
   ::selection {
@@ -81,13 +85,23 @@
     @apply w-16 h-px bg-gold my-6;
   }
 
-  /* Luxury heading style */
+  /* Luxury heading — Cormorant, editorial weight */
   .heading-luxury {
-    @apply font-serif text-4xl md:text-5xl lg:text-6xl text-brown tracking-wide leading-tight;
+    @apply font-serif text-4xl md:text-5xl lg:text-6xl text-brown tracking-wide leading-tight font-medium;
+  }
+
+  /* Display heading — Playfair Display bold, maximum drama */
+  .heading-display {
+    @apply font-display text-4xl md:text-5xl lg:text-7xl text-brown font-bold leading-[1.1] tracking-tight;
   }
 
   .subheading-luxury {
-    @apply font-serif text-2xl md:text-3xl text-brown tracking-wide;
+    @apply font-serif text-2xl md:text-3xl lg:text-4xl text-brown tracking-wide font-medium;
+  }
+
+  /* Premium body copy — 18px, airy line-height */
+  .body-luxury {
+    @apply font-sans text-lg leading-[1.8] text-brown/70;
   }
 
   /* Label style */

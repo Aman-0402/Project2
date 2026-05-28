@@ -23,12 +23,12 @@ export default function WhatsAppCTASection() {
           transition={{ duration: 0.8 }}
         >
           <p className="label-luxury text-gold mb-4">Connect With Us</p>
-          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-ivory tracking-wide leading-tight mb-6">
+          <h2 className="font-display text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-ivory font-bold leading-[1.1] mb-6">
             Experience Luxury<br />
             <em className="not-italic text-gradient-gold">Personally</em>
           </h2>
           <div className="w-12 h-px bg-gold mx-auto my-8" />
-          <p className="font-sans text-ivory/50 text-sm leading-relaxed max-w-md mx-auto mb-10">
+          <p className="font-sans text-ivory/50 text-base md:text-lg leading-[1.8] max-w-md mx-auto mb-10">
             Our fragrance consultants are available on WhatsApp for product inquiries,
             custom fragrance commissions, and exclusive consultations.
           </p>

@@ -36,6 +36,7 @@ const config: Config = {
       },
       fontFamily: {
         serif: ['var(--font-cormorant)', 'Georgia', 'serif'],
+        display: ['var(--font-playfair)', 'Georgia', 'serif'],
         sans: ['var(--font-poppins)', 'system-ui', 'sans-serif'],
       },
       backgroundImage: {

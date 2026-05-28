@@ -156,7 +156,7 @@ export default function HeroSection() {
 
         {/* Italic subtitle */}
         <motion.p
-          className="font-serif text-base md:text-xl text-ivory/35 italic mt-5 tracking-wide"
+          className="font-display text-lg md:text-2xl text-ivory/40 italic font-normal mt-5 tracking-wide"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.55, ease: [0.4, 0, 0.2, 1] }}
@@ -174,7 +174,7 @@ export default function HeroSection() {
 
         {/* Body copy */}
         <motion.p
-          className="font-sans text-ivory/35 text-sm leading-relaxed max-w-xs mx-auto"
+          className="font-sans text-ivory/35 text-base leading-[1.8] max-w-xs mx-auto"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.05 }}

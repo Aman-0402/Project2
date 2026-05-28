@@ -50,12 +50,12 @@ export default function BrandStory() {
             transition={{ duration: 0.9, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
           >
             <p className="label-luxury text-gold mb-4">Our Story</p>
-            <h2 className="font-serif text-4xl md:text-5xl text-ivory leading-tight mb-6">
+            <h2 className="font-display text-4xl md:text-5xl lg:text-6xl text-ivory leading-[1.1] font-bold mb-6">
               Crafting Scents That<br />
               <em className="not-italic text-gradient-gold">Define Moments</em>
             </h2>
             <div className="w-12 h-px bg-gold mb-8" />
-            <div className="space-y-4 font-sans text-ivory/60 text-sm leading-relaxed">
+            <div className="space-y-4 font-sans text-ivory/60 text-base md:text-lg leading-[1.8]">
               <p>
                 Born from a passion for rare ingredients and ancient perfumery traditions,
                 {CONFIG.brandName} is a boutique fragrance house dedicated to the art of extraordinary scent.
