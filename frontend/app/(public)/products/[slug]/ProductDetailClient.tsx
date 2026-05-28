@@ -11,6 +11,7 @@ import LoadingSpinner from '@/components/ui/LoadingSpinner'
 import Badge from '@/components/ui/Badge'
 import { ROUTES, CONFIG } from '@/constants/config'
 import { formatPrice } from '@/utils/formatters'
+import { useCurrency } from '@/hooks/useCurrency'
 import type { Product } from '@/types'
 
 const NOTE_LABELS: Record<string, string> = {
@@ -24,6 +25,7 @@ export default function ProductDetailClient() {
   const [product, setProduct] = useState<Product | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
+  const currency = useCurrency()
 
   useEffect(() => {
     if (!params.slug) return
@@ -126,7 +128,7 @@ export default function ProductDetailClient() {
 
             {/* Price + volume */}
             <div className="flex items-baseline gap-3 mb-6">
-              <span className="font-sans text-2xl text-brown font-medium">{formatPrice(product.price)}</span>
+              <span className="font-sans text-2xl text-brown font-medium">{formatPrice(product.price, currency)}</span>
               {product.volume && (
                 <span className="font-sans text-sm text-brown/40">{product.volume}</span>
               )}
@@ -145,7 +147,7 @@ export default function ProductDetailClient() {
             <div className="flex flex-col sm:flex-row gap-3 mb-10">
               <WhatsAppCTALink
                 productName={product.name}
-                price={formatPrice(product.price)}
+                price={formatPrice(product.price, currency)}
                 variant="buy"
                 className="flex-1 justify-center"
               />

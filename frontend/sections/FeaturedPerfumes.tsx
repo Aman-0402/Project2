@@ -5,8 +5,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { productService } from '@/services/products'
-import { formatPrice } from '@/utils/formatters'
 import { ROUTES } from '@/constants/config'
+import CurrencyPrice from '@/components/ui/CurrencyPrice'
 import type { ProductListItem } from '@/types'
 
 const MOOD_TAGS: Record<string, string[]> = {
@@ -131,7 +131,7 @@ export default function FeaturedPerfumes() {
                       {/* Always-visible name + price */}
                       <div className="absolute inset-x-0 bottom-0 p-4">
                         <h3 className="font-serif text-base text-ivory leading-tight mb-1">{product.name}</h3>
-                        <p className="font-sans text-xs text-gold/80">{formatPrice(product.price)}</p>
+                        <CurrencyPrice price={product.price} className="font-sans text-xs text-gold/80" />
                       </div>
 
                       {/* Hover overlay — mood tags + CTA */}

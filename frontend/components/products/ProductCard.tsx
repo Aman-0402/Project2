@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { formatPrice } from '@/utils/formatters'
+import CurrencyPrice from '@/components/ui/CurrencyPrice'
 import { ROUTES } from '@/constants/config'
 import type { ProductListItem } from '@/types'
 
@@ -54,7 +54,7 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
             {product.name}
           </h3>
           <div className="flex items-center justify-between mt-2">
-            <span className="font-sans text-sm text-brown/60">{formatPrice(product.price)}</span>
+            <CurrencyPrice price={product.price} className="font-sans text-sm text-brown/60" />
             {product.volume && (
               <span className="font-sans text-xs text-brown/30">{product.volume}</span>
             )}
