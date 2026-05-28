@@ -404,12 +404,35 @@ export default function ProductForm({
                   placeholder="e.g. 1500"
                   error={validationErrors.price}
                 />
-                <Input
-                  label="Volume"
-                  value={form.volume}
-                  onChange={(e) => set('volume', e.target.value)}
-                  placeholder="e.g. 50ml"
-                />
+                <div>
+                  <label className="label-luxury block mb-1.5">Volume</label>
+                  <select
+                    title="Product volume"
+                    aria-label="Product volume"
+                    value={['10ml','30ml','50ml','100ml'].includes(form.volume ?? '') ? (form.volume ?? '') : (form.volume ? 'custom' : '')}
+                    onChange={(e) => {
+                      if (e.target.value === 'custom') set('volume', '')
+                      else set('volume', e.target.value)
+                    }}
+                    className="w-full bg-ivory border border-beige-dark px-4 py-2.5 font-sans text-sm text-brown focus:outline-none focus:border-gold transition-colors"
+                  >
+                    <option value="">Select volume</option>
+                    <option value="10ml">10ml</option>
+                    <option value="30ml">30ml</option>
+                    <option value="50ml">50ml</option>
+                    <option value="100ml">100ml</option>
+                    <option value="custom">Custom</option>
+                  </select>
+                  {!['', '10ml', '30ml', '50ml', '100ml'].includes(form.volume ?? '') && (
+                    <input
+                      type="text"
+                      value={form.volume ?? ''}
+                      onChange={(e) => set('volume', e.target.value)}
+                      placeholder="e.g. 75ml"
+                      className="mt-2 w-full bg-ivory border border-beige-dark px-4 py-2.5 font-sans text-sm text-brown placeholder-brown/30 focus:outline-none focus:border-gold transition-colors"
+                    />
+                  )}
+                </div>
               </div>
             </div>
           </div>

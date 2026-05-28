@@ -6,8 +6,8 @@ export type Currency = 'INR' | 'USD'
 
 function detectCurrency(): Currency {
   try {
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
-    return tz === 'Asia/Kolkata' ? 'INR' : 'USD'
+    // India is UTC+5:30 — getTimezoneOffset() returns minutes BEHIND UTC (-330 for IST)
+    return new Date().getTimezoneOffset() === -330 ? 'INR' : 'USD'
   } catch {
     return 'INR'
   }
