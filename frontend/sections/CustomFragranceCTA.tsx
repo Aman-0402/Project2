@@ -56,17 +56,14 @@ export default function CustomFragranceCTA() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
-                href={ROUTES.createFragrance}
-                className="inline-flex items-center gap-3 bg-brown text-ivory px-10 py-4 text-xs font-sans uppercase tracking-luxury hover:bg-brown-dark transition-colors duration-300"
-              >
+              <Link href={ROUTES.createFragrance} className="btn-luxury">
                 Design Your Fragrance
               </Link>
               <a
                 href={buildCustomFragranceUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 border border-brown text-brown px-8 py-4 text-xs font-sans uppercase tracking-luxury hover:border-gold hover:text-gold transition-colors duration-300"
+                className="btn-luxury-outline"
               >
                 WhatsApp Us
               </a>

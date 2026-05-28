@@ -190,10 +190,7 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.25 }}
         >
-          <Link
-            href={ROUTES.collections}
-            className="inline-flex items-center gap-3 bg-gold text-brown px-10 py-4 text-xs font-sans uppercase tracking-luxury hover:bg-gold-light transition-colors duration-300"
-          >
+          <Link href={ROUTES.collections} className="btn-luxury">
             Explore Collections
             <svg className="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
@@ -203,7 +200,7 @@ export default function HeroSection() {
             href={buildWhatsAppUrl()}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 bg-transparent text-ivory border border-ivory/20 px-8 py-4 text-xs font-sans uppercase tracking-luxury hover:border-gold hover:text-gold transition-all duration-300"
+            className="btn-luxury-dark"
           >
             WhatsApp Us
           </a>

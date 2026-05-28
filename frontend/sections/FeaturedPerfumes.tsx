@@ -164,10 +164,7 @@ export default function FeaturedPerfumes() {
           viewport={{ once: true }}
           transition={{ delay: 0.4 }}
         >
-          <Link
-            href={ROUTES.collections}
-            className="inline-flex items-center gap-3 text-brown border-b border-brown/30 pb-1 font-sans text-sm uppercase tracking-luxury hover:text-gold hover:border-gold transition-all duration-300"
-          >
+          <Link href={ROUTES.collections} className="btn-luxury-outline">
             View Full Collection
             <span className="text-xs">&rarr;</span>
           </Link>

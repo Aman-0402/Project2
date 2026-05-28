@@ -203,10 +203,7 @@ export default function ProductShowcase() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          <Link
-            href={ROUTES.collections}
-            className="inline-flex items-center gap-3 bg-transparent text-brown border border-brown/40 px-10 py-4 text-xs font-sans uppercase tracking-luxury hover:bg-brown hover:text-ivory hover:border-brown transition-all duration-300"
-          >
+          <Link href={ROUTES.collections} className="btn-luxury-outline">
             View All Fragrances
             <span>&rarr;</span>
           </Link>
