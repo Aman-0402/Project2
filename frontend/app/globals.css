@@ -480,12 +480,12 @@
 
 /* Toggle cell wrapper — extra bottom space for the status label */
 .neo-toggle-cell {
-  padding-bottom: 20px;
+  padding-bottom: 14px;
 }
 
 /* ── Neo Toggle ─────────────────────────────────────────────────────────── */
 .neo-toggle-container {
-  --toggle-width: 64px;
+  --toggle-width: 56px;
   --toggle-height: 30px;
   --toggle-bg: #181c20;
   --toggle-off-color: #475057;

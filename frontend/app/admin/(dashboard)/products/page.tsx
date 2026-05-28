@@ -237,7 +237,7 @@ export default function AdminProductsPage() {
 
                     {/* Active toggle */}
                     <td className="px-4 py-4 text-center">
-                      <div className="flex justify-center" className="neo-toggle-cell">
+                      <div className="neo-toggle-cell flex justify-center">
                         <NeoToggle
                           id={`active-${product.id}`}
                           checked={product.is_active}
@@ -250,7 +250,7 @@ export default function AdminProductsPage() {
 
                     {/* Featured toggle */}
                     <td className="px-4 py-4 text-center">
-                      <div className="flex justify-center" className="neo-toggle-cell">
+                      <div className="neo-toggle-cell flex justify-center">
                         <NeoToggle
                           id={`featured-${product.id}`}
                           checked={product.is_featured}
