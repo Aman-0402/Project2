@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Cormorant_Garamond, Playfair_Display, Poppins, Noto_Serif_Devanagari } from 'next/font/google'
+import { Cormorant_Garamond, Playfair_Display, Poppins, Noto_Serif_Devanagari, Lavishly_Yours } from 'next/font/google'
 import { AuthProvider } from '@/context/AuthContext'
 import WhatsAppButton from '@/components/whatsapp/WhatsAppButton'
 import './globals.css'
@@ -24,6 +24,13 @@ const poppins = Poppins({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600'],
   variable: '--font-poppins',
+  display: 'swap',
+})
+
+const lavishly = Lavishly_Yours({
+  subsets: ['latin'],
+  weight: ['400'],
+  variable: '--font-lavishly',
   display: 'swap',
 })
 
@@ -52,7 +59,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${playfair.variable} ${poppins.variable} ${devanagari.variable}`}>
+    <html lang="en" className={`${cormorant.variable} ${playfair.variable} ${poppins.variable} ${devanagari.variable} ${lavishly.variable}`}>
       <body className="bg-ivory text-brown font-sans antialiased">
         <AuthProvider>
           {children}

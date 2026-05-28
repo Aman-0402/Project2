@@ -157,7 +157,7 @@
 
   /* ── Luxury button system ── */
 
-  /* Gold fill — primary CTA on light bg */
+  /* Gold fill — primary CTA */
   .btn-luxury {
     @apply inline-flex items-center justify-center gap-3
            font-sans text-xs uppercase tracking-luxury
@@ -165,12 +165,38 @@
            px-10 py-4
            transition-all duration-[400ms] ease-out
            hover:bg-gold-light hover:border-gold-light
-           hover:-translate-y-0.5
+           hover:-translate-y-1
            cursor-pointer;
-    box-shadow: 0 2px 20px rgba(198,161,110,0.12);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 20px rgba(198,161,110,0.15), inset 0 1px 0 rgba(255,255,255,0.18);
+  }
+  /* Top-gloss: static */
+  .btn-luxury::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 55%);
+    pointer-events: none;
+  }
+  /* Shine sweep: slides on hover */
+  .btn-luxury::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 55%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.32), transparent);
+    transform: translateX(-180%) skewX(-20deg);
+    transition: transform 0.55s ease;
+    pointer-events: none;
+  }
+  .btn-luxury:hover::before {
+    transform: translateX(320%) skewX(-20deg);
   }
   .btn-luxury:hover {
-    box-shadow: 0 6px 36px rgba(198,161,110,0.45);
+    box-shadow: 0 10px 40px rgba(198,161,110,0.55), inset 0 1px 0 rgba(255,255,255,0.22);
   }
 
   /* Outline on light bg — dark border, fills dark on hover */
@@ -181,14 +207,31 @@
            px-10 py-4
            transition-all duration-[400ms] ease-out
            hover:bg-brown hover:text-ivory hover:border-brown
-           hover:-translate-y-0.5
+           hover:-translate-y-1
            cursor-pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-luxury-outline::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 55%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    transform: translateX(-180%) skewX(-20deg);
+    transition: transform 0.55s ease;
+    pointer-events: none;
+  }
+  .btn-luxury-outline:hover::before {
+    transform: translateX(320%) skewX(-20deg);
   }
   .btn-luxury-outline:hover {
-    box-shadow: 0 6px 28px rgba(59,36,25,0.2);
+    box-shadow: 0 8px 32px rgba(59,36,25,0.25);
   }
 
-  /* Outline on dark bg — gold/ivory border, gold text on hover */
+  /* Outline on dark bg — glass + gold glow on hover */
   .btn-luxury-dark {
     @apply inline-flex items-center justify-center gap-3
            font-sans text-xs uppercase tracking-luxury
@@ -196,11 +239,32 @@
            px-10 py-4
            transition-all duration-[400ms] ease-out
            hover:border-gold hover:text-gold
-           hover:-translate-y-0.5
+           hover:-translate-y-1
            cursor-pointer;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+  /* Gold shimmer sweep on hover */
+  .btn-luxury-dark::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 55%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(198,161,110,0.18), transparent);
+    transform: translateX(-180%) skewX(-20deg);
+    transition: transform 0.55s ease;
+    pointer-events: none;
+  }
+  .btn-luxury-dark:hover::before {
+    transform: translateX(320%) skewX(-20deg);
   }
   .btn-luxury-dark:hover {
-    box-shadow: 0 6px 32px rgba(198,161,110,0.25);
+    box-shadow: 0 10px 40px rgba(198,161,110,0.30), inset 0 1px 0 rgba(198,161,110,0.1);
+    background: rgba(198,161,110,0.06);
   }
 
   /* WhatsApp green button — simple variant (used elsewhere) */
@@ -371,6 +435,12 @@
 /* Devanagari tagline */
 .font-devanagari {
   font-family: var(--font-devanagari), serif;
+}
+
+/* Lavishly Yours script */
+.font-lavishly {
+  font-family: var(--font-lavishly), cursive;
+  font-weight: 400;
 }
 
 /* Bottle brand lockup text */

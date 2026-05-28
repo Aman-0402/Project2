@@ -137,7 +137,6 @@ function splitBrandName(name: string): [string, string] {
 
 export default function HeroSection() {
   const ref = useRef<HTMLElement>(null)
-  const [nameLine1, nameLine2] = splitBrandName(CONFIG.brandName)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
   const dotY      = useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
   const contentOp = useTransform(scrollYProgress, [0, 0.6], [1, 0])
@@ -282,34 +281,15 @@ export default function HeroSection() {
         style={{ opacity: contentOp }}
         className="relative z-10 w-full px-6 text-center lg:text-left lg:w-1/2 lg:mr-auto lg:pl-16 lg:pr-8"
       >
-        {/* Brand name */}
+        {/* Hero headline */}
         <motion.h1
-          className="font-serif text-[clamp(2.8rem,6.5vw,6.5rem)] text-ivory leading-[1.0] tracking-[0.08em] mb-8"
+          className="font-lavishly text-[clamp(3.5rem,7vw,7rem)] text-ivory leading-[1.15] mb-8"
           initial={{ opacity: 0, y: 60 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.1, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
         >
-          {nameLine2 ? (
-            <>
-              <span className="block">{nameLine1}</span>
-              <span className="block">{nameLine2}</span>
-            </>
-          ) : nameLine1}
+          The Essence of Paradise
         </motion.h1>
-
-        {/* Tagline */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.5, ease: [0.4, 0, 0.2, 1] }}
-        >
-          <p className="font-devanagari text-2xl md:text-3xl text-gold/90 leading-relaxed">
-            जनत का एहसास
-          </p>
-          <p className="font-display text-sm md:text-base text-ivory/55 italic tracking-wide mt-1">
-            The Essence of Paradise
-          </p>
-        </motion.div>
 
         {/* Gold divider — left-aligned on desktop */}
         <motion.div
