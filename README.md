@@ -1,6 +1,6 @@
-# LUXE PARFUM
+# M.M ATTARWALA
 
-A luxury perfume brand showcase website with admin product management and WhatsApp-driven conversions. No customer accounts — admin-only platform with cinematic UI.
+Luxury perfume brand showcase website for M.M Attarwala, Vadodara, Gujarat. Admin product management, WhatsApp-driven conversions, cinematic UI with layered product photography. No customer accounts — admin-only platform.
 
 ---
 
