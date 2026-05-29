@@ -283,7 +283,7 @@ export default function HeroSection() {
       >
         {/* Hero headline */}
         <motion.h1
-          className="font-lavishly text-[clamp(3.5rem,7vw,7rem)] text-ivory leading-[1.15] mb-8"
+          className="font-lavishly text-[clamp(3.5rem,7vw,7rem)] text-ivory leading-[1.15] mb-8 whitespace-nowrap"
           initial={{ opacity: 0, y: 60 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.1, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
@@ -341,21 +341,6 @@ export default function HeroSection() {
         </motion.div>
       </motion.div>
 
-      {/* ── Scroll indicator ── */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2.2, duration: 0.8 }}
-        aria-hidden="true"
-      >
-        <span className="text-ivory/25 text-[9px] font-sans uppercase tracking-luxury">Scroll</span>
-        <motion.div
-          className="w-px h-10 bg-gradient-to-b from-gold/60 to-transparent"
-          animate={{ scaleY: [1, 0.25, 1], opacity: [0.6, 0.2, 0.6] }}
-          transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
-        />
-      </motion.div>
     </section>
   )
 }
