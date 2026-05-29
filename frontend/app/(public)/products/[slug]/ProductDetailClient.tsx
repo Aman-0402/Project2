@@ -9,7 +9,7 @@ import { productService } from '@/services/products'
 import WhatsAppCTALink from '@/components/whatsapp/WhatsAppCTALink'
 import LoadingSpinner from '@/components/ui/LoadingSpinner'
 import Badge from '@/components/ui/Badge'
-import { ROUTES, CONFIG } from '@/constants/config'
+import { ROUTES } from '@/constants/config'
 import { formatPrice } from '@/utils/formatters'
 import { useCurrency } from '@/hooks/useCurrency'
 import type { Product } from '@/types'
@@ -25,8 +25,9 @@ export default function ProductDetailClient() {
   const [product, setProduct] = useState<Product | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
-  const [activeIndex, setActiveIndex] = useState(0)
+  const [activeSlot, setActiveSlot] = useState(0)
   const [direction, setDirection] = useState(0)
+  const [bottleHovered, setBottleHovered] = useState(false)
   const currency = useCurrency()
 
   useEffect(() => {
@@ -66,43 +67,81 @@ export default function ProductDetailClient() {
 
   return (
     <div className="bg-ivory">
-      {/* Above-fold product view */}
-      <div className="flex flex-col h-screen">
-        {/* Breadcrumb */}
-        <div className="container-luxury pt-24 pb-3 flex-shrink-0">
-          <nav className="flex items-center gap-2 text-xs font-sans">
-            <Link href={ROUTES.home} className="text-brown/40 hover:text-gold transition-colors">{CONFIG.brandName}</Link>
-            <span className="text-brown/20">/</span>
-            <Link href={ROUTES.collections} className="text-brown/40 hover:text-gold transition-colors">Collections</Link>
-            <span className="text-brown/20">/</span>
-            <span className="text-brown">{product.name}</span>
-          </nav>
-        </div>
-
-        {/* Product layout — fills remaining viewport */}
-        <div className="container-luxury flex-1 overflow-hidden pb-6">
-        <div className="grid grid-cols-1 lg:grid-cols-[5fr_7fr] gap-8 lg:gap-14 h-full">
+      <div className="container-luxury pt-28 pb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-[5fr_7fr] gap-8 lg:gap-14 items-start">
           {/* Image Gallery */}
           <motion.div
-            className="h-full flex flex-col"
+            className="flex flex-col"
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
           >
             {(() => {
               const images = product.images?.length ? product.images : product.image ? [product.image] : []
+              const hasLayered = images.length >= 2
+
+              // slots: 0 = layered composite, then images[2], images[3]
+              const slots = [0, ...(images.length > 2 ? [2] : []), ...(images.length > 3 ? [3] : [])]
               const go = (next: number) => {
-                setDirection(next > activeIndex ? 1 : -1)
-                setActiveIndex(next)
+                setDirection(next > activeSlot ? 1 : -1)
+                setActiveSlot(next)
               }
+              const isLayered = slots[activeSlot] === 0 && hasLayered
+              const singleSrc = images[slots[activeSlot]]
+
               return (
-                <div className="h-full flex flex-col">
-                  {/* Main image — 3:4 on mobile, constrained height on desktop */}
-                  <div className="relative aspect-[3/4] lg:aspect-auto lg:flex-1 bg-beige overflow-hidden max-h-[70vh] lg:max-h-none">
-                    {images.length > 0 ? (
+                <div className="flex flex-col">
+                  {/* Main image — 3:4 portrait */}
+                  <div className="relative aspect-[3/4] bg-beige overflow-hidden">
+                    {images.length === 0 ? (
+                      <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
+                        <div className="w-16 h-px bg-gold/40" />
+                        <span className="font-serif text-8xl text-brown/10">{product.name[0]}</span>
+                        <div className="w-16 h-px bg-gold/40" />
+                      </div>
+                    ) : isLayered ? (
+                      /* ── Layered composite: bg + bottle ── */
+                      <AnimatePresence mode="wait">
+                        <motion.div
+                          key="layered"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.4 }}
+                          className="absolute inset-0"
+                        >
+                          {/* Background layer */}
+                          <Image
+                            src={images[1]}
+                            alt="background"
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 1024px) 100vw, 42vw"
+                          />
+                          {/* Bottle layer — PNG transparent, zoom on hover */}
+                          <motion.div
+                            className="absolute inset-0 cursor-zoom-in"
+                            animate={{ scale: bottleHovered ? 1.09 : 1 }}
+                            transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+                            onMouseEnter={() => setBottleHovered(true)}
+                            onMouseLeave={() => setBottleHovered(false)}
+                          >
+                            <Image
+                              src={images[0]}
+                              alt={product.name}
+                              fill
+                              className="object-contain"
+                              sizes="(max-width: 1024px) 100vw, 42vw"
+                              priority
+                            />
+                          </motion.div>
+                        </motion.div>
+                      </AnimatePresence>
+                    ) : (
+                      /* ── Single image slide ── */
                       <AnimatePresence mode="wait" custom={direction}>
                         <motion.div
-                          key={activeIndex}
+                          key={activeSlot}
                           custom={direction}
                           variants={{
                             enter: (d: number) => ({ x: d > 0 ? '100%' : '-100%', opacity: 0 }),
@@ -116,68 +155,57 @@ export default function ProductDetailClient() {
                           className="absolute inset-0"
                         >
                           <Image
-                            src={images[activeIndex]}
-                            alt={`${product.name} ${activeIndex + 1}`}
+                            src={singleSrc}
+                            alt={`${product.name} view ${activeSlot + 1}`}
                             fill
                             className="object-cover"
-                            sizes="(max-width: 1024px) 100vw, 50vw"
-                            priority={activeIndex === 0}
+                            sizes="(max-width: 1024px) 100vw, 42vw"
                           />
                         </motion.div>
                       </AnimatePresence>
-                    ) : (
-                      <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
-                        <div className="w-16 h-px bg-gold/40" />
-                        <span className="font-serif text-8xl text-brown/10">{product.name[0]}</span>
-                        <div className="w-16 h-px bg-gold/40" />
-                      </div>
                     )}
 
-                    {/* Prev / Next arrows */}
-                    {images.length > 1 && (
+                    {/* Prev / Next — only when extra slides exist */}
+                    {slots.length > 1 && (
                       <>
                         <button
-                          onClick={() => go((activeIndex - 1 + images.length) % images.length)}
-                          className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-ivory/80 hover:bg-ivory flex items-center justify-center transition-colors z-10"
-                          aria-label="Previous image"
                           type="button"
+                          onClick={() => go((activeSlot - 1 + slots.length) % slots.length)}
+                          className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-ivory/80 hover:bg-ivory flex items-center justify-center transition-colors z-10"
+                          aria-label="Previous"
                         >
                           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-4 h-4 text-brown">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
                           </svg>
                         </button>
                         <button
-                          onClick={() => go((activeIndex + 1) % images.length)}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-ivory/80 hover:bg-ivory flex items-center justify-center transition-colors z-10"
-                          aria-label="Next image"
                           type="button"
+                          onClick={() => go((activeSlot + 1) % slots.length)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-ivory/80 hover:bg-ivory flex items-center justify-center transition-colors z-10"
+                          aria-label="Next"
                         >
                           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-4 h-4 text-brown">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                           </svg>
                         </button>
-                        {/* Counter */}
-                        <div className="absolute bottom-3 right-3 bg-brown/60 text-ivory text-[10px] font-sans px-2 py-0.5">
-                          {activeIndex + 1} / {images.length}
-                        </div>
                       </>
                     )}
                   </div>
 
-                  {/* Thumbnails */}
-                  {images.length > 1 && (
+                  {/* Thumbnails — slot 0 shows bottle thumb, then extra images */}
+                  {slots.length > 1 && (
                     <div className="flex gap-2 mt-3">
-                      {images.map((src, i) => (
+                      {slots.map((imgIdx, s) => (
                         <button
-                          key={i}
-                          onClick={() => go(i)}
-                          className={`relative w-16 aspect-square overflow-hidden flex-shrink-0 border-2 transition-colors duration-200 ${
-                            i === activeIndex ? 'border-gold' : 'border-transparent hover:border-gold/40'
-                          }`}
-                          aria-label={`View image ${i + 1}`}
+                          key={s}
                           type="button"
+                          onClick={() => go(s)}
+                          className={`relative w-16 aspect-square overflow-hidden flex-shrink-0 border-2 transition-colors duration-200 ${
+                            s === activeSlot ? 'border-gold' : 'border-transparent hover:border-gold/40'
+                          }`}
+                          aria-label={s === 0 ? 'Composite view' : `View ${s + 1}`}
                         >
-                          <Image src={src} alt={`${product.name} thumbnail ${i + 1}`} fill className="object-cover" sizes="64px" />
+                          <Image src={images[imgIdx]} alt={`thumbnail ${s + 1}`} fill className="object-cover" sizes="64px" />
                         </button>
                       ))}
                     </div>
@@ -189,7 +217,7 @@ export default function ProductDetailClient() {
 
           {/* Info */}
           <motion.div
-            className="flex flex-col justify-center lg:overflow-y-auto lg:py-2"
+            className="flex flex-col justify-start"
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.15, ease: [0.4, 0, 0.2, 1] }}
@@ -269,8 +297,7 @@ export default function ProductDetailClient() {
             )}
           </motion.div>
         </div>
-        </div>{/* end container-luxury */}
-      </div>{/* end h-screen */}
+      </div>
     </div>
   )
 }
