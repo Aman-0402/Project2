@@ -1,14 +1,15 @@
-# LUXE PARFUM — AGENT.md
+# M.M ATTARWALA — AGENT.md
 > Living project tracking document. Update after every completed step.
 
 ---
 
 ## PROJECT OVERVIEW
 
-**Name:** LUXE PARFUM (placeholder — configurable via env)
+**Name:** M.M ATTARWALA
+**Client:** M.M Attarwala, Vadodara, Gujarat, India
 **Type:** Luxury Perfume Brand Showcase Website
 **Model:** Admin-only platform. No customer accounts. WhatsApp-driven conversions.
-**Goal:** Premium perfume showcase with cinematic UI, admin product management, and WhatsApp contact integration.
+**Goal:** Premium perfume showcase with cinematic UI, admin product management, WhatsApp contact integration, and layered product photography.
 
 ---
 
@@ -26,7 +27,7 @@
 - Frontend: Next.js 14 App Router, Tailwind CSS, Framer Motion
 - Backend: Django 5, Django REST Framework
 - Database: MySQL (DB: project1, User: root)
-- Image Storage: Cloudinary (dev: local FileSystem)
+- Image Storage: Local filesystem (Django MEDIA_ROOT/media/products/) — Cloudinary config kept in .env for future use
 - Auth: JWT via SimpleJWT (admin-only, is_staff=True)
 - Frontend Deploy: Vercel
 - Backend Deploy: VPS or Render
@@ -93,11 +94,13 @@ Animation:
 | volume          | VARCHAR(50)    | e.g. "50ml", "100ml"     |
 | category_id     | BIGINT FK      | -> categories_category.id|
 | fragrance_notes | JSON           | {top, middle, base}      |
-| image           | VARCHAR(500)   | Cloudinary URL           |
-| is_featured     | TINYINT(1)     | default 0                |
-| is_active       | TINYINT(1)     | default 1                |
-| created_at      | DATETIME(6)    | auto                     |
-| updated_at      | DATETIME(6)    | auto_now                 |
+| image               | VARCHAR(500)   | Primary image URL (auto from images[0]) |
+| images              | JSON           | Array of up to 4 local URLs             |
+| is_featured         | TINYINT(1)     | default 0                               |
+| is_active           | TINYINT(1)     | default 1                               |
+| image_layer_effect  | TINYINT(1)     | default 1 — composite bottle+bg on detail page |
+| created_at          | DATETIME(6)    | auto                                    |
+| updated_at          | DATETIME(6)    | auto_now                                |
 
 ### site_settings (table: site_settings_sitesetting)
 | Column     | Type         | Notes   |
@@ -107,7 +110,7 @@ Animation:
 | value      | LONGTEXT     | nullable|
 | updated_at | DATETIME(6)  | auto    |
 
-**Seeded site_settings keys:** brand_name, tagline, about_text, whatsapp_number, hero_headline, hero_subheadline
+**Seeded site_settings keys:** brand_name, tagline, about_text, whatsapp_number, hero_headline, hero_subheadline, image_layer_effect
 **Seeded categories:** Oud, Floral, Citrus, Oriental, Woody, Fresh
 **Admin user:** username=admin, password=admin123 (CHANGE IN PRODUCTION)
 
@@ -148,6 +151,7 @@ PUT    /api/admin/categories/{id}/   Update category
 DELETE /api/admin/categories/{id}/   Delete category
 
 PUT    /api/admin/settings/          Bulk update settings ({settings: {key: value}})
+POST   /api/admin/upload-image/      Upload product image to local media storage (multipart, max 2MB)
 ```
 
 ### Response Format
@@ -175,12 +179,13 @@ PUT    /api/admin/settings/          Bulk update settings ({settings: {key: valu
 
 ### Admin Pages
 ```
-/admin/login         Login form
-/admin               Dashboard overview
-/admin/products      Product list (edit/delete actions)
-/admin/products/new  Add new product
-/admin/products/[id]/edit  Edit product
-/admin/categories    Category management
+/admin/login              Login form
+/admin                    Dashboard overview (stat cards + recent products)
+/admin/products           Product list (NeoToggle for active/featured inline)
+/admin/products/new       Add new product (multi-image, fragrance tag input)
+/admin/products/[id]/edit Edit product
+/admin/categories         Category management
+/admin/settings           Site settings + Feature Flags (image_layer_effect toggle)
 ```
 
 ### Homepage Sections
@@ -201,15 +206,24 @@ PUT    /api/admin/settings/          Bulk update settings ({settings: {key: valu
 ### Backend Utils
 - `utils/response.py` — success_response, error_response, created_response, not_found_response, unauthorized_response, forbidden_response
 - `utils/validators.py` — validate_price, validate_phone_number
-- `services/cloudinary_service.py` — upload_image, delete_image, extract_public_id
+- `services/cloudinary_service.py` — upload_image, delete_image, extract_public_id (kept for future use)
 - `apps.authentication.permissions.IsAdminUser` — DRF permission class for all admin endpoints
+- `apps/products/views.py:AdminImageUploadView` — local file upload to media/products/, returns absolute URL
 
-### Frontend UI Components (Phase 3+)
+### Frontend UI Components
 - Button, Card, Input, Modal, Badge, LoadingSpinner
 - Navbar, Footer, MobileMenu
-- ProductCard, ProductGrid, ProductImageGallery
+- ProductCard (CurrencyPrice), ProductGrid
+- ProductDetailClient — layered image composite (bottle PNG + background), AnimatePresence slider, thumbnail strip
 - WhatsAppButton (floating), WhatsAppCTALink
-- AdminSidebar, AdminNavbar, ProductForm
+- AdminSidebar, AdminNavbar, ProductForm (multi-image slots, TagInput fragrance notes, volume select, image_layer_effect toggle)
+- NeoToggle — animated CSS toggle (64×56px, CSS vars, spectrum bars, active/featured variants)
+- CurrencyPrice — client component using useCurrency hook (timezone-based INR/USD detection)
+
+### Hooks & Utils
+- `hooks/useCurrency.ts` — detects India via UTC offset -330 (IST), defaults INR to avoid SSR mismatch
+- `utils/formatters.ts:formatPrice` — Intl.NumberFormat, INR=en-IN locale, 0 decimals; USD=en-US
+- `services/settings.ts` — getAll(), adminUpdate()
 
 ---
 
@@ -366,10 +380,16 @@ PUT    /api/admin/settings/          Bulk update settings ({settings: {key: valu
 - Seed data: `venv/Scripts/python manage.py seed_data`
 - Dev settings: DJANGO_SETTINGS_MODULE=config.settings.development (default in manage.py)
 - Prod settings: DJANGO_SETTINGS_MODULE=config.settings.production (set in wsgi.py/asgi.py)
-- Cloudinary disabled in dev (uses local FileSystem storage)
+- Image storage: local media/ directory. Cloudinary config in .env not active (DEFAULT_FILE_STORAGE removed).
+- Images served at: http://localhost:8000/media/products/<filename> (via django.conf.urls.static in DEBUG)
+- next.config.mjs remotePatterns: localhost:8000 and 127.0.0.1:8000 /media/** allowed for next/image
 - CORS in dev: allow all origins
 - Admin credentials: admin / admin123 - CHANGE BEFORE PRODUCTION
 - fragrance_notes JSON format: {"top": ["bergamot"], "middle": ["rose"], "base": ["oud"]}
+- Currency: India (UTC offset -330) → INR (₹), elsewhere → USD ($). Detected client-side via new Date().getTimezoneOffset()
+- Image layer effect: images[0] = bottle PNG (transparent), images[1] = background. Composite shown when product.image_layer_effect=true AND site setting image_layer_effect != 'false'
+- Volume field in ProductForm: preset options 10ml/30ml/50ml/100ml + Custom free text
+- Migrations: 0001_initial, 0002_product_images, 0003_product_image_layer_effect
 
 ---
 
