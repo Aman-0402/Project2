@@ -103,7 +103,7 @@ export default function FeaturedPerfumes() {
                   viewport={{ once: true }}
                   whileHover={{ y: -8, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } }}
                 >
-                  <Link href={ROUTES.product(product.slug)} className="group block cursor-pointer">
+                  <Link href={ROUTES.product(product.slug)} className="group block cursor-pointer transition-all duration-500 group-hover:drop-shadow-[0_20px_40px_rgba(198,161,110,0.25)]">
                     <div className="relative aspect-[3/4] overflow-hidden rounded-xl">
                       {/* Layered composite or single image */}
                       {product.images?.length >= 2 && product.image_layer_effect ? (
@@ -151,21 +151,8 @@ export default function FeaturedPerfumes() {
                         <CurrencyPrice price={product.price} className="font-sans text-xs text-gold/80" />
                       </div>
 
-                      {/* Hover overlay — mood tags + CTA */}
-                      <div className="absolute inset-0 bg-[#1C0F0A]/70 backdrop-blur-[2px] flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-400">
-                        {moodTags.length > 0 && (
-                          <div className="flex flex-wrap justify-center gap-1.5 px-4">
-                            {moodTags.map((tag) => (
-                              <span key={tag} className="font-sans text-[10px] uppercase tracking-luxury text-ivory/70 border border-gold/30 px-2 py-0.5">
-                                {tag}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                        <span className="inline-flex items-center gap-2 font-sans text-xs uppercase tracking-luxury text-gold border-b border-gold/40 pb-px mt-1">
-                          Explore <span>&rarr;</span>
-                        </span>
-                      </div>
+                      {/* Hover — gold border glow */}
+                      <div className="absolute inset-0 rounded-xl ring-1 ring-transparent group-hover:ring-gold/50 transition-all duration-500 pointer-events-none" />
                     </div>
                   </Link>
                 </motion.div>
