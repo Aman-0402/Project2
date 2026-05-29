@@ -104,9 +104,26 @@ export default function FeaturedPerfumes() {
                   whileHover={{ y: -8, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } }}
                 >
                   <Link href={ROUTES.product(product.slug)} className="group block cursor-pointer">
-                    <div className="relative aspect-[3/4] overflow-hidden">
-                      {/* Image or luxury placeholder */}
-                      {product.image ? (
+                    <div className="relative aspect-[3/4] overflow-hidden rounded-xl">
+                      {/* Layered composite or single image */}
+                      {product.images?.length >= 2 && product.image_layer_effect ? (
+                        <>
+                          <Image
+                            src={product.images[1]}
+                            alt=""
+                            fill
+                            className="object-cover transition-transform duration-700 group-hover:scale-105"
+                            sizes="(max-width: 768px) 50vw, 25vw"
+                          />
+                          <Image
+                            src={product.images[0]}
+                            alt={product.name}
+                            fill
+                            className="object-contain transition-transform duration-700 group-hover:scale-110"
+                            sizes="(max-width: 768px) 50vw, 25vw"
+                          />
+                        </>
+                      ) : product.image ? (
                         <Image
                           src={product.image}
                           alt={product.name}
