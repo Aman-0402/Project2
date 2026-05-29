@@ -6,6 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { productService } from '@/services/products'
+import { settingsService } from '@/services/settings'
 import WhatsAppCTALink from '@/components/whatsapp/WhatsAppCTALink'
 import LoadingSpinner from '@/components/ui/LoadingSpinner'
 import Badge from '@/components/ui/Badge'
@@ -28,7 +29,16 @@ export default function ProductDetailClient() {
   const [activeSlot, setActiveSlot] = useState(0)
   const [direction, setDirection] = useState(0)
   const [bottleHovered, setBottleHovered] = useState(false)
+  const [layerEffectEnabled, setLayerEffectEnabled] = useState(true)
   const currency = useCurrency()
+
+  useEffect(() => {
+    settingsService.getAll().then((res) => {
+      if (res.success && res.data) {
+        setLayerEffectEnabled(res.data.image_layer_effect !== 'false')
+      }
+    })
+  }, [])
 
   useEffect(() => {
     if (!params.slug) return
@@ -78,7 +88,7 @@ export default function ProductDetailClient() {
           >
             {(() => {
               const images = product.images?.length ? product.images : product.image ? [product.image] : []
-              const hasLayered = images.length >= 2
+              const hasLayered = images.length >= 2 && layerEffectEnabled
 
               // slots: 0 = layered composite, then images[2], images[3]
               const slots = [0, ...(images.length > 2 ? [2] : []), ...(images.length > 3 ? [3] : [])]

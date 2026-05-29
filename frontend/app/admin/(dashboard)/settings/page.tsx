@@ -12,6 +12,20 @@ interface SettingField {
   placeholder: string
 }
 
+interface ToggleField {
+  key: string
+  label: string
+  description: string
+}
+
+const TOGGLE_FIELDS: ToggleField[] = [
+  {
+    key: 'image_layer_effect',
+    label: 'Product Image Layer Effect',
+    description: 'Composite bottle (image 1, PNG) over background (image 2) on product pages with hover zoom',
+  },
+]
+
 const FIELDS: SettingField[] = [
   {
     key: 'brand_name',
@@ -154,6 +168,46 @@ export default function AdminSettingsPage() {
                 </div>
               </div>
             ))}
+          </motion.div>
+
+          {/* Feature toggles */}
+          <motion.div
+            className="bg-ivory border border-beige-dark overflow-hidden mb-4"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15, duration: 0.35 }}
+          >
+            <div className="px-6 py-3 border-b border-beige-dark bg-beige/20">
+              <p className="label-luxury text-[10px]">Feature Flags</p>
+            </div>
+            {TOGGLE_FIELDS.map((field) => {
+              const enabled = values[field.key] !== 'false'
+              return (
+                <div key={field.key} className="px-6 py-5 flex items-center justify-between gap-6">
+                  <div>
+                    <p className="font-sans text-sm text-brown font-medium mb-0.5">{field.label}</p>
+                    <p className="font-sans text-xs text-brown/40">{field.description}</p>
+                  </div>
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={enabled}
+                    title={field.label}
+                    aria-label={field.label}
+                    onClick={() => handleChange(field.key, enabled ? 'false' : 'true')}
+                    className={`relative flex-shrink-0 w-11 h-6 rounded-full transition-colors duration-300 focus:outline-none ${
+                      enabled ? 'bg-gold' : 'bg-beige-dark'
+                    }`}
+                  >
+                    <span
+                      className={`absolute top-0.5 left-0.5 w-5 h-5 bg-ivory rounded-full shadow transition-transform duration-300 ${
+                        enabled ? 'translate-x-5' : 'translate-x-0'
+                      }`}
+                    />
+                  </button>
+                </div>
+              )
+            })}
           </motion.div>
 
           {error && (

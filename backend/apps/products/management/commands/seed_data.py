@@ -34,6 +34,7 @@ INITIAL_SETTINGS = {
     'whatsapp_number': os.environ.get('WHATSAPP_NUMBER', '+919724586101'),
     'hero_headline': 'The Essence of Paradise',
     'hero_subheadline': 'Traditional Indian attars, perfumes & agarbatti — crafted with timeless artistry in Vadodara.',
+    'image_layer_effect': 'true',
 }
 
 

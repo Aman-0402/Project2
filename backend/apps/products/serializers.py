@@ -11,7 +11,7 @@ class ProductListSerializer(serializers.ModelSerializer):
         model = Product
         fields = [
             'id', 'name', 'slug', 'price', 'volume',
-            'category', 'image', 'images', 'is_featured', 'created_at',
+            'category', 'image', 'images', 'is_featured', 'image_layer_effect', 'created_at',
         ]
 
 
@@ -24,7 +24,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'name', 'slug', 'description', 'price', 'volume',
             'category', 'fragrance_notes', 'image', 'images', 'is_featured',
-            'is_active', 'created_at', 'updated_at',
+            'is_active', 'image_layer_effect', 'created_at', 'updated_at',
         ]
 
 
@@ -36,7 +36,7 @@ class ProductWriteSerializer(serializers.ModelSerializer):
         fields = [
             'name', 'description', 'price', 'volume',
             'category', 'fragrance_notes', 'image', 'images',
-            'is_featured', 'is_active',
+            'is_featured', 'is_active', 'image_layer_effect',
         ]
 
     def validate_price(self, value):

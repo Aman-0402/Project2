@@ -19,6 +19,7 @@ export interface Product {
   images: string[]
   is_featured: boolean
   is_active: boolean
+  image_layer_effect: boolean
   created_at: string
   updated_at: string
 }
@@ -47,4 +48,5 @@ export interface ProductFormData {
   images: string[]
   is_featured: boolean
   is_active: boolean
+  image_layer_effect: boolean
 }

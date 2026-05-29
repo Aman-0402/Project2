@@ -22,6 +22,7 @@ class Product(models.Model):
     images = models.JSONField(default=list, blank=True, help_text='Array of up to 4 Cloudinary URLs')
     is_featured = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    image_layer_effect = models.BooleanField(default=True, help_text='Composite bottle (image 1) over background (image 2) on product page')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
