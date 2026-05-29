@@ -65,23 +65,26 @@ export default function ProductDetailClient() {
     (product.fragrance_notes?.base?.length ?? 0) > 0
 
   return (
-    <div className="min-h-screen bg-ivory">
-      {/* Breadcrumb */}
-      <div className="container-luxury pt-32 pb-6">
-        <nav className="flex items-center gap-2 text-xs font-sans">
-          <Link href={ROUTES.home} className="text-brown/40 hover:text-gold transition-colors">{CONFIG.brandName}</Link>
-          <span className="text-brown/20">/</span>
-          <Link href={ROUTES.collections} className="text-brown/40 hover:text-gold transition-colors">Collections</Link>
-          <span className="text-brown/20">/</span>
-          <span className="text-brown">{product.name}</span>
-        </nav>
-      </div>
+    <div className="bg-ivory">
+      {/* Above-fold product view */}
+      <div className="flex flex-col h-screen">
+        {/* Breadcrumb */}
+        <div className="container-luxury pt-24 pb-3 flex-shrink-0">
+          <nav className="flex items-center gap-2 text-xs font-sans">
+            <Link href={ROUTES.home} className="text-brown/40 hover:text-gold transition-colors">{CONFIG.brandName}</Link>
+            <span className="text-brown/20">/</span>
+            <Link href={ROUTES.collections} className="text-brown/40 hover:text-gold transition-colors">Collections</Link>
+            <span className="text-brown/20">/</span>
+            <span className="text-brown">{product.name}</span>
+          </nav>
+        </div>
 
-      {/* Product layout */}
-      <div className="container-luxury pb-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+        {/* Product layout — fills remaining viewport */}
+        <div className="container-luxury flex-1 overflow-hidden pb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[5fr_7fr] gap-8 lg:gap-14 h-full">
           {/* Image Gallery */}
           <motion.div
+            className="h-full flex flex-col"
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
@@ -93,9 +96,9 @@ export default function ProductDetailClient() {
                 setActiveIndex(next)
               }
               return (
-                <div>
-                  {/* Main image */}
-                  <div className="relative aspect-[4/5] bg-beige overflow-hidden">
+                <div className="h-full flex flex-col">
+                  {/* Main image — 3:4 on mobile, constrained height on desktop */}
+                  <div className="relative aspect-[3/4] lg:aspect-auto lg:flex-1 bg-beige overflow-hidden max-h-[70vh] lg:max-h-none">
                     {images.length > 0 ? (
                       <AnimatePresence mode="wait" custom={direction}>
                         <motion.div
@@ -186,7 +189,7 @@ export default function ProductDetailClient() {
 
           {/* Info */}
           <motion.div
-            className="flex flex-col justify-center"
+            className="flex flex-col justify-center lg:overflow-y-auto lg:py-2"
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.15, ease: [0.4, 0, 0.2, 1] }}
@@ -266,7 +269,8 @@ export default function ProductDetailClient() {
             )}
           </motion.div>
         </div>
-      </div>
+        </div>{/* end container-luxury */}
+      </div>{/* end h-screen */}
     </div>
   )
 }

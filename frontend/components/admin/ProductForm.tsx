@@ -250,7 +250,7 @@ function ImageSlot({
                 <span className="text-[9px] font-sans text-brown/30 uppercase tracking-luxury text-center leading-tight">
                   {index === 0 ? 'Upload photo' : 'Add photo'}
                   <br />
-                  <span className="text-brown/20">max 2 MB</span>
+                  <span className="text-brown/20">3:4 · max 2 MB</span>
                 </span>
                 <input
                   type="file"
@@ -479,6 +479,9 @@ export default function ProductForm({
             </div>
             <p className="font-sans text-xs text-brown/40 mb-4">
               Min 1 · Max 4 · 2 MB each · First is primary
+            </p>
+            <p className="font-sans text-[10px] text-gold/70 bg-gold/8 border border-gold/20 px-3 py-2 mb-4 leading-snug">
+              Use <strong>3:4 portrait ratio</strong> (e.g. 900×1200px) for best display. Landscape images will be cropped.
             </p>
 
             <div className="grid grid-cols-2 gap-2">
