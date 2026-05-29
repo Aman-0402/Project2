@@ -6,14 +6,23 @@ export function buildWhatsAppUrl(message?: string): string {
   return `https://wa.me/${number}${encodedMessage ? `?text=${encodedMessage}` : ''}`
 }
 
-export function buildProductInquiryUrl(productName: string): string {
-  const message = `Hello, I am interested in ${productName}.`
-  return buildWhatsAppUrl(message)
+// Secondary number (M. Munavvar) — used for Ask Details
+export function buildWhatsAppUrl2(message?: string): string {
+  const number = CONFIG.whatsappNumber2.replace(/\D/g, '')
+  const encodedMessage = message ? encodeURIComponent(message) : ''
+  return `https://wa.me/${number}${encodedMessage ? `?text=${encodedMessage}` : ''}`
 }
 
+// Buy Now → M. Roeesh (primary)
 export function buildProductBuyUrl(productName: string, price: string): string {
   const message = `Hello, I would like to purchase ${productName} (${price}). Please guide me with the order.`
   return buildWhatsAppUrl(message)
+}
+
+// Ask Details → M. Munavvar (secondary)
+export function buildProductInquiryUrl(productName: string): string {
+  const message = `Hello, I am interested in ${productName}. Could you please share more details?`
+  return buildWhatsAppUrl2(message)
 }
 
 export function buildCustomFragranceUrl(): string {

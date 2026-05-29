@@ -27,7 +27,43 @@ const TOGGLE_FIELDS: ToggleField[] = [
   },
 ]
 
-const FIELDS: SettingField[] = []
+const FIELDS: SettingField[] = [
+  {
+    key: 'whatsapp_number',
+    label: 'WhatsApp — M. Roeesh (Buy Now)',
+    description: 'Primary number — used for all "Buy Now" buttons. Include country code.',
+    type: 'tel',
+    placeholder: '+919724586101',
+  },
+  {
+    key: 'whatsapp_number_2',
+    label: 'WhatsApp — M. Munavvar (Ask Details)',
+    description: 'Secondary number — used for all "Ask Details" buttons. Include country code.',
+    type: 'tel',
+    placeholder: '+919016361538',
+  },
+  {
+    key: 'instagram_url',
+    label: 'Instagram URL',
+    description: 'Full URL to your Instagram profile',
+    type: 'text',
+    placeholder: 'https://www.instagram.com/mmattarwala/',
+  },
+  {
+    key: 'facebook_url',
+    label: 'Facebook URL',
+    description: 'Full URL to your Facebook page',
+    type: 'text',
+    placeholder: 'https://www.facebook.com/mmattarwala/',
+  },
+  {
+    key: 'youtube_url',
+    label: 'YouTube URL',
+    description: 'Full URL to your YouTube channel',
+    type: 'text',
+    placeholder: 'https://www.youtube.com/@mmattarwala',
+  },
+]
 
 export default function AdminSettingsPage() {
   const [values, setValues] = useState<Record<string, string>>({})
@@ -155,7 +191,7 @@ export default function AdminSettingsPage() {
                   <button
                     type="button"
                     role="switch"
-                    aria-checked={enabled ? 'true' : 'false'}
+                    aria-checked={enabled}
                     title={field.label}
                     aria-label={field.label}
                     onClick={() => handleChange(field.key, enabled ? 'false' : 'true')}

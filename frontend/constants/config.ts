@@ -1,8 +1,15 @@
 export const CONFIG = {
   apiUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api',
-  whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '+9852104967',
+  // Primary — M. Roeesh — Buy Now buttons
+  whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '+919724586101',
+  // Secondary — M. Munavvar — Ask Details buttons
+  whatsappNumber2: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER_2 || '+919016361538',
   brandName: process.env.NEXT_PUBLIC_BRAND_NAME || 'M.M ATTARWALA',
   brandTagline: 'The Art of Scent',
+  instagram: process.env.NEXT_PUBLIC_INSTAGRAM_URL || 'https://www.instagram.com/mmattarwala/',
+  facebook: process.env.NEXT_PUBLIC_FACEBOOK_URL || 'https://www.facebook.com/mmattarwala/',
+  youtube: process.env.NEXT_PUBLIC_YOUTUBE_URL || 'https://www.youtube.com/@mmattarwala',
+  email: 'mmattarwala2008@rediff.com',
 } as const
 
 export const ROUTES = {
