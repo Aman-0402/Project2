@@ -13,7 +13,8 @@ Luxury perfume brand showcase website for M.M Attarwala, Vadodara, Gujarat. Admi
 | Backend | Django 5 + Django REST Framework |
 | Auth | SimpleJWT (admin-only) |
 | Database | MySQL 8 |
-| Images | Cloudinary |
+| Images | Local filesystem (media/products/) |
+| Currency | Auto-detect INR/USD via timezone offset |
 | Frontend Deploy | Vercel |
 | Backend Deploy | Render / VPS (Docker) |
 
@@ -119,6 +120,7 @@ DB_PASSWORD=
 DB_HOST=localhost
 DB_PORT=3306
 
+# Cloudinary (optional — not active in dev, images stored locally)
 CLOUDINARY_CLOUD_NAME=
 CLOUDINARY_API_KEY=
 CLOUDINARY_API_SECRET=
@@ -188,11 +190,12 @@ PUT             /api/admin/settings/
 | Route | Description |
 |-------|-------------|
 | `/admin/login` | Login form |
-| `/admin` | Dashboard (stats + recent products) |
-| `/admin/products` | Product list (edit/delete) |
-| `/admin/products/new` | Add product |
+| `/admin` | Dashboard (stat cards + recent products) |
+| `/admin/products` | Product list with inline active/featured NeoToggle |
+| `/admin/products/new` | Add product (multi-image, fragrance tag input, volume select) |
 | `/admin/products/[id]/edit` | Edit product |
 | `/admin/categories` | Category management |
+| `/admin/settings` | Site settings + Feature Flags |
 
 ---
 
@@ -247,5 +250,25 @@ venv/Scripts/python manage.py test tests --verbosity=2
 Running `python manage.py seed_data` creates:
 
 - **6 categories:** Oud, Floral, Citrus, Oriental, Woody, Fresh
-- **6 site settings:** brand_name, tagline, about_text, whatsapp_number, hero_headline, hero_subheadline
+- **7 site settings:** brand_name, tagline, about_text, whatsapp_number, hero_headline, hero_subheadline, image_layer_effect
 - **Admin user:** admin / admin123
+
+---
+
+## Key Features
+
+### Product Images
+- Up to **4 images** per product (min 1, max 2MB each, **3:4 portrait ratio** recommended)
+- **Image Layer Effect** — image 1 (bottle PNG, transparent background) composited over image 2 (scene background) with hover zoom on product detail page
+- Toggle per-product (`image_layer_effect`) and globally via admin Settings
+
+### Currency Detection
+- India visitors (IST timezone, UTC+5:30) → **₹ INR**
+- International visitors → **$ USD**
+- Detected client-side via `new Date().getTimezoneOffset()` — no IP API needed
+
+### Admin Features
+- **NeoToggle** — animated inline toggle for active/featured status in products table
+- **Fragrance Notes** — tag/keyword input with auto-suggestions per note layer (top/middle/base)
+- **Volume Select** — preset options (10ml, 30ml, 50ml, 100ml) + Custom free text
+- **Settings page** — live editable brand name, tagline, WhatsApp number, hero text, feature flags
