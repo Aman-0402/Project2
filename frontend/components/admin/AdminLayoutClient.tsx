@@ -14,9 +14,9 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
   useEffect(() => { setSidebarOpen(false) }, [pathname])
 
   return (
-    <div className="flex min-h-screen bg-beige-light">
-      {/* Desktop sidebar */}
-      <div className="hidden lg:block">
+    <div className="admin-portal flex min-h-screen bg-[#EDE4D8]">
+      {/* Desktop sidebar — sticky, full viewport height */}
+      <div className="hidden lg:block sticky top-0 h-screen flex-shrink-0">
         <AdminSidebar />
       </div>
 
@@ -47,7 +47,7 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
       {/* Main content */}
       <div className="flex-1 flex flex-col min-w-0">
         <AdminNavbar onMenuToggle={() => setSidebarOpen((v) => !v)} />
-        <main className="flex-1 p-4 md:p-6 overflow-auto">
+        <main className="flex-1 p-4 md:p-6 overflow-auto bg-[#EDE4D8]">
           {children}
         </main>
       </div>

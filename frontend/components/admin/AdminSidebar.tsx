@@ -61,7 +61,7 @@ export default function AdminSidebar() {
   const { user, logout } = useAuth()
 
   return (
-    <aside className="w-60 min-h-screen bg-brown flex flex-col border-r border-ivory/5">
+    <aside className="w-60 h-full bg-brown flex flex-col border-r border-ivory/5 overflow-y-auto">
       {/* Brand */}
       <div className="px-6 py-6 border-b border-ivory/10">
         <p className="font-serif text-ivory text-lg tracking-wide">{CONFIG.brandName}</p>
@@ -84,7 +84,7 @@ export default function AdminSidebar() {
                 relative flex items-center gap-3 px-3 py-2.5 text-sm font-sans
                 transition-all duration-200 group
                 ${isActive
-                  ? 'text-ivory bg-ivory/10'
+                  ? 'text-ivory'
                   : 'text-ivory/50 hover:text-ivory hover:bg-ivory/5'
                 }
               `}
@@ -92,8 +92,12 @@ export default function AdminSidebar() {
               {isActive && (
                 <motion.span
                   layoutId="admin-nav-indicator"
-                  className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-4 bg-gold"
+                  className="absolute inset-0 rounded-sm"
+                  style={{ background: 'linear-gradient(90deg, rgba(198,161,110,0.22), transparent)' }}
                 />
+              )}
+              {isActive && (
+                <span className="absolute left-0 top-0 bottom-0 w-[3px] bg-gold rounded-r-sm" />
               )}
               <span className={isActive ? 'text-gold' : 'text-ivory/40 group-hover:text-ivory/70'}>
                 {item.icon}
