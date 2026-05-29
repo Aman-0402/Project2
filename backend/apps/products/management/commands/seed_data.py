@@ -32,9 +32,13 @@ INITIAL_SETTINGS = {
         'Trusted by fragrance lovers across India and beyond.'
     ),
     'whatsapp_number': os.environ.get('WHATSAPP_NUMBER', '+919724586101'),
+    'whatsapp_number_2': os.environ.get('WHATSAPP_NUMBER_2', '+919016361538'),
     'hero_headline': 'The Essence of Paradise',
     'hero_subheadline': 'Traditional Indian attars, perfumes & agarbatti — crafted with timeless artistry in Vadodara.',
     'image_layer_effect': 'true',
+    'instagram_url': 'https://www.instagram.com/mmattarwala/',
+    'facebook_url': 'https://www.facebook.com/mmattarwala/',
+    'youtube_url': 'https://www.youtube.com/@mmattarwala',
 }
 
 
