@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { productService } from '@/services/products'
 import WhatsAppCTALink from '@/components/whatsapp/WhatsAppCTALink'
 import LoadingSpinner from '@/components/ui/LoadingSpinner'
@@ -25,6 +25,8 @@ export default function ProductDetailClient() {
   const [product, setProduct] = useState<Product | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
+  const [activeIndex, setActiveIndex] = useState(0)
+  const [direction, setDirection] = useState(0)
   const currency = useCurrency()
 
   useEffect(() => {
@@ -78,30 +80,108 @@ export default function ProductDetailClient() {
       {/* Product layout */}
       <div className="container-luxury pb-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-          {/* Image */}
+          {/* Image Gallery */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
           >
-            <div className="relative aspect-[4/5] bg-beige overflow-hidden">
-              {product.image ? (
-                <Image
-                  src={product.image}
-                  alt={product.name}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                  priority
-                />
-              ) : (
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
-                  <div className="w-16 h-px bg-gold/40" />
-                  <span className="font-serif text-8xl text-brown/10">{product.name[0]}</span>
-                  <div className="w-16 h-px bg-gold/40" />
+            {(() => {
+              const images = product.images?.length ? product.images : product.image ? [product.image] : []
+              const go = (next: number) => {
+                setDirection(next > activeIndex ? 1 : -1)
+                setActiveIndex(next)
+              }
+              return (
+                <div>
+                  {/* Main image */}
+                  <div className="relative aspect-[4/5] bg-beige overflow-hidden">
+                    {images.length > 0 ? (
+                      <AnimatePresence mode="wait" custom={direction}>
+                        <motion.div
+                          key={activeIndex}
+                          custom={direction}
+                          variants={{
+                            enter: (d: number) => ({ x: d > 0 ? '100%' : '-100%', opacity: 0 }),
+                            center: { x: 0, opacity: 1 },
+                            exit: (d: number) => ({ x: d > 0 ? '-100%' : '100%', opacity: 0 }),
+                          }}
+                          initial="enter"
+                          animate="center"
+                          exit="exit"
+                          transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1] }}
+                          className="absolute inset-0"
+                        >
+                          <Image
+                            src={images[activeIndex]}
+                            alt={`${product.name} ${activeIndex + 1}`}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 1024px) 100vw, 50vw"
+                            priority={activeIndex === 0}
+                          />
+                        </motion.div>
+                      </AnimatePresence>
+                    ) : (
+                      <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
+                        <div className="w-16 h-px bg-gold/40" />
+                        <span className="font-serif text-8xl text-brown/10">{product.name[0]}</span>
+                        <div className="w-16 h-px bg-gold/40" />
+                      </div>
+                    )}
+
+                    {/* Prev / Next arrows */}
+                    {images.length > 1 && (
+                      <>
+                        <button
+                          onClick={() => go((activeIndex - 1 + images.length) % images.length)}
+                          className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-ivory/80 hover:bg-ivory flex items-center justify-center transition-colors z-10"
+                          aria-label="Previous image"
+                          type="button"
+                        >
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-4 h-4 text-brown">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                          </svg>
+                        </button>
+                        <button
+                          onClick={() => go((activeIndex + 1) % images.length)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-ivory/80 hover:bg-ivory flex items-center justify-center transition-colors z-10"
+                          aria-label="Next image"
+                          type="button"
+                        >
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-4 h-4 text-brown">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                          </svg>
+                        </button>
+                        {/* Counter */}
+                        <div className="absolute bottom-3 right-3 bg-brown/60 text-ivory text-[10px] font-sans px-2 py-0.5">
+                          {activeIndex + 1} / {images.length}
+                        </div>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Thumbnails */}
+                  {images.length > 1 && (
+                    <div className="flex gap-2 mt-3">
+                      {images.map((src, i) => (
+                        <button
+                          key={i}
+                          onClick={() => go(i)}
+                          className={`relative w-16 aspect-square overflow-hidden flex-shrink-0 border-2 transition-colors duration-200 ${
+                            i === activeIndex ? 'border-gold' : 'border-transparent hover:border-gold/40'
+                          }`}
+                          aria-label={`View image ${i + 1}`}
+                          type="button"
+                        >
+                          <Image src={src} alt={`${product.name} thumbnail ${i + 1}`} fill className="object-cover" sizes="64px" />
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
+              )
+            })()}
           </motion.div>
 
           {/* Info */}

@@ -1,12 +1,14 @@
+import os
+import uuid
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
+from django.conf import settings
 from apps.authentication.permissions import IsAdminUser
 from utils.response import (
     success_response, error_response, created_response, not_found_response
 )
 from .models import Product
 from .serializers import ProductListSerializer, ProductDetailSerializer, ProductWriteSerializer
-from services.cloudinary_service import upload_image
 
 MAX_IMAGE_SIZE = 2 * 1024 * 1024  # 2 MB
 ALLOWED_IMAGE_TYPES = ('image/jpeg', 'image/jpg', 'image/png', 'image/webp')
@@ -121,7 +123,7 @@ class AdminProductDetailView(APIView):
 
 
 class AdminImageUploadView(APIView):
-    """POST /api/admin/upload-image/ — upload one image to Cloudinary (admin only)."""
+    """POST /api/admin/upload-image/ — upload one image to local media storage (admin only)."""
     permission_classes = [IsAdminUser]
 
     def post(self, request):
@@ -136,7 +138,15 @@ class AdminImageUploadView(APIView):
             return error_response(message='Image exceeds 2 MB limit.')
 
         try:
-            url = upload_image(file, folder='mm-attarwala/products')
+            ext = os.path.splitext(file.name)[1].lower() or '.jpg'
+            filename = f"{uuid.uuid4().hex}{ext}"
+            upload_dir = os.path.join(settings.MEDIA_ROOT, 'products')
+            os.makedirs(upload_dir, exist_ok=True)
+            filepath = os.path.join(upload_dir, filename)
+            with open(filepath, 'wb') as dest:
+                for chunk in file.chunks():
+                    dest.write(chunk)
+            url = request.build_absolute_uri(f"{settings.MEDIA_URL}products/{filename}")
         except Exception as exc:
             return error_response(message=f'Upload failed: {str(exc)}')
 
