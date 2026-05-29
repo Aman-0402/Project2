@@ -34,6 +34,7 @@ export interface ProductListItem {
   image: string | null
   images: string[]
   is_featured: boolean
+  image_layer_effect: boolean
   created_at: string
 }
 

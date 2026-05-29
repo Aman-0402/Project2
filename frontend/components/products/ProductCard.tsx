@@ -20,7 +20,26 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
       <Link href={ROUTES.product(product.slug)} className="group block">
         {/* Image */}
         <div className="relative aspect-[3/4] bg-beige overflow-hidden mb-4">
-          {product.image ? (
+          {product.images?.length >= 2 && product.image_layer_effect ? (
+            <>
+              {/* Background layer */}
+              <Image
+                src={product.images[1]}
+                alt=""
+                fill
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              />
+              {/* Bottle layer — zooms on hover */}
+              <Image
+                src={product.images[0]}
+                alt={product.name}
+                fill
+                className="object-contain transition-transform duration-700 group-hover:scale-110"
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              />
+            </>
+          ) : product.image ? (
             <Image
               src={product.image}
               alt={product.name}
