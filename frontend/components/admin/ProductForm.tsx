@@ -356,8 +356,14 @@ export default function ProductForm({
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!validate()) return
+    // Strip __custom__ placeholder, clean up and sort volumes numerically
+    const cleanVolume = (form.volume ?? '')
+      .split(',').map(s => s.trim()).filter(s => s && s !== '__custom__')
+      .sort((a, b) => (parseFloat(a) || Infinity) - (parseFloat(b) || Infinity))
+      .join(', ')
     await onSubmit({
       ...form,
+      volume: cleanVolume,
       fragrance_notes: {
         top: fragranceNotes.top,
         middle: fragranceNotes.middle,
@@ -407,32 +413,87 @@ export default function ProductForm({
                 />
                 <div>
                   <label className="label-luxury block mb-1.5">Volume</label>
-                  <select
-                    title="Product volume"
-                    aria-label="Product volume"
-                    value={['10ml','30ml','50ml','100ml'].includes(form.volume ?? '') ? (form.volume ?? '') : (form.volume ? 'custom' : '')}
-                    onChange={(e) => {
-                      if (e.target.value === 'custom') set('volume', '')
-                      else set('volume', e.target.value)
-                    }}
-                    className="w-full bg-ivory border border-beige-dark px-4 py-2.5 font-sans text-sm text-brown focus:outline-none focus:border-gold transition-colors"
-                  >
-                    <option value="">Select volume</option>
-                    <option value="10ml">10ml</option>
-                    <option value="30ml">30ml</option>
-                    <option value="50ml">50ml</option>
-                    <option value="100ml">100ml</option>
-                    <option value="custom">Custom</option>
-                  </select>
-                  {!['', '10ml', '30ml', '50ml', '100ml'].includes(form.volume ?? '') && (
-                    <input
-                      type="text"
-                      value={form.volume ?? ''}
-                      onChange={(e) => set('volume', e.target.value)}
-                      placeholder="e.g. 75ml"
-                      className="mt-2 w-full bg-ivory border border-beige-dark px-4 py-2.5 font-sans text-sm text-brown placeholder-brown/30 focus:outline-none focus:border-gold transition-colors"
-                    />
-                  )}
+                  {(() => {
+                    const PRESETS = ['10ml', '30ml', '50ml', '100ml']
+                    // Parse current value into array
+                    const current = (form.volume ?? '').split(',').map(s => s.trim()).filter(Boolean)
+                    const selectedPresets = current.filter(v => PRESETS.includes(v))
+                    const customVals = current.filter(v => !PRESETS.includes(v))
+                    const showCustomInput = customVals.length > 0 || current.includes('__custom__')
+
+                    const togglePreset = (val: string) => {
+                      const next = selectedPresets.includes(val)
+                        ? selectedPresets.filter(v => v !== val)
+                        : [...selectedPresets, val]
+                      set('volume', [...next, ...customVals].join(', '))
+                    }
+                    const setCustom = (val: string) => {
+                      set('volume', [...selectedPresets, ...(val ? [val] : [])].join(', '))
+                    }
+
+                    return (
+                      <>
+                        <div className="flex flex-wrap gap-2 mb-2">
+                          {PRESETS.map((opt) => {
+                            const active = selectedPresets.includes(opt)
+                            return (
+                              <button
+                                key={opt}
+                                type="button"
+                                onClick={() => togglePreset(opt)}
+                                className={`px-3 py-1.5 text-xs font-sans border transition-colors duration-150 flex items-center gap-1.5 ${
+                                  active
+                                    ? 'bg-brown text-ivory border-brown'
+                                    : 'bg-ivory text-brown/55 border-beige-dark hover:border-gold hover:text-gold'
+                                }`}
+                              >
+                                {active && (
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} className="w-2.5 h-2.5">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                  </svg>
+                                )}
+                                {opt}
+                              </button>
+                            )
+                          })}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (customVals.length > 0) setCustom('')
+                              else set('volume', [...selectedPresets, '__custom__'].join(', '))
+                            }}
+                            className={`px-3 py-1.5 text-xs font-sans border transition-colors duration-150 flex items-center gap-1.5 ${
+                              showCustomInput
+                                ? 'bg-brown text-ivory border-brown'
+                                : 'bg-ivory text-brown/55 border-beige-dark hover:border-gold hover:text-gold'
+                            }`}
+                          >
+                            {showCustomInput && (
+                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} className="w-2.5 h-2.5">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                              </svg>
+                            )}
+                            Custom
+                          </button>
+                        </div>
+                        {showCustomInput && (
+                          <input
+                            type="text"
+                            value={customVals.join(', ')}
+                            onChange={(e) => setCustom(e.target.value)}
+                            placeholder="e.g. 75ml or 200ml, 500ml"
+                            className="w-full bg-ivory border border-beige-dark px-4 py-2.5 font-sans text-sm text-brown placeholder-brown/30 focus:outline-none focus:border-gold transition-colors"
+                            autoFocus
+                          />
+                        )}
+                        {current.length > 0 && (
+                          <p className="text-[10px] font-sans text-brown/35 mt-1.5">
+                            Selected: {current.filter(v => v !== '__custom__').join(' · ') || '—'}
+                          </p>
+                        )}
+                      </>
+                    )
+                  })()}
                 </div>
               </div>
             </div>
@@ -531,7 +592,7 @@ export default function ProductForm({
                 <button
                   type="button"
                   role="switch"
-                  aria-checked={form.is_active ? 'true' : 'false'}
+                  aria-checked={form.is_active}
                   onClick={() => set('is_active', !form.is_active)}
                   className={`relative w-10 h-5 rounded-full transition-colors duration-300 ${form.is_active ? 'bg-gold' : 'bg-beige-dark'}`}
                 >
@@ -547,7 +608,7 @@ export default function ProductForm({
                 <button
                   type="button"
                   role="switch"
-                  aria-checked={form.is_featured ? 'true' : 'false'}
+                  aria-checked={form.is_featured}
                   onClick={() => set('is_featured', !form.is_featured)}
                   className={`relative w-10 h-5 rounded-full transition-colors duration-300 ${form.is_featured ? 'bg-gold' : 'bg-beige-dark'}`}
                 >
@@ -566,7 +627,7 @@ export default function ProductForm({
                 <button
                   type="button"
                   role="switch"
-                  aria-checked={form.image_layer_effect ? 'true' : 'false'}
+                  aria-checked={form.image_layer_effect}
                   onClick={() => set('image_layer_effect', !form.image_layer_effect)}
                   className={`relative w-10 h-5 rounded-full transition-colors duration-300 flex-shrink-0 ${form.image_layer_effect ? 'bg-gold' : 'bg-beige-dark'}`}
                 >
