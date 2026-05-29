@@ -88,7 +88,7 @@ export default function ProductDetailClient() {
           >
             {(() => {
               const images = product.images?.length ? product.images : product.image ? [product.image] : []
-              const hasLayered = images.length >= 2 && layerEffectEnabled
+              const hasLayered = images.length >= 2 && layerEffectEnabled && product.image_layer_effect !== false
 
               // slots: 0 = layered composite, then images[2], images[3]
               const slots = [0, ...(images.length > 2 ? [2] : []), ...(images.length > 3 ? [3] : [])]

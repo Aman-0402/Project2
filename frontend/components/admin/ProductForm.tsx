@@ -292,6 +292,7 @@ const EMPTY_FORM: ProductFormData = {
   images: [],
   is_featured: false,
   is_active: true,
+  image_layer_effect: true,
 }
 
 export default function ProductForm({
