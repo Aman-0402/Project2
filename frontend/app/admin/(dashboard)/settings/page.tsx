@@ -27,50 +27,7 @@ const TOGGLE_FIELDS: ToggleField[] = [
   },
 ]
 
-const FIELDS: SettingField[] = [
-  {
-    key: 'brand_name',
-    label: 'Brand Name',
-    description: 'Displayed in the navbar and throughout the site',
-    type: 'text',
-    placeholder: 'M.M ATTARWALA',
-  },
-  {
-    key: 'tagline',
-    label: 'Tagline',
-    description: 'Short line shown under the brand name in navbar',
-    type: 'text',
-    placeholder: 'The Art of Scent',
-  },
-  {
-    key: 'whatsapp_number',
-    label: 'WhatsApp Number',
-    description: 'Used for all WhatsApp CTAs on the site (include country code)',
-    type: 'tel',
-    placeholder: '+919724586101',
-  },
-  {
-    key: 'hero_headline',
-    label: 'Hero Headline',
-    description: 'Main heading shown on the homepage hero section',
-    type: 'text',
-    placeholder: 'The Essence of Paradise',
-  },
-  {
-    key: 'hero_subheadline',
-    label: 'Hero Subheadline',
-    description: 'Supporting text below the hero headline',
-    type: 'text',
-    placeholder: 'Traditional Indian attars, perfumes & agarbatti...',
-  },
-  {
-    key: 'about_text',
-    label: 'About Text',
-    description: 'Brand story text shown on the About page',
-    type: 'textarea',
-    placeholder: 'Tell your brand story...',
-  },
-]
+const FIELDS: SettingField[] = []
 
 export default function AdminSettingsPage() {
   const [values, setValues] = useState<Record<string, string>>({})
@@ -198,7 +155,7 @@ export default function AdminSettingsPage() {
                   <button
                     type="button"
                     role="switch"
-                    aria-checked={enabled}
+                    aria-checked={enabled ? 'true' : 'false'}
                     title={field.label}
                     aria-label={field.label}
                     onClick={() => handleChange(field.key, enabled ? 'false' : 'true')}
