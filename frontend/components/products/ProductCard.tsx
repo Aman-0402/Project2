@@ -19,7 +19,7 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
     >
       <Link href={ROUTES.product(product.slug)} className="group block">
         {/* Image */}
-        <div className="relative aspect-[3/4] bg-beige overflow-hidden mb-4">
+        <div className="relative aspect-[3/4] bg-beige overflow-hidden mb-4 rounded-xl">
           {product.images?.length >= 2 && product.image_layer_effect ? (
             <>
               {/* Background layer */}
