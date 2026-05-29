@@ -78,6 +78,12 @@ export default function ProductDetailClient() {
   return (
     <div className="bg-ivory">
       <div className="container-luxury pt-28 pb-16">
+        <Link href={ROUTES.collections} className="inline-flex items-center gap-1.5 text-brown/40 hover:text-gold transition-colors text-xs font-sans uppercase tracking-luxury mb-8">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-3.5 h-3.5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>
+          Collections
+        </Link>
         <div className="grid grid-cols-1 lg:grid-cols-[5fr_7fr] gap-8 lg:gap-14 items-start">
           {/* Image Gallery */}
           <motion.div

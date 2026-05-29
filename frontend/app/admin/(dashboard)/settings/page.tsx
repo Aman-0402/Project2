@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { settingsService } from '@/services/settings'
 
@@ -115,6 +116,12 @@ export default function AdminSettingsPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35 }}
       >
+        <Link href="/admin" className="text-brown/40 hover:text-gold transition-colors text-xs font-sans uppercase tracking-luxury inline-flex items-center gap-1.5 mb-3">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-3.5 h-3.5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>
+          Dashboard
+        </Link>
         <p className="label-luxury mb-1">Configuration</p>
         <h1 className="font-serif text-3xl text-brown">Site Settings</h1>
       </motion.div>
