@@ -557,6 +557,25 @@ export default function ProductForm({
                   />
                 </button>
               </label>
+              <label className="flex items-center justify-between cursor-pointer">
+                <div>
+                  <span className="font-sans text-sm text-brown block">Image Layer Effect</span>
+                  <span className="font-sans text-xs text-brown/40">Overlay bottle (image 1) on background (image 2)</span>
+                </div>
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={form.image_layer_effect ? 'true' : 'false'}
+                  onClick={() => set('image_layer_effect', !form.image_layer_effect)}
+                  className={`relative w-10 h-5 rounded-full transition-colors duration-300 flex-shrink-0 ${form.image_layer_effect ? 'bg-gold' : 'bg-beige-dark'}`}
+                >
+                  <motion.span
+                    className="absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow"
+                    animate={{ x: form.image_layer_effect ? 20 : 0 }}
+                    transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                  />
+                </button>
+              </label>
             </div>
           </div>
 
