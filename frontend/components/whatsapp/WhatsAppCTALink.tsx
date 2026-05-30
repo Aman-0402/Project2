@@ -6,6 +6,9 @@ import { buildProductInquiryUrl, buildProductBuyUrl } from '@/utils/whatsapp'
 interface WhatsAppCTALinkProps {
   productName: string
   price?: string
+  volume?: string
+  description?: string
+  fragranceNotes?: { top?: string[]; middle?: string[]; base?: string[] }
   variant?: 'buy' | 'inquiry'
   className?: string
 }
@@ -13,13 +16,16 @@ interface WhatsAppCTALinkProps {
 export default function WhatsAppCTALink({
   productName,
   price,
+  volume,
+  description,
+  fragranceNotes,
   variant = 'inquiry',
   className = '',
 }: WhatsAppCTALinkProps) {
   const href =
     variant === 'buy' && price
-      ? buildProductBuyUrl(productName, price)
-      : buildProductInquiryUrl(productName)
+      ? buildProductBuyUrl(productName, price, { volume, description, fragranceNotes })
+      : buildProductInquiryUrl(productName, { volume, description })
 
   const label = variant === 'buy' ? 'Buy Now' : 'Ask Details'
 

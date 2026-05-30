@@ -14,15 +14,56 @@ export function buildWhatsAppUrl2(message?: string): string {
 }
 
 // Buy Now → M. Roeesh (primary)
-export function buildProductBuyUrl(productName: string, price: string): string {
-  const message = `Hello, I would like to purchase ${productName} (${price}). Please guide me with the order.`
-  return buildWhatsAppUrl(message)
+export function buildProductBuyUrl(
+  productName: string,
+  price: string,
+  options?: {
+    volume?: string
+    description?: string
+    fragranceNotes?: { top?: string[]; middle?: string[]; base?: string[] }
+  }
+): string {
+  const lines: string[] = [
+    `🛒 *ORDER REQUEST — ${CONFIG.brandName}*`,
+    ``,
+    `✨ *Fragrance:* ${productName}`,
+  ]
+
+  if (options?.volume) lines.push(`📦 *Size:* ${options.volume}`)
+  lines.push(`💰 *Price:* ${price}`)
+
+  if (options?.description) {
+    lines.push(``, `📝 *About:*`, options.description)
+  }
+
+  const notes = options?.fragranceNotes
+  if (notes && (notes.top?.length || notes.middle?.length || notes.base?.length)) {
+    lines.push(``, `🌸 *Fragrance Notes:*`)
+    if (notes.top?.length)    lines.push(`   • Top: ${notes.top.join(', ')}`)
+    if (notes.middle?.length) lines.push(`   • Heart: ${notes.middle.join(', ')}`)
+    if (notes.base?.length)   lines.push(`   • Base: ${notes.base.join(', ')}`)
+  }
+
+  lines.push(``, `✅ Please confirm availability and guide me with delivery.`)
+
+  return buildWhatsAppUrl(lines.join('\n'))
 }
 
 // Ask Details → M. Munavvar (secondary)
-export function buildProductInquiryUrl(productName: string): string {
-  const message = `Hello, I am interested in ${productName}. Could you please share more details?`
-  return buildWhatsAppUrl2(message)
+export function buildProductInquiryUrl(
+  productName: string,
+  options?: { volume?: string; description?: string }
+): string {
+  const lines: string[] = [
+    `🔍 *FRAGRANCE INQUIRY — ${CONFIG.brandName}*`,
+    ``,
+    `I am interested in: *${productName}*`,
+  ]
+  if (options?.volume)      lines.push(`Size I'm looking at: ${options.volume}`)
+  if (options?.description) lines.push(``, options.description)
+  lines.push(``, `Could you please share more details — availability, delivery, and any offers?`)
+
+  return buildWhatsAppUrl2(lines.join('\n'))
 }
 
 export function buildCustomFragranceUrl(): string {

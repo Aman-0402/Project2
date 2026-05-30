@@ -318,19 +318,36 @@ export default function ProductDetailClient() {
             )}
 
             {/* WhatsApp CTAs */}
-            <div className="flex flex-col sm:flex-row gap-3 mb-10">
-              <WhatsAppCTALink
-                productName={product.name}
-                price={formatPrice(product.price, currency)}
-                variant="buy"
-                className="flex-1 justify-center"
-              />
-              <WhatsAppCTALink
-                productName={product.name}
-                variant="inquiry"
-                className="flex-1 justify-center"
-              />
-            </div>
+            {(() => {
+              const volumes = product.volume
+                ? product.volume.split(',').map(s => s.trim()).filter(Boolean)
+                : []
+              const hasVolumePrices = product.volume_prices && Object.keys(product.volume_prices).length > 0
+              const activeVol = selectedVolume ?? (volumes[0] ?? undefined)
+              const activePrice = (hasVolumePrices && activeVol && product.volume_prices[activeVol])
+                ? product.volume_prices[activeVol]
+                : Number(product.price)
+              return (
+                <div className="flex flex-col sm:flex-row gap-3 mb-10">
+                  <WhatsAppCTALink
+                    productName={product.name}
+                    price={formatPrice(activePrice, currency)}
+                    volume={activeVol}
+                    description={product.description ?? undefined}
+                    fragranceNotes={product.fragrance_notes}
+                    variant="buy"
+                    className="flex-1 justify-center"
+                  />
+                  <WhatsAppCTALink
+                    productName={product.name}
+                    volume={activeVol}
+                    description={product.description ?? undefined}
+                    variant="inquiry"
+                    className="flex-1 justify-center"
+                  />
+                </div>
+              )
+            })()}
 
             {/* Fragrance Notes */}
             {hasFragranceNotes && (
