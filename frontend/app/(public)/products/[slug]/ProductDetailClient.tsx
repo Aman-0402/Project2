@@ -137,7 +137,7 @@ export default function ProductDetailClient() {
                           />
                           {/* Bottle layer — PNG transparent, zoom on hover */}
                           <motion.div
-                            className="absolute inset-0 cursor-zoom-in"
+                            className="absolute inset-0"
                             animate={{ scale: bottleHovered ? 1.09 : 1 }}
                             transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
                             onMouseEnter={() => setBottleHovered(true)}
