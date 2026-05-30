@@ -64,6 +64,7 @@ export default function EditProductPage() {
     description: product.description ?? '',
     price: product.price,
     volume: product.volume ?? '',
+    volume_prices: product.volume_prices ?? {},
     category: product.category?.id ?? null,
     fragrance_notes: product.fragrance_notes,
     image: product.image ?? '',
