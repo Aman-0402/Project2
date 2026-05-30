@@ -67,20 +67,20 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
         {/* Info */}
         <div className="pt-3">
           {product.category && (
-            <p className="label-luxury text-[9px] mb-1 text-gold/70">{product.category.name}</p>
+            <p className="label-luxury text-[8px] mb-1 text-gold/60">{product.category.name}</p>
           )}
-          <h3 className="font-serif text-lg text-brown leading-snug group-hover:text-gold transition-colors duration-300 mb-1.5">
+          <h3 className="font-serif text-xl md:text-2xl text-brown leading-tight group-hover:text-gold transition-colors duration-300 mb-1.5">
             {product.name}
           </h3>
           {product.description && (
-            <p className="font-sans text-xs text-brown/50 leading-relaxed mb-2 line-clamp-2">
+            <p className="font-sans text-[11px] text-brown/45 leading-relaxed mb-2.5 line-clamp-2 italic">
               {product.description}
             </p>
           )}
-          <div className="flex items-center justify-between mt-1">
-            <CurrencyPrice price={product.price} className="font-sans text-sm text-brown/70 font-medium" />
+          <div className="flex items-center justify-between mt-1 pt-2 border-t border-beige-dark/60">
+            <CurrencyPrice price={product.price} className="font-sans text-sm text-brown/75 font-medium" />
             {product.volume && (
-              <span className="font-sans text-[10px] text-brown/30">{product.volume}</span>
+              <span className="font-sans text-[9px] text-brown/25 uppercase tracking-wider">{product.volume}</span>
             )}
           </div>
         </div>

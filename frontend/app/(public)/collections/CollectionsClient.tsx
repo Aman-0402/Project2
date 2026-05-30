@@ -94,7 +94,7 @@ export default function CollectionsClient() {
             >
               Explore
             </motion.p>
-            <h1 className="font-serif text-6xl md:text-7xl lg:text-8xl text-ivory tracking-wide leading-none mb-6">
+            <h1 className="collections-hero-title font-serif text-ivory tracking-wide leading-none mb-6">
               Collections
             </h1>
             <motion.div

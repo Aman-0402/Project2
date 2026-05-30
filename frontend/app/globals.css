@@ -757,6 +757,9 @@
 .collections-hero-divider {
   background: linear-gradient(90deg, transparent, rgba(198,161,110,0.8), transparent);
 }
+.collections-hero-title {
+  font-size: clamp(72px, 8vw, 120px);
+}
 .collections-chip {
   display: inline-flex;
   align-items: center;
