@@ -766,6 +766,9 @@
 .collection-tile-hover-glow {
   background: radial-gradient(ellipse at 50% 80%, rgba(198,161,110,0.10) 0%, transparent 60%);
 }
+.cf-stepbar {
+  box-shadow: 0 4px 32px rgba(18,11,8,0.6);
+}
 .collections-chip {
   display: inline-flex;
   align-items: center;
