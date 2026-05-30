@@ -24,27 +24,28 @@ export function buildProductBuyUrl(
   }
 ): string {
   const lines: string[] = [
-    `🛒 *ORDER REQUEST — ${CONFIG.brandName}*`,
+    `*ORDER REQUEST — ${CONFIG.brandName}*`,
+    `--------------------------------`,
     ``,
-    `✨ *Fragrance:* ${productName}`,
+    `*Fragrance:* ${productName}`,
   ]
 
-  if (options?.volume) lines.push(`📦 *Size:* ${options.volume}`)
-  lines.push(`💰 *Price:* ${price}`)
+  if (options?.volume) lines.push(`*Size:* ${options.volume}`)
+  lines.push(`*Price:* ${price}`)
 
   if (options?.description) {
-    lines.push(``, `📝 *About:*`, options.description)
+    lines.push(``, `*About this fragrance:*`, `_${options.description}_`)
   }
 
   const notes = options?.fragranceNotes
   if (notes && (notes.top?.length || notes.middle?.length || notes.base?.length)) {
-    lines.push(``, `🌸 *Fragrance Notes:*`)
-    if (notes.top?.length)    lines.push(`   • Top: ${notes.top.join(', ')}`)
-    if (notes.middle?.length) lines.push(`   • Heart: ${notes.middle.join(', ')}`)
-    if (notes.base?.length)   lines.push(`   • Base: ${notes.base.join(', ')}`)
+    lines.push(``, `*Fragrance Notes:*`)
+    if (notes.top?.length)    lines.push(`  Top Notes: ${notes.top.join(', ')}`)
+    if (notes.middle?.length) lines.push(`  Heart Notes: ${notes.middle.join(', ')}`)
+    if (notes.base?.length)   lines.push(`  Base Notes: ${notes.base.join(', ')}`)
   }
 
-  lines.push(``, `✅ Please confirm availability and guide me with delivery.`)
+  lines.push(``, `--------------------------------`, `Please confirm availability and guide me with the order.`)
 
   return buildWhatsAppUrl(lines.join('\n'))
 }
@@ -55,13 +56,14 @@ export function buildProductInquiryUrl(
   options?: { volume?: string; description?: string }
 ): string {
   const lines: string[] = [
-    `🔍 *FRAGRANCE INQUIRY — ${CONFIG.brandName}*`,
+    `*FRAGRANCE INQUIRY — ${CONFIG.brandName}*`,
+    `--------------------------------`,
     ``,
     `I am interested in: *${productName}*`,
   ]
-  if (options?.volume)      lines.push(`Size I'm looking at: ${options.volume}`)
-  if (options?.description) lines.push(``, options.description)
-  lines.push(``, `Could you please share more details — availability, delivery, and any offers?`)
+  if (options?.volume)      lines.push(`Size: ${options.volume}`)
+  if (options?.description) lines.push(``, `_${options.description}_`)
+  lines.push(``, `Could you please share details on availability, price, and delivery?`)
 
   return buildWhatsAppUrl2(lines.join('\n'))
 }
