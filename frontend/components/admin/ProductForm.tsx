@@ -287,6 +287,7 @@ const EMPTY_FORM: ProductFormData = {
   description: '',
   price: '',
   volume: '',
+  volume_prices: {},
   category: null,
   subcategories: [],
   fragrance_notes: { top: [], middle: [], base: [] },
@@ -413,102 +414,106 @@ export default function ProductForm({
                 placeholder="Describe the fragrance, its story, and character..."
                 rows={5}
               />
-              <div className="grid grid-cols-2 gap-4">
-                <Input
-                  label="Price (₹)"
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  value={form.price}
-                  onChange={(e) => set('price', e.target.value)}
-                  placeholder="e.g. 1500"
-                  error={validationErrors.price}
-                />
-                <div>
-                  <label className="label-luxury block mb-1.5">Volume</label>
-                  {(() => {
-                    const PRESETS = ['10ml', '30ml', '50ml', '100ml']
-                    // Parse current value into array
-                    const current = (form.volume ?? '').split(',').map(s => s.trim()).filter(Boolean)
-                    const selectedPresets = current.filter(v => PRESETS.includes(v))
-                    const customVals = current.filter(v => !PRESETS.includes(v))
-                    const showCustomInput = customVals.length > 0 || current.includes('__custom__')
+              {/* Volume + Price per variant */}
+              {(() => {
+                const PRESETS = ['10ml', '30ml', '50ml', '100ml']
+                const volumePrices = form.volume_prices ?? {}
+                const selectedVolumes = (form.volume ?? '').split(',').map(s => s.trim()).filter(v => v && v !== '__custom__')
+                const customVols = selectedVolumes.filter(v => !PRESETS.includes(v))
+                const showCustom = customVols.length > 0
 
-                    const togglePreset = (val: string) => {
-                      const next = selectedPresets.includes(val)
-                        ? selectedPresets.filter(v => v !== val)
-                        : [...selectedPresets, val]
-                      set('volume', [...next, ...customVals].join(', '))
-                    }
-                    const setCustom = (val: string) => {
-                      set('volume', [...selectedPresets, ...(val ? [val] : [])].join(', '))
-                    }
+                const toggleVolume = (vol: string) => {
+                  const isSelected = selectedVolumes.includes(vol)
+                  const next = isSelected
+                    ? selectedVolumes.filter(v => v !== vol)
+                    : [...selectedVolumes, vol].sort((a, b) => (parseFloat(a) || 99) - (parseFloat(b) || 99))
+                  set('volume', next.join(', '))
+                  if (isSelected) {
+                    const newPrices = { ...volumePrices }
+                    delete newPrices[vol]
+                    set('volume_prices', newPrices)
+                  }
+                }
+                const setVolPrice = (vol: string, val: string) => {
+                  set('volume_prices', { ...volumePrices, [vol]: val ? Number(val) : undefined } as Record<string, number>)
+                }
+                const addCustomVol = (val: string) => {
+                  const parts = val.split(',').map(s => s.trim()).filter(Boolean)
+                  const all = [...selectedVolumes.filter(v => PRESETS.includes(v)), ...parts]
+                    .sort((a, b) => (parseFloat(a) || 99) - (parseFloat(b) || 99))
+                  set('volume', all.join(', '))
+                }
 
-                    return (
-                      <>
-                        <div className="flex flex-wrap gap-2 mb-2">
-                          {PRESETS.map((opt) => {
-                            const active = selectedPresets.includes(opt)
-                            return (
-                              <button
-                                key={opt}
-                                type="button"
-                                onClick={() => togglePreset(opt)}
-                                className={`px-3 py-1.5 text-xs font-sans border transition-colors duration-150 flex items-center gap-1.5 ${
-                                  active
-                                    ? 'bg-brown text-ivory border-brown'
-                                    : 'bg-ivory text-brown/55 border-beige-dark hover:border-gold hover:text-gold'
-                                }`}
-                              >
-                                {active && (
-                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} className="w-2.5 h-2.5">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                                  </svg>
-                                )}
-                                {opt}
-                              </button>
-                            )
-                          })}
-                          <button
-                            type="button"
-                            onClick={() => {
-                              if (customVals.length > 0) setCustom('')
-                              else set('volume', [...selectedPresets, '__custom__'].join(', '))
-                            }}
-                            className={`px-3 py-1.5 text-xs font-sans border transition-colors duration-150 flex items-center gap-1.5 ${
-                              showCustomInput
-                                ? 'bg-brown text-ivory border-brown'
-                                : 'bg-ivory text-brown/55 border-beige-dark hover:border-gold hover:text-gold'
-                            }`}
-                          >
-                            {showCustomInput && (
-                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} className="w-2.5 h-2.5">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                              </svg>
+                return (
+                  <div>
+                    <label className="label-luxury block mb-3">Volume &amp; Price</label>
+                    <p className="font-sans text-[10px] text-brown/40 mb-3">Select volumes and set price for each</p>
+
+                    {/* Preset volumes with price inputs */}
+                    <div className="flex flex-col gap-2.5 mb-3">
+                      {PRESETS.map((vol) => {
+                        const active = selectedVolumes.includes(vol)
+                        return (
+                          <div key={vol} className="flex items-center gap-3">
+                            <button
+                              type="button"
+                              onClick={() => toggleVolume(vol)}
+                              className={`w-20 flex-shrink-0 py-2 text-xs font-sans border transition-colors duration-150 flex items-center justify-center gap-1.5 ${
+                                active ? 'bg-brown text-ivory border-brown' : 'bg-ivory text-brown/50 border-beige-dark hover:border-gold hover:text-gold'
+                              }`}
+                            >
+                              {active && <span className="text-[10px]">✓</span>}
+                              {vol}
+                            </button>
+                            {active && (
+                              <div className="flex-1 flex items-center gap-1.5">
+                                <span className="font-sans text-xs text-brown/40">₹</span>
+                                <input
+                                  type="number"
+                                  min="0"
+                                  value={volumePrices[vol] ?? ''}
+                                  onChange={(e) => setVolPrice(vol, e.target.value)}
+                                  placeholder="Price"
+                                  className="flex-1 bg-ivory border border-beige-dark px-3 py-2 font-sans text-sm text-brown placeholder-brown/25 focus:outline-none focus:border-gold transition-colors"
+                                />
+                              </div>
                             )}
-                            Custom
-                          </button>
-                        </div>
-                        {showCustomInput && (
-                          <input
-                            type="text"
-                            value={customVals.join(', ')}
-                            onChange={(e) => setCustom(e.target.value)}
-                            placeholder="e.g. 75ml or 200ml, 500ml"
-                            className="w-full bg-ivory border border-beige-dark px-4 py-2.5 font-sans text-sm text-brown placeholder-brown/30 focus:outline-none focus:border-gold transition-colors"
-                            autoFocus
-                          />
-                        )}
-                        {current.length > 0 && (
-                          <p className="text-[10px] font-sans text-brown/35 mt-1.5">
-                            Selected: {current.filter(v => v !== '__custom__').join(' · ') || '—'}
-                          </p>
-                        )}
-                      </>
-                    )
-                  })()}
-                </div>
-              </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+
+                    {/* Custom volume */}
+                    <div className="flex items-center gap-2 mb-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (!showCustom) set('volume', [...PRESETS.filter(v => selectedVolumes.includes(v)), 'custom_placeholder'].join(', '))
+                          else set('volume', selectedVolumes.filter(v => PRESETS.includes(v)).join(', '))
+                        }}
+                        className={`px-3 py-2 text-xs font-sans border transition-colors duration-150 ${showCustom ? 'bg-brown text-ivory border-brown' : 'bg-ivory text-brown/50 border-beige-dark hover:border-gold hover:text-gold'}`}
+                      >
+                        + Custom
+                      </button>
+                    </div>
+                    {showCustom && (
+                      <input
+                        type="text"
+                        value={customVols.join(', ')}
+                        onChange={(e) => addCustomVol(e.target.value)}
+                        placeholder="e.g. 75ml or 200ml, 500ml"
+                        className="w-full bg-ivory border border-beige-dark px-4 py-2.5 font-sans text-sm text-brown placeholder-brown/30 focus:outline-none focus:border-gold transition-colors"
+                        autoFocus
+                      />
+                    )}
+                    {Object.keys(volumePrices).length > 0 && (
+                      <p className="font-sans text-[10px] text-brown/35 mt-2">
+                        Display price auto-set to lowest: ₹{Math.min(...Object.values(volumePrices).filter(Boolean))}
+                      </p>
+                    )}
+                  </div>
+                )
+              })()}
             </div>
           </div>
 
@@ -647,7 +652,7 @@ export default function ProductForm({
                 <button
                   type="button"
                   role="switch"
-                  aria-checked={form.is_active}
+                  aria-checked={form.is_active ? 'true' : 'false'}
                   onClick={() => set('is_active', !form.is_active)}
                   className={`relative w-10 h-5 rounded-full transition-colors duration-300 ${form.is_active ? 'bg-gold' : 'bg-beige-dark'}`}
                 >
@@ -663,7 +668,7 @@ export default function ProductForm({
                 <button
                   type="button"
                   role="switch"
-                  aria-checked={form.is_featured}
+                  aria-checked={form.is_featured ? 'true' : 'false'}
                   onClick={() => set('is_featured', !form.is_featured)}
                   className={`relative w-10 h-5 rounded-full transition-colors duration-300 ${form.is_featured ? 'bg-gold' : 'bg-beige-dark'}`}
                 >
@@ -682,7 +687,7 @@ export default function ProductForm({
                 <button
                   type="button"
                   role="switch"
-                  aria-checked={form.image_layer_effect}
+                  aria-checked={form.image_layer_effect ? 'true' : 'false'}
                   onClick={() => set('image_layer_effect', !form.image_layer_effect)}
                   className={`relative w-10 h-5 rounded-full transition-colors duration-300 flex-shrink-0 ${form.image_layer_effect ? 'bg-gold' : 'bg-beige-dark'}`}
                 >

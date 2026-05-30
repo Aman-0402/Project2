@@ -17,6 +17,7 @@ export interface Product {
   fragrance_notes: FragranceNotes
   image: string | null
   images: string[]
+  volume_prices: Record<string, number>
   subcategories: SubCategory[]
   is_featured: boolean
   is_active: boolean
@@ -35,6 +36,7 @@ export interface ProductListItem {
   category: Category | null
   image: string | null
   images: string[]
+  volume_prices: Record<string, number>
   subcategories: SubCategory[]
   is_featured: boolean
   image_layer_effect: boolean
@@ -50,6 +52,7 @@ export interface ProductFormData {
   fragrance_notes: FragranceNotes
   image: string
   images: string[]
+  volume_prices: Record<string, number>
   subcategories: number[]
   is_featured: boolean
   is_active: boolean

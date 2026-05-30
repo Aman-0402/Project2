@@ -12,7 +12,7 @@ class ProductListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = [
-            'id', 'name', 'slug', 'description', 'price', 'volume',
+            'id', 'name', 'slug', 'description', 'price', 'volume', 'volume_prices',
             'category', 'subcategories', 'image', 'images', 'is_featured', 'image_layer_effect', 'created_at',
         ]
 
@@ -25,7 +25,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = [
-            'id', 'name', 'slug', 'description', 'price', 'volume',
+            'id', 'name', 'slug', 'description', 'price', 'volume', 'volume_prices',
             'category', 'subcategories', 'fragrance_notes', 'image', 'images', 'is_featured',
             'is_active', 'image_layer_effect', 'created_at', 'updated_at',
         ]
@@ -40,7 +40,7 @@ class ProductWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = [
-            'name', 'description', 'price', 'volume',
+            'name', 'description', 'price', 'volume', 'volume_prices',
             'category', 'subcategories', 'fragrance_notes', 'image', 'images',
             'is_featured', 'is_active', 'image_layer_effect',
         ]
@@ -68,4 +68,11 @@ class ProductWriteSerializer(serializers.ModelSerializer):
         images = data.get('images', [])
         if images:
             data['image'] = images[0]
+        # Auto-set price from lowest volume price
+        volume_prices = data.get('volume_prices', {})
+        if volume_prices:
+            try:
+                data['price'] = min(float(v) for v in volume_prices.values() if v)
+            except (ValueError, TypeError):
+                pass
         return data

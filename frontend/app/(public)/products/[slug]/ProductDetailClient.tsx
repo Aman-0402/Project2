@@ -30,6 +30,7 @@ export default function ProductDetailClient() {
   const [direction, setDirection] = useState(0)
   const [bottleHovered, setBottleHovered] = useState(false)
   const [layerEffectEnabled, setLayerEffectEnabled] = useState(true)
+  const [selectedVolume, setSelectedVolume] = useState<string | null>(null)
   const currency = useCurrency()
 
   useEffect(() => {
@@ -253,13 +254,59 @@ export default function ProductDetailClient() {
               {product.name}
             </h1>
 
-            {/* Price + volume */}
-            <div className="flex items-baseline gap-3 mb-6">
-              <span className="font-sans text-2xl text-brown font-medium">{formatPrice(product.price, currency)}</span>
-              {product.volume && (
-                <span className="font-sans text-sm text-brown/40">{product.volume}</span>
-              )}
-            </div>
+            {/* Price — updates with selected volume */}
+            {(() => {
+              const volumes = product.volume
+                ? product.volume.split(',').map(s => s.trim()).filter(Boolean)
+                : []
+              const hasVolumePrices = product.volume_prices && Object.keys(product.volume_prices).length > 0
+              const activeVol = selectedVolume ?? (hasVolumePrices ? volumes[0] : null)
+              const activePrice = (hasVolumePrices && activeVol && product.volume_prices[activeVol])
+                ? product.volume_prices[activeVol]
+                : Number(product.price)
+
+              return (
+                <div className="mb-6">
+                  <div className="flex items-baseline gap-3 mb-4">
+                    <span className="font-sans text-3xl text-brown font-medium">
+                      {formatPrice(activePrice, currency)}
+                    </span>
+                    {activeVol && (
+                      <span className="font-sans text-sm text-brown/40">{activeVol}</span>
+                    )}
+                  </div>
+
+                  {/* Volume selector */}
+                  {volumes.length > 1 && (
+                    <div className="flex flex-wrap gap-2">
+                      {volumes.map((vol) => {
+                        const price = hasVolumePrices ? product.volume_prices[vol] : null
+                        const isActive = (activeVol === vol)
+                        return (
+                          <button
+                            key={vol}
+                            type="button"
+                            onClick={() => setSelectedVolume(vol)}
+                            className={`px-4 py-2 text-xs font-sans border transition-all duration-200 ${
+                              isActive
+                                ? 'bg-brown text-ivory border-brown'
+                                : 'bg-transparent text-brown/60 border-beige-dark hover:border-gold hover:text-gold'
+                            }`}
+                          >
+                            {vol}
+                            {price && (
+                              <span className={`ml-1.5 text-[10px] ${isActive ? 'text-gold/70' : 'text-brown/35'}`}>
+                                {formatPrice(price, currency)}
+                              </span>
+                            )}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  )}
+                </div>
+              )
+            })()}
 
             <div className="w-12 h-px bg-gold mb-6" />
 
