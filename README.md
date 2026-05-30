@@ -132,8 +132,9 @@ CORS_ALLOWED_ORIGINS=http://localhost:3000
 
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:8000/api
-NEXT_PUBLIC_WHATSAPP_NUMBER=+1234567890
-NEXT_PUBLIC_BRAND_NAME=LUXE PARFUM
+NEXT_PUBLIC_WHATSAPP_NUMBER=+919724586101
+NEXT_PUBLIC_WHATSAPP_NUMBER_2=+919016361538
+NEXT_PUBLIC_BRAND_NAME=M.M ATTARWALA
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
@@ -149,6 +150,7 @@ GET  /api/products/featured/     Featured products for homepage
 GET  /api/products/{slug}/       Product detail
 GET  /api/categories/            All categories
 GET  /api/settings/              Site settings (key:value)
+POST /api/inquiries/             Submit custom fragrance request
 ```
 
 ### Auth Endpoints
@@ -169,6 +171,8 @@ POST            /api/categories/
 PUT             /api/admin/categories/{id}/
 DELETE          /api/admin/categories/{id}/
 PUT             /api/admin/settings/
+GET             /api/admin/inquiries/           (filter: ?status=new|contacted|completed)
+GET|PATCH|DELETE  /api/admin/inquiries/{id}/
 ```
 
 ---
@@ -184,6 +188,7 @@ PUT             /api/admin/settings/
 | `/products/[slug]` | Product detail with fragrance pyramid |
 | `/about` | Brand story |
 | `/contact` | WhatsApp contact options |
+| `/create-fragrance` | Custom fragrance builder (5-step wizard) |
 
 ### Admin (JWT protected)
 
@@ -267,8 +272,20 @@ Running `python manage.py seed_data` creates:
 - International visitors → **$ USD**
 - Detected client-side via `new Date().getTimezoneOffset()` — no IP API needed
 
+### Custom Fragrance Builder
+- 5-step interactive wizard at `/create-fragrance`: Family → Notes → Intensity → Name → Enquiry
+- 6 fragrance families (Oud, Floral, Musk, Fresh, Oriental, Woody) with family-specific note palettes (up to 2 per layer)
+- Live animated bottle SVG — fill level and accent color update per selection
+- Submits inquiry to backend (`POST /api/inquiries/`) and generates pre-filled WhatsApp message
+- Dark cinematic theme isolated to this page via `cf-page-bg` CSS class
+
+### WhatsApp Dual Routing
+- **Buy Now** → M. Roeesh (`NEXT_PUBLIC_WHATSAPP_NUMBER`) — includes product name, price, notes
+- **Ask Details** → M. Munavvar (`NEXT_PUBLIC_WHATSAPP_NUMBER_2`) — general inquiry
+
 ### Admin Features
 - **NeoToggle** — animated inline toggle for active/featured status in products table
 - **Fragrance Notes** — tag/keyword input with auto-suggestions per note layer (top/middle/base)
 - **Volume Select** — preset options (10ml, 30ml, 50ml, 100ml) + Custom free text
 - **Settings page** — live editable brand name, tagline, WhatsApp number, hero text, feature flags
+- **Inquiries** — backend API ready (status tracking: new/contacted/completed); admin UI pending

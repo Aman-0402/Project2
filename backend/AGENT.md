@@ -74,6 +74,22 @@ Animation:
 
 ## DATABASE STRUCTURE
 
+### inquiries (table: inquiries_fragrancerequest)
+| Column           | Type         | Notes                              |
+|------------------|--------------|------------------------------------|
+| id               | BIGINT PK AI |                                    |
+| gender           | VARCHAR(20)  | fragrance family (e.g. "oud")      |
+| occasion         | VARCHAR(50)  |                                    |
+| notes            | JSON         | array of note strings              |
+| intensity        | VARCHAR(30)  |                                    |
+| fragrance_name   | VARCHAR(200) |                                    |
+| customer_name    | VARCHAR(200) |                                    |
+| customer_phone   | VARCHAR(50)  |                                    |
+| customer_city    | VARCHAR(100) | blank=True                         |
+| additional_notes | TEXT         | blank=True                         |
+| status           | VARCHAR(20)  | new / contacted / completed        |
+| created_at       | DATETIME(6)  | auto                               |
+
 ### categories (table: categories_category)
 | Column      | Type         | Notes          |
 |-------------|--------------|----------------|
@@ -137,6 +153,11 @@ POST /api/auth/logout/           Logout (blacklists refresh token)
 GET  /api/auth/me/               Get current admin user info (JWT required)
 ```
 
+### Inquiry Endpoints
+```
+POST   /api/inquiries/               Submit custom fragrance request (public)
+```
+
 ### Admin Endpoints (JWT Bearer required, is_staff=True)
 ```
 GET    /api/admin/products/          List ALL products (incl. inactive)
@@ -152,6 +173,11 @@ DELETE /api/admin/categories/{id}/   Delete category
 
 PUT    /api/admin/settings/          Bulk update settings ({settings: {key: value}})
 POST   /api/admin/upload-image/      Upload product image to local media storage (multipart, max 2MB)
+
+GET    /api/admin/inquiries/         List fragrance requests (?status=new|contacted|completed)
+GET    /api/admin/inquiries/{id}/    Get single inquiry
+PATCH  /api/admin/inquiries/{id}/    Update status
+DELETE /api/admin/inquiries/{id}/    Delete inquiry
 ```
 
 ### Response Format
@@ -170,11 +196,12 @@ POST   /api/admin/upload-image/      Upload product image to local media storage
 
 ### Public Pages
 ```
-/                    Homepage (9 sections)
-/collections         Product grid with category filter
-/products/[slug]     Product detail page
-/about               Brand story page
-/contact             Contact + WhatsApp CTA
+/                        Homepage (9 sections)
+/collections             Product grid with category filter
+/products/[slug]         Product detail page
+/about                   Brand story page
+/contact                 Contact + WhatsApp CTA
+/create-fragrance        Custom fragrance builder (5-step wizard)
 ```
 
 ### Admin Pages
@@ -186,6 +213,7 @@ POST   /api/admin/upload-image/      Upload product image to local media storage
 /admin/products/[id]/edit Edit product
 /admin/categories         Category management
 /admin/settings           Site settings + Feature Flags (image_layer_effect toggle)
+/admin/inquiries          (route defined, UI page pending)
 ```
 
 ### Homepage Sections
@@ -219,11 +247,17 @@ POST   /api/admin/upload-image/      Upload product image to local media storage
 - AdminSidebar, AdminNavbar, ProductForm (multi-image slots, TagInput fragrance notes, volume select, image_layer_effect toggle)
 - NeoToggle — animated CSS toggle (64×56px, CSS vars, spectrum bars, active/featured variants)
 - CurrencyPrice — client component using useCurrency hook (timezone-based INR/USD detection)
+- CreateFragranceClient — 5-step custom fragrance wizard (Family → Notes → Intensity → Name → Enquiry), DarkBottle SVG preview, submits to inquiries API + WhatsApp
 
 ### Hooks & Utils
 - `hooks/useCurrency.ts` — detects India via UTC offset -330 (IST), defaults INR to avoid SSR mismatch
 - `utils/formatters.ts:formatPrice` — Intl.NumberFormat, INR=en-IN locale, 0 decimals; USD=en-US
 - `services/settings.ts` — getAll(), adminUpdate()
+- `services/inquiries.ts` — create(), adminGetAll(?status), adminUpdateStatus(id, status), adminDelete(id)
+- `utils/whatsapp.ts:buildWhatsAppUrl2` — secondary number (M. Munavvar) for Ask Details
+- `utils/whatsapp.ts:buildProductBuyUrl` — Buy Now → primary (M. Roeesh), includes notes + description
+- `utils/whatsapp.ts:buildProductInquiryUrl` — Ask Details → secondary (M. Munavvar)
+- `utils/whatsapp.ts:buildCustomFragranceOrderUrl` — full custom fragrance WhatsApp message builder
 
 ---
 
@@ -350,6 +384,19 @@ POST   /api/admin/upload-image/      Upload product image to local media storage
 - [x] `backend/.env.production.example` — production env vars template with all required keys
 - [x] Production settings: DEBUG=False, SECURE_SSL_REDIRECT, HSTS, CSRF_COOKIE_SECURE
 
+### Post-Launch Features [DONE]
+- [x] Custom Fragrance Builder — `/create-fragrance` page (5-step wizard, dark cinematic theme)
+- [x] `inquiries` Django app — FragranceRequest model (status: new/contacted/completed), public POST + admin CRUD
+- [x] `services/inquiries.ts` — frontend service for inquiries API
+- [x] `buildWhatsAppUrl2()` — secondary number for Ask Details (M. Munavvar)
+- [x] `buildProductBuyUrl()` — rich Buy Now message (name, price, description, notes)
+- [x] `buildProductInquiryUrl()` — Ask Details message → secondary number
+- [x] `buildCustomFragranceOrderUrl()` — rich WhatsApp message for custom fragrance builder
+- [x] `CONFIG.whatsappNumber2` + `NEXT_PUBLIC_WHATSAPP_NUMBER_2` env var
+- [x] Social links in CONFIG (Instagram, Facebook, YouTube) + email constant
+- [x] `globals.css` — `cf-page-bg`, `cf-stepbar` utility classes for dark fragrance builder page
+- [x] `/admin/inquiries` route defined in ROUTES (admin UI page pending)
+
 ---
 
 ## KNOWN ISSUES
@@ -390,6 +437,10 @@ POST   /api/admin/upload-image/      Upload product image to local media storage
 - Image layer effect: images[0] = bottle PNG (transparent), images[1] = background. Composite shown when product.image_layer_effect=true AND site setting image_layer_effect != 'false'
 - Volume field in ProductForm: preset options 10ml/30ml/50ml/100ml + Custom free text
 - Migrations: 0001_initial, 0002_product_images, 0003_product_image_layer_effect
+- Inquiries app: backend/apps/inquiries/ — register in INSTALLED_APPS + config/urls.py
+- Custom fragrance builder: dark bg (#1A120E), gold accent (#B08D57/#C8A36A), families have per-family note lists
+- WhatsApp dual routing: Buy Now → whatsappNumber (M. Roeesh), Ask Details → whatsappNumber2 (M. Munavvar)
+- NEXT_PUBLIC_WHATSAPP_NUMBER_2=+919016361538 needed in .env.local and Vercel env vars
 
 ---
 
