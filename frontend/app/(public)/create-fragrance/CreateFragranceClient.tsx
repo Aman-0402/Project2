@@ -151,7 +151,8 @@ function DarkBottle({ fillPercent, accent }: { fillPercent: number; accent: stri
 
 function StepBar({ step }: { step: number }) {
   return (
-    <div className="sticky top-0 z-20 bg-[#0d0600]/95 backdrop-blur border-b border-white/[0.05] px-4 py-3">
+    <div className="sticky top-0 z-20 bg-[#1A120E]/92 backdrop-blur-xl border-b border-[#C8A36A]/10 px-4 py-3"
+      style={{ boxShadow: '0 4px 32px rgba(18,11,8,0.6)' }}>
       <div className="max-w-5xl mx-auto flex items-center justify-between">
         {STEPS.map((label, i) => {
           const done = step > i + 1
