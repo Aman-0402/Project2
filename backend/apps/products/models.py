@@ -18,6 +18,7 @@ class Product(models.Model):
     )
     # Fragrance notes stored as JSON: {"top": [...], "middle": [...], "base": [...]}
     fragrance_notes = models.JSONField(default=dict, blank=True)
+    volume_prices = models.JSONField(default=dict, blank=True, help_text='Per-volume pricing: {"10ml": 500, "50ml": 1999}')
     image = models.CharField(max_length=500, blank=True, null=True, help_text='Primary Cloudinary URL (auto-set from images[0])')
     images = models.JSONField(default=list, blank=True, help_text='Array of up to 4 Cloudinary URLs')
     subcategories = models.ManyToManyField(
