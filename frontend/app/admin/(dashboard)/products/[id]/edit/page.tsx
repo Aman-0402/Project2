@@ -72,6 +72,7 @@ export default function EditProductPage() {
       : product.image
       ? [product.image]
       : [],
+    subcategories: product.subcategories?.map((s) => s.id) ?? [],
     is_featured: product.is_featured,
     is_active: product.is_active,
     image_layer_effect: product.image_layer_effect ?? true,

@@ -29,6 +29,19 @@ class CategoryListView(APIView):
         return created_response(data=CategorySerializer(category).data, message='Category created.')
 
 
+class SubCategoryListView(APIView):
+    """GET subcategories for a category by slug (public)."""
+    permission_classes = [AllowAny]
+
+    def get(self, request, slug):
+        try:
+            category = Category.objects.get(slug=slug)
+        except Category.DoesNotExist:
+            return not_found_response('Category not found.')
+        subcats = SubCategory.objects.filter(category=category)
+        return success_response(data=SubCategorySerializer(subcats, many=True).data)
+
+
 class CategoryDetailView(APIView):
     """PUT update, DELETE remove (admin only)."""
     permission_classes = [IsAdminUser]

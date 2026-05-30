@@ -1,5 +1,5 @@
 export type { ApiResponse, PaginatedResponse } from './api'
-export type { Category } from './category'
+export type { Category, SubCategory } from './category'
 export type { Product, ProductListItem, ProductFormData, FragranceNotes } from './product'
 export type { AdminUser, LoginCredentials, AuthTokens } from './auth'
 export type { FragranceInquiry } from './inquiry'

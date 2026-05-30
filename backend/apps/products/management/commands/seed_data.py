@@ -9,7 +9,7 @@ Seeds:
 import os
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
-from apps.categories.models import Category
+from apps.categories.models import Category, SubCategory
 from apps.site_settings.models import SiteSetting
 
 
@@ -21,6 +21,45 @@ CATEGORIES = [
     {'name': 'Car Perfume', 'description': 'Premium car perfumes — carry luxury with you on every journey.'},
     {'name': 'Car Freshener', 'description': 'Long-lasting car fresheners — crisp, clean fragrance for your drive.'},
 ]
+
+SUBCATEGORIES = {
+    'Attar': [
+        'Floral Attar', 'Oud Attar', 'Musk Attar', 'Arabic Attar', 'White Attar',
+        'Premium Attar', 'Long Lasting Attar', 'Roll-On Attar', 'Alcohol-Free Attar',
+        'Unisex Attar', "Men's Attar", "Women's Attar", 'Namaz / Islamic Attar',
+        'Luxury Attar Collection', 'Seasonal Attar',
+    ],
+    'Perfume': [
+        'Eau De Parfum (EDP)', 'Eau De Toilette (EDT)', "Men's Perfume", "Women's Perfume",
+        'Unisex Perfume', 'Luxury Perfume', 'Daily Wear Perfume', 'Party Wear Perfume',
+        'Office Wear Perfume', 'Summer Perfume', 'Winter Perfume', 'Premium Collection',
+        'Celebrity Inspired Fragrance', 'Gift Sets', 'Imported Perfumes',
+    ],
+    'Agarbatti': [
+        'Sandalwood Agarbatti', 'Rose Agarbatti', 'Mogra Agarbatti', 'Oudh Agarbatti',
+        'Temple Fragrance', 'Premium Incense Sticks', 'Charcoal-Free Agarbatti',
+        'Dhoop Sticks', 'Cone Incense', 'Meditation Fragrance',
+        'Festival Collection', 'Long Burning Agarbatti',
+    ],
+    'Room Fragrance': [
+        'Room Spray', 'Aroma Diffuser Oil', 'Reed Diffuser', 'Scented Candles',
+        'Electric Diffuser', 'Luxury Home Fragrance', 'Hotel Collection',
+        'Relaxing Fragrance', 'Fresh & Citrus Fragrance', 'Floral Home Fragrance',
+        'Office Fragrance', 'Bedroom Fragrance', 'Bathroom Freshener',
+    ],
+    'Car Perfume': [
+        'Hanging Car Perfume', 'Vent Clip Perfume', 'Gel Car Perfume',
+        'Premium Car Diffuser', 'Long Lasting Car Perfume', 'Luxury Car Collection',
+        'Sporty Fragrance', 'Fresh Aqua Fragrance', 'Oud Car Perfume',
+        'Masculine Car Perfume', 'Compact Car Freshener',
+    ],
+    'Car Freshener': [
+        'Air Freshener Spray', 'Dashboard Freshener', 'Hanging Freshener',
+        'Organic Freshener', 'Premium Car Freshener', 'Fruity Fragrance',
+        'Mint Freshener', 'Long Lasting Freshener', 'Smoke Odor Remover',
+        'Leather Fragrance', 'Luxury Vehicle Collection',
+    ],
+}
 
 INITIAL_SETTINGS = {
     'brand_name': 'M.M ATTARWALA',
@@ -64,6 +103,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self._seed_categories()
+        self._seed_subcategories()
         self._seed_settings()
         self._seed_admin(
             options['admin_username'],
@@ -87,6 +127,20 @@ class Command(BaseCommand):
             if is_new:
                 created += 1
         self.stdout.write(f'  Categories: {created} created, {len(CATEGORIES) - created} already existed.')
+
+    def _seed_subcategories(self):
+        created = 0
+        for cat_name, subcat_names in SUBCATEGORIES.items():
+            try:
+                category = Category.objects.get(name=cat_name)
+            except Category.DoesNotExist:
+                self.stdout.write(f'  SubCategories: category "{cat_name}" not found, skipping.')
+                continue
+            for name in subcat_names:
+                _, is_new = SubCategory.objects.get_or_create(category=category, name=name)
+                if is_new:
+                    created += 1
+        self.stdout.write(f'  SubCategories: {created} created.')
 
     def _seed_settings(self):
         created = 0

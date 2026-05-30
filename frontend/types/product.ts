@@ -1,4 +1,4 @@
-import type { Category } from './category'
+import type { Category, SubCategory } from './category'
 
 export interface FragranceNotes {
   top?: string[]
@@ -17,6 +17,7 @@ export interface Product {
   fragrance_notes: FragranceNotes
   image: string | null
   images: string[]
+  subcategories: SubCategory[]
   is_featured: boolean
   is_active: boolean
   image_layer_effect: boolean
@@ -34,6 +35,7 @@ export interface ProductListItem {
   category: Category | null
   image: string | null
   images: string[]
+  subcategories: SubCategory[]
   is_featured: boolean
   image_layer_effect: boolean
   created_at: string
@@ -48,6 +50,7 @@ export interface ProductFormData {
   fragrance_notes: FragranceNotes
   image: string
   images: string[]
+  subcategories: number[]
   is_featured: boolean
   is_active: boolean
   image_layer_effect: boolean

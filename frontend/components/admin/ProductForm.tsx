@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Input, Textarea } from '@/components/ui/Input'
+import type { SubCategory } from '@/types'
 import Button from '@/components/ui/Button'
 import { categoryService } from '@/services/categories'
 import { productService } from '@/services/products'
@@ -287,6 +288,7 @@ const EMPTY_FORM: ProductFormData = {
   price: '',
   volume: '',
   category: null,
+  subcategories: [],
   fragrance_notes: { top: [], middle: [], base: [] },
   image: '',
   images: [],
@@ -304,6 +306,7 @@ export default function ProductForm({
 }: ProductFormProps) {
   const [form, setForm] = useState<ProductFormData>({ ...EMPTY_FORM, ...initialData })
   const [categories, setCategories] = useState<Category[]>([])
+  const [subcatOptions, setSubcatOptions] = useState<SubCategory[]>([])
   const [fragranceNotes, setFragranceNotes] = useState({
     top: initialData?.fragrance_notes?.top ?? [],
     middle: initialData?.fragrance_notes?.middle ?? [],
@@ -323,6 +326,16 @@ export default function ProductForm({
       if (res.success && res.data) setCategories(res.data)
     })
   }, [])
+
+  useEffect(() => {
+    if (!form.category) { setSubcatOptions([]); return }
+    const cat = categories.find((c) => c.id === form.category)
+    if (cat?.subcategories?.length) {
+      setSubcatOptions(cat.subcategories)
+    } else {
+      setSubcatOptions([])
+    }
+  }, [form.category, categories])
 
   function set<K extends keyof ProductFormData>(key: K, value: ProductFormData[K]) {
     setForm((prev) => ({ ...prev, [key]: value }))
@@ -563,23 +576,65 @@ export default function ProductForm({
             )}
           </div>
 
-          {/* Category */}
+          {/* Category + Subcategory */}
           <div className="bg-ivory border border-beige-dark p-6">
             <p className="label-luxury mb-4">Category</p>
-            <div className="flex flex-col gap-1.5">
-              <label className="label-luxury text-[10px]">Select Category</label>
-              <select
-                value={form.category ?? ''}
-                onChange={(e) => set('category', e.target.value ? Number(e.target.value) : null)}
-                title="Product category"
-                aria-label="Product category"
-                className="w-full bg-ivory border border-beige-dark px-4 py-3 font-sans text-sm text-brown focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-colors duration-200"
-              >
-                <option value="">No category</option>
-                {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>{cat.name}</option>
-                ))}
-              </select>
+            <div className="flex flex-col gap-4">
+              <div>
+                <label className="label-luxury text-[10px] block mb-1.5">Main Category</label>
+                <select
+                  value={form.category ?? ''}
+                  onChange={(e) => {
+                    set('category', e.target.value ? Number(e.target.value) : null)
+                    set('subcategories', [])
+                  }}
+                  title="Product category"
+                  aria-label="Product category"
+                  className="w-full bg-ivory border border-beige-dark px-4 py-3 font-sans text-sm text-brown focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-colors duration-200"
+                >
+                  <option value="">No category</option>
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Subcategory chips */}
+              {subcatOptions.length > 0 && (
+                <div>
+                  <label className="label-luxury text-[10px] block mb-2">Sub-categories <span className="text-brown/30 normal-case">(select multiple)</span></label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {subcatOptions.map((sub) => {
+                      const selected = (form.subcategories ?? []).includes(sub.id)
+                      return (
+                        <button
+                          key={sub.id}
+                          type="button"
+                          onClick={() => {
+                            const current = form.subcategories ?? []
+                            set('subcategories', selected
+                              ? current.filter((id) => id !== sub.id)
+                              : [...current, sub.id]
+                            )
+                          }}
+                          className={`px-2.5 py-1 text-[10px] font-sans border transition-colors duration-150 ${
+                            selected
+                              ? 'bg-brown text-ivory border-brown'
+                              : 'bg-ivory text-brown/50 border-beige-dark hover:border-gold/50 hover:text-brown'
+                          }`}
+                        >
+                          {selected && <span className="mr-1">✓</span>}{sub.name}
+                        </button>
+                      )
+                    })}
+                  </div>
+                  {(form.subcategories?.length ?? 0) > 0 && (
+                    <p className="font-sans text-[10px] text-brown/35 mt-2">
+                      {form.subcategories?.length} selected
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 

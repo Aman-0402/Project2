@@ -59,6 +59,7 @@ export default function CollectionsClient() {
   const [products, setProducts] = useState<ProductListItem[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
+  const [activeSubcat, setActiveSubcat] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -71,9 +72,12 @@ export default function CollectionsClient() {
   }, [])
 
   const activecat = categories.find((c) => c.slug === activeCategory)
-  const filtered = activeCategory
+  const catProducts = activeCategory
     ? products.filter((p) => p.category?.slug === activeCategory)
     : []
+  const filtered = activeSubcat
+    ? catProducts.filter((p) => p.subcategories?.some((s) => s.slug === activeSubcat))
+    : catProducts
 
   return (
     <div className="min-h-screen bg-[#0E0704]">
@@ -167,7 +171,7 @@ export default function CollectionsClient() {
                       <motion.button
                         key={cat.slug}
                         type="button"
-                        onClick={() => setActiveCategory(cat.slug)}
+                        onClick={() => { setActiveCategory(cat.slug); setActiveSubcat(null) }}
                         className="collection-tile group relative h-52 rounded-lg overflow-hidden text-left cursor-pointer border border-white/5 hover:border-gold/30 transition-all duration-500"
                         style={{ '--tile-bg': meta.gradient } as React.CSSProperties}
                         initial={{ opacity: 0, y: 24 }}
@@ -227,7 +231,7 @@ export default function CollectionsClient() {
               <div className="flex items-center gap-4 mb-10">
                 <button
                   type="button"
-                  onClick={() => setActiveCategory(null)}
+                  onClick={() => { setActiveCategory(null); setActiveSubcat(null) }}
                   className="inline-flex items-center gap-1.5 text-brown/45 hover:text-gold transition-colors text-xs font-sans uppercase tracking-luxury"
                 >
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-3.5 h-3.5">
@@ -238,6 +242,29 @@ export default function CollectionsClient() {
                 <span className="text-brown/20">/</span>
                 <span className="font-sans text-xs text-brown/50 uppercase tracking-luxury">{activecat?.name}</span>
               </div>
+
+              {/* Subcategory filter chips */}
+              {activecat && activecat.subcategories?.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-8">
+                  <button
+                    type="button"
+                    onClick={() => setActiveSubcat(null)}
+                    className={`collections-chip ${!activeSubcat ? 'collections-chip-active' : 'collections-chip-inactive'}`}
+                  >
+                    All
+                  </button>
+                  {activecat.subcategories.map((sub) => (
+                    <button
+                      key={sub.slug}
+                      type="button"
+                      onClick={() => setActiveSubcat(activeSubcat === sub.slug ? null : sub.slug)}
+                      className={`collections-chip ${activeSubcat === sub.slug ? 'collections-chip-active' : 'collections-chip-inactive'}`}
+                    >
+                      {sub.name}
+                    </button>
+                  ))}
+                </div>
+              )}
 
               {filtered.length === 0 ? (
                 <div className="text-center py-24">
