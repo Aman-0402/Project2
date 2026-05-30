@@ -769,6 +769,9 @@
 .cf-stepbar {
   box-shadow: 0 4px 32px rgba(18,11,8,0.6);
 }
+.cf-page-bg {
+  background: radial-gradient(ellipse 80% 60% at 50% 30%, #2C1A0E 0%, #120B08 60%);
+}
 .collections-chip {
   display: inline-flex;
   align-items: center;

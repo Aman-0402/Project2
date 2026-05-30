@@ -151,8 +151,7 @@ function DarkBottle({ fillPercent, accent }: { fillPercent: number; accent: stri
 
 function StepBar({ step }: { step: number }) {
   return (
-    <div className="sticky top-0 z-20 bg-[#1A120E]/92 backdrop-blur-xl border-b border-[#C8A36A]/10 px-4 py-3"
-      style={{ boxShadow: '0 4px 32px rgba(18,11,8,0.6)' }}>
+    <div className="cf-stepbar sticky top-0 z-20 bg-[#1A120E]/92 backdrop-blur-xl border-b border-[#C8A36A]/10 px-4 py-3">
       <div className="max-w-5xl mx-auto flex items-center justify-between">
         {STEPS.map((label, i) => {
           const done = step > i + 1
@@ -306,7 +305,7 @@ export default function CreateFragranceClient() {
   // ── Submitted screen ──────────────────────────────────────────────────────
   if (submitted) {
     return (
-      <div className="min-h-screen bg-[#120900] flex flex-col items-center justify-center px-6 py-24 text-center">
+      <div className="cf-page-bg min-h-screen flex flex-col items-center justify-center px-6 py-24 text-center">
         <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: 'spring', stiffness: 200 }}>
           <div className="w-16 h-16 rounded-full border border-[#B08D57]/40 flex items-center justify-center mx-auto mb-6">
             <svg viewBox="0 0 24 24" className="w-8 h-8 text-[#B08D57]" fill="none" stroke="currentColor" strokeWidth={1.5}>
@@ -350,7 +349,7 @@ export default function CreateFragranceClient() {
 
   // ── Main builder ──────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-[#120900]" ref={topRef}>
+    <div className="cf-page-bg min-h-screen" ref={topRef}>
       <StepBar step={step} />
 
       <div className="max-w-5xl mx-auto px-4 py-8 flex flex-col lg:flex-row gap-6 lg:gap-10 items-start">
@@ -380,14 +379,16 @@ export default function CreateFragranceClient() {
                         type="button"
                         key={f.id}
                         onClick={() => setProfile(p => ({ ...p, family: f.id, topNotes: [], middleNotes: [], baseNotes: [] }))}
-                        className={`relative overflow-hidden rounded text-left p-4 h-28 transition-all duration-300 border ${
-                          profile.family === f.id ? 'border-[#B08D57]/60' : 'border-white/[0.07] hover:border-white/20'
+                        className={`relative overflow-hidden rounded-lg text-left p-4 h-32 transition-all duration-300 border backdrop-blur-sm ${
+                          profile.family === f.id
+                            ? 'border-[#C8A36A]/60 shadow-[0_0_24px_rgba(200,163,106,0.12)]'
+                            : 'border-white/[0.09] hover:border-[#C8A36A]/30 hover:shadow-[0_0_16px_rgba(200,163,106,0.06)]'
                         }`}
                       >
                         <div className={`absolute inset-0 bg-gradient-to-br ${f.bg} transition-opacity duration-300 ${profile.family === f.id ? 'opacity-100' : 'opacity-60'}`} />
                         <div
-                          className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"
-                          style={{ fontFamily: 'Arial, sans-serif', fontSize: '52px', color: f.accent, opacity: 0.08, direction: 'rtl' }}
+                          className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden cf-arabic-bg"
+                          style={{ fontFamily: 'Arial, sans-serif', fontSize: '64px', color: f.accent, opacity: 0.10, direction: 'rtl' }}
                           aria-hidden="true"
                         >
                           {f.arabic}
@@ -489,7 +490,7 @@ export default function CreateFragranceClient() {
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -8 }}
-                      className="border border-white/[0.08] bg-white/[0.03] p-5"
+                      className="border border-[#C8A36A]/15 bg-[#1A120E]/60 backdrop-blur-sm p-5 rounded-lg"
                     >
                       <p className="font-serif text-xl text-white/80 mb-1">{currentIntensity.label}</p>
                       <p className="text-white/40 font-sans text-xs mb-3">{currentIntensity.desc}</p>
