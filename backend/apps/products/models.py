@@ -20,6 +20,10 @@ class Product(models.Model):
     fragrance_notes = models.JSONField(default=dict, blank=True)
     image = models.CharField(max_length=500, blank=True, null=True, help_text='Primary Cloudinary URL (auto-set from images[0])')
     images = models.JSONField(default=list, blank=True, help_text='Array of up to 4 Cloudinary URLs')
+    subcategories = models.ManyToManyField(
+        'categories.SubCategory', blank=True, related_name='products',
+        help_text='Sub-tags within the main category'
+    )
     is_featured = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     image_layer_effect = models.BooleanField(default=True, help_text='Composite bottle (image 1) over background (image 2) on product page')

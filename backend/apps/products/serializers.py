@@ -1,41 +1,47 @@
 from rest_framework import serializers
 from .models import Product
-from apps.categories.serializers import CategorySerializer
+from apps.categories.models import SubCategory
+from apps.categories.serializers import CategorySerializer, SubCategorySerializer
 
 
 class ProductListSerializer(serializers.ModelSerializer):
     """Lightweight serializer for list views."""
     category = CategorySerializer(read_only=True)
+    subcategories = SubCategorySerializer(many=True, read_only=True)
 
     class Meta:
         model = Product
         fields = [
             'id', 'name', 'slug', 'description', 'price', 'volume',
-            'category', 'image', 'images', 'is_featured', 'image_layer_effect', 'created_at',
+            'category', 'subcategories', 'image', 'images', 'is_featured', 'image_layer_effect', 'created_at',
         ]
 
 
 class ProductDetailSerializer(serializers.ModelSerializer):
     """Full serializer for product detail view."""
     category = CategorySerializer(read_only=True)
+    subcategories = SubCategorySerializer(many=True, read_only=True)
 
     class Meta:
         model = Product
         fields = [
             'id', 'name', 'slug', 'description', 'price', 'volume',
-            'category', 'fragrance_notes', 'image', 'images', 'is_featured',
+            'category', 'subcategories', 'fragrance_notes', 'image', 'images', 'is_featured',
             'is_active', 'image_layer_effect', 'created_at', 'updated_at',
         ]
 
 
 class ProductWriteSerializer(serializers.ModelSerializer):
     """Serializer for create/update (admin)."""
+    subcategories = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=SubCategory.objects.all(), required=False
+    )
 
     class Meta:
         model = Product
         fields = [
             'name', 'description', 'price', 'volume',
-            'category', 'fragrance_notes', 'image', 'images',
+            'category', 'subcategories', 'fragrance_notes', 'image', 'images',
             'is_featured', 'is_active', 'image_layer_effect',
         ]
 

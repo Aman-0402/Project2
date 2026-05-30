@@ -760,6 +760,12 @@
 .collections-hero-title {
   font-size: clamp(72px, 8vw, 120px);
 }
+.collection-tile {
+  background: var(--tile-bg);
+}
+.collection-tile-hover-glow {
+  background: radial-gradient(ellipse at 50% 80%, rgba(198,161,110,0.10) 0%, transparent 60%);
+}
 .collections-chip {
   display: inline-flex;
   align-items: center;

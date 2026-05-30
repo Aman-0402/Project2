@@ -2,6 +2,25 @@ from django.db import models
 from django.utils.text import slugify
 
 
+class SubCategory(models.Model):
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='subcategories')
+    name = models.CharField(max_length=150)
+    slug = models.SlugField(max_length=150, blank=True)
+
+    class Meta:
+        verbose_name_plural = 'subcategories'
+        ordering = ['name']
+        unique_together = ('category', 'name')
+
+    def __str__(self):
+        return f'{self.category.name} — {self.name}'
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True, blank=True)

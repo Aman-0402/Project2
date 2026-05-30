@@ -1,11 +1,59 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import ProductCard from '@/components/products/ProductCard'
 import { productService } from '@/services/products'
 import { categoryService } from '@/services/categories'
 import type { ProductListItem, Category } from '@/types'
+
+// Visual identity per collection slug
+const COLLECTION_META: Record<string, { gradient: string; tagline: string; icon: string; order: number }> = {
+  attar: {
+    gradient: 'linear-gradient(135deg, #1C0A05 0%, #3B1A0A 50%, #5C2D12 100%)',
+    tagline: 'Pure concentrated fragrance oils',
+    icon: '◉',
+    order: 1,
+  },
+  perfume: {
+    gradient: 'linear-gradient(135deg, #0D0810 0%, #2A1530 50%, #4A2050 100%)',
+    tagline: 'Premium long-lasting sprays',
+    icon: '◈',
+    order: 2,
+  },
+  agarbatti: {
+    gradient: 'linear-gradient(135deg, #080C0A 0%, #142218 50%, #1E3524 100%)',
+    tagline: 'Sacred incense sticks',
+    icon: '◇',
+    order: 3,
+  },
+  'room-fragrance': {
+    gradient: 'linear-gradient(135deg, #0C0D10 0%, #1A2030 50%, #253048 100%)',
+    tagline: 'Transform your living space',
+    icon: '◆',
+    order: 4,
+  },
+  'car-perfume': {
+    gradient: 'linear-gradient(135deg, #0A0A0A 0%, #1C1C1C 50%, #2E2E2E 100%)',
+    tagline: 'Luxury for every journey',
+    icon: '◑',
+    order: 5,
+  },
+  'car-freshener': {
+    gradient: 'linear-gradient(135deg, #080C06 0%, #14200E 50%, #1E3016 100%)',
+    tagline: 'Fresh crisp drive experience',
+    icon: '◐',
+    order: 6,
+  },
+}
+
+function getFallbackMeta(slug: string) {
+  return COLLECTION_META[slug] ?? {
+    gradient: 'linear-gradient(135deg, #1C1008 0%, #3B2410 50%, #5C3820 100%)',
+    tagline: 'Explore our collection',
+    icon: '◎',
+  }
+}
 
 export default function CollectionsClient() {
   const [products, setProducts] = useState<ProductListItem[]>([])
@@ -22,176 +70,195 @@ export default function CollectionsClient() {
       .finally(() => setIsLoading(false))
   }, [])
 
+  const activecat = categories.find((c) => c.slug === activeCategory)
   const filtered = activeCategory
     ? products.filter((p) => p.category?.slug === activeCategory)
-    : products
+    : []
 
   return (
-    <div className="min-h-screen bg-ivory">
-      {/* Page hero */}
+    <div className="min-h-screen bg-[#0E0704]">
+
+      {/* Hero */}
       <div className="collections-hero relative overflow-hidden flex items-center justify-center">
-        {/* Dot texture */}
         <div className="absolute inset-0 bg-dot-pattern opacity-[0.04]" />
-
-        {/* Amber radial glow — centre */}
         <div className="collections-hero-glow-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full pointer-events-none" />
-
-        {/* Left ambient */}
         <div className="collections-hero-glow-side absolute left-0 top-1/2 -translate-y-1/2 w-64 h-64 rounded-full pointer-events-none" />
         <div className="collections-hero-glow-side absolute right-0 top-1/2 -translate-y-1/2 w-64 h-64 rounded-full pointer-events-none" />
 
-        {/* Floating particles */}
         {[
-          { x: '15%',  y: '25%', d: 3.2, op: 0.18 },
-          { x: '82%',  y: '18%', d: 4.8, op: 0.14 },
-          { x: '68%',  y: '72%', d: 2.4, op: 0.22 },
-          { x: '28%',  y: '65%', d: 3.6, op: 0.16 },
-          { x: '50%',  y: '12%', d: 2.0, op: 0.12 },
-          { x: '9%',   y: '55%', d: 4.0, op: 0.10 },
-          { x: '90%',  y: '48%', d: 3.0, op: 0.15 },
-          { x: '40%',  y: '80%', d: 2.2, op: 0.13 },
+          { x: '15%', y: '25%', d: 3.2, op: 0.18 },
+          { x: '82%', y: '18%', d: 4.8, op: 0.14 },
+          { x: '68%', y: '72%', d: 2.4, op: 0.22 },
+          { x: '28%', y: '65%', d: 3.6, op: 0.16 },
+          { x: '50%', y: '12%', d: 2.0, op: 0.12 },
+          { x: '9%',  y: '55%', d: 4.0, op: 0.10 },
+          { x: '90%', y: '48%', d: 3.0, op: 0.15 },
+          { x: '40%', y: '80%', d: 2.2, op: 0.13 },
         ].map((p, i) => (
           <motion.div
             key={i}
             className="absolute rounded-full pointer-events-none"
-            style={{
-              left: p.x, top: p.y,
-              width: `${p.d}px`, height: `${p.d}px`,
-              background: `rgba(198,161,110,${p.op})`,
-            }}
+            style={{ left: p.x, top: p.y, width: `${p.d}px`, height: `${p.d}px`, background: `rgba(198,161,110,${p.op})` }}
             animate={{ y: [0, -18, 0], opacity: [p.op, p.op * 2, p.op] }}
             transition={{ duration: 4 + i * 0.7, repeat: Infinity, ease: 'easeInOut', delay: i * 0.4 }}
           />
         ))}
 
-        {/* Smoke SVG */}
-        <svg
-          className="collections-hero-smoke absolute bottom-0 inset-x-0 w-full pointer-events-none opacity-[0.06]"
-          viewBox="0 0 1440 200" preserveAspectRatio="none"
-          aria-hidden="true"
-        >
+        <svg className="collections-hero-smoke absolute bottom-0 inset-x-0 w-full pointer-events-none opacity-[0.06]"
+          viewBox="0 0 1440 200" preserveAspectRatio="none" aria-hidden="true">
           <path d="M0,160 C200,80 400,180 600,120 C800,60 1000,160 1200,100 C1300,70 1380,130 1440,100 L1440,200 L0,200Z" fill="rgba(198,161,110,1)" />
           <path d="M0,180 C300,120 500,170 720,140 C940,110 1100,170 1440,150 L1440,200 L0,200Z" fill="rgba(255,255,255,0.5)" />
         </svg>
 
-        {/* Top fade line */}
         <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
-        {/* Bottom fade */}
-        <div className="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-ivory to-transparent" />
 
-        {/* Content */}
         <div className="container-luxury text-center relative z-10 py-20">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, ease: [0.4, 0, 0.2, 1] }}
-          >
-            <motion.p
-              className="label-luxury text-gold mb-4"
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, ease: [0.4, 0, 0.2, 1] }}>
+            <motion.p className="label-luxury text-gold mb-4"
               initial={{ opacity: 0, letterSpacing: '0.4em' }}
               animate={{ opacity: 1, letterSpacing: '0.25em' }}
               transition={{ duration: 1.2, delay: 0.1 }}
             >
-              Explore
+              {activecat ? activecat.name : 'Explore'}
             </motion.p>
             <h1 className="collections-hero-title font-serif text-ivory tracking-wide leading-none mb-6">
-              Collections
+              {activecat ? activecat.name : 'Collections'}
             </h1>
-            <motion.div
-              className="collections-hero-divider w-16 h-px mx-auto"
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 1, delay: 0.4 }}
-            />
-            <motion.p
-              className="font-sans text-sm text-ivory/35 mt-5 tracking-widest uppercase"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.7 }}
-            >
-              {products.length > 0 ? `${products.length} Fragrances` : 'Our Fragrances'}
+            <motion.div className="collections-hero-divider w-16 h-px mx-auto" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 0.4 }} />
+            <motion.p className="font-sans text-sm text-ivory/35 mt-5 tracking-widest uppercase"
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }}>
+              {activecat
+                ? `${filtered.length} ${filtered.length === 1 ? 'Product' : 'Products'}`
+                : `${categories.length} Collections`}
             </motion.p>
           </motion.div>
         </div>
       </div>
 
-      {/* Filter strip — warm ivory layer */}
-      {categories.length > 0 && (
-        <div className="bg-[#F5EDE2] border-b border-[rgba(200,169,107,0.15)] py-6">
-          <div className="container-luxury">
-            <motion.div
-              className="flex flex-wrap items-center justify-center gap-2"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              {/* All chip */}
-              <button
-                type="button"
-                onClick={() => setActiveCategory(null)}
-                className={`collections-chip ${!activeCategory ? 'collections-chip-active' : 'collections-chip-inactive'}`}
-              >
-                All
-                <span className={`ml-1.5 text-[10px] ${!activeCategory ? 'text-gold/70' : 'text-brown/35'}`}>
-                  {products.length}
-                </span>
-              </button>
-              {categories.map((cat) => {
-                const count = products.filter((p) => p.category?.slug === cat.slug).length
-                const isActive = activeCategory === cat.slug
-                return (
-                  <button
-                    type="button"
-                    key={cat.slug}
-                    onClick={() => setActiveCategory(cat.slug)}
-                    className={`collections-chip ${isActive ? 'collections-chip-active' : 'collections-chip-inactive'}`}
-                  >
-                    {cat.name}
-                    <span className={`ml-1.5 text-[10px] ${isActive ? 'text-gold/70' : 'text-brown/35'}`}>
-                      {count}
-                    </span>
-                  </button>
-                )
-              })}
-            </motion.div>
-          </div>
-        </div>
-      )}
+      <AnimatePresence mode="wait">
+        {!activeCategory ? (
 
-      {/* Product grid — slightly deeper ivory layer */}
-      <div className="bg-[#EDE4D9] py-16 md:py-20 px-4 md:px-8 lg:px-16">
-        <div className="container-luxury">
-          {isLoading ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {Array.from({ length: 8 }).map((_, i) => (
-                <div key={i} className="bg-beige/60 animate-pulse rounded-xl">
-                  <div className="aspect-[3/4]" />
+          /* ── Collection tiles ── */
+          <motion.section
+            key="tiles"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            className="bg-[#0E0704] py-16 md:py-20 px-4 md:px-8 lg:px-16"
+          >
+            <div className="container-luxury">
+              {isLoading ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <div key={i} className="h-52 bg-brown/20 animate-pulse rounded-lg" />
+                  ))}
                 </div>
-              ))}
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {[...categories].sort((a, b) => {
+                    const oa = COLLECTION_META[a.slug]?.order ?? 99
+                    const ob = COLLECTION_META[b.slug]?.order ?? 99
+                    return oa - ob
+                  }).map((cat, i) => {
+                    const meta = getFallbackMeta(cat.slug)
+                    const count = products.filter((p) => p.category?.slug === cat.slug).length
+                    return (
+                      <motion.button
+                        key={cat.slug}
+                        type="button"
+                        onClick={() => setActiveCategory(cat.slug)}
+                        className="collection-tile group relative h-52 rounded-lg overflow-hidden text-left cursor-pointer border border-white/5 hover:border-gold/30 transition-all duration-500"
+                        style={{ '--tile-bg': meta.gradient } as React.CSSProperties}
+                        initial={{ opacity: 0, y: 24 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.08, duration: 0.55, ease: [0.4, 0, 0.2, 1] }}
+                        whileHover={{ y: -4, transition: { duration: 0.3 } }}
+                      >
+                        {/* Ambient glow on hover */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                        <div className="collection-tile-hover-glow absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                        {/* Gold top line */}
+                        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                        {/* Content */}
+                        <div className="absolute inset-0 p-7 flex flex-col justify-between">
+                          <div className="flex items-start justify-between">
+                            <span className="text-gold/30 text-2xl font-serif select-none">{meta.icon}</span>
+                            <span className="font-sans text-[9px] text-gold/40 uppercase tracking-luxury border border-gold/15 px-2 py-0.5 rounded-sm">
+                              {count} {count === 1 ? 'product' : 'products'}
+                            </span>
+                          </div>
+                          <div>
+                            <h2 className="font-serif text-2xl text-ivory leading-tight mb-1.5 group-hover:text-gold transition-colors duration-300">
+                              {cat.name}
+                            </h2>
+                            <p className="font-sans text-xs text-ivory/35 leading-relaxed">
+                              {meta.tagline}
+                            </p>
+                            <div className="flex items-center gap-2 mt-4 opacity-0 group-hover:opacity-100 transition-all duration-400 translate-y-1 group-hover:translate-y-0">
+                              <span className="w-4 h-px bg-gold/60" />
+                              <span className="font-sans text-[10px] text-gold/70 uppercase tracking-luxury">Explore</span>
+                            </div>
+                          </div>
+                        </div>
+                      </motion.button>
+                    )
+                  })}
+                </div>
+              )}
             </div>
-          ) : filtered.length === 0 ? (
-            <div className="text-center py-24">
-              <p className="font-serif text-2xl text-brown/30 mb-4">No fragrances found</p>
-              <button
-                type="button"
-                onClick={() => setActiveCategory(null)}
-                className="label-luxury text-gold hover:text-gold-dark transition-colors"
-              >
-                Clear filter
-              </button>
+          </motion.section>
+
+        ) : (
+
+          /* ── Product grid ── */
+          <motion.section
+            key="products"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            className="bg-[#EDE4D9] py-16 md:py-20 px-4 md:px-8 lg:px-16"
+          >
+            <div className="container-luxury">
+              {/* Back + subtitle */}
+              <div className="flex items-center gap-4 mb-10">
+                <button
+                  type="button"
+                  onClick={() => setActiveCategory(null)}
+                  className="inline-flex items-center gap-1.5 text-brown/45 hover:text-gold transition-colors text-xs font-sans uppercase tracking-luxury"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-3.5 h-3.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                  </svg>
+                  All Collections
+                </button>
+                <span className="text-brown/20">/</span>
+                <span className="font-sans text-xs text-brown/50 uppercase tracking-luxury">{activecat?.name}</span>
+              </div>
+
+              {filtered.length === 0 ? (
+                <div className="text-center py-24">
+                  <p className="font-serif text-2xl text-brown/30 mb-4">No products in this collection yet</p>
+                  <button type="button" onClick={() => setActiveCategory(null)}
+                    className="label-luxury text-gold hover:text-gold-dark transition-colors">
+                    ← Back to Collections
+                  </button>
+                </div>
+              ) : (
+                <motion.div layout className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                  {filtered.map((product, i) => (
+                    <ProductCard key={product.id} product={product} index={i} />
+                  ))}
+                </motion.div>
+              )}
             </div>
-          ) : (
-            <motion.div
-              layout
-              className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-            >
-              {filtered.map((product, i) => (
-                <ProductCard key={product.id} product={product} index={i} />
-              ))}
-            </motion.div>
-          )}
-        </div>
-      </div>
+          </motion.section>
+
+        )}
+      </AnimatePresence>
     </div>
   )
 }

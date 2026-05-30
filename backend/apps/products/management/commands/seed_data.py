@@ -14,12 +14,12 @@ from apps.site_settings.models import SiteSetting
 
 
 CATEGORIES = [
-    {'name': 'Oud', 'description': 'Deep, rich, and resinous fragrances from agarwood.'},
-    {'name': 'Floral', 'description': 'Elegant bouquets of blooming flowers.'},
-    {'name': 'Citrus', 'description': 'Fresh, bright, and invigorating citrus accords.'},
-    {'name': 'Oriental', 'description': 'Warm, spicy, and exotic eastern-inspired scents.'},
-    {'name': 'Woody', 'description': 'Earthy, grounded notes of cedar, sandalwood, and more.'},
-    {'name': 'Fresh', 'description': 'Clean, airy, and modern lightweight fragrances.'},
+    {'name': 'Attar', 'description': 'Traditional Indian attars — pure, concentrated fragrance oils crafted from natural ingredients.'},
+    {'name': 'Perfume', 'description': 'Premium perfume sprays — long-lasting luxury fragrances for every occasion.'},
+    {'name': 'Agarbatti', 'description': 'Handcrafted incense sticks — fill your space with the sacred aroma of the finest ingredients.'},
+    {'name': 'Room Fragrance', 'description': 'Elegant room freshener sprays — transform any space into a sanctuary of scent.'},
+    {'name': 'Car Perfume', 'description': 'Premium car perfumes — carry luxury with you on every journey.'},
+    {'name': 'Car Freshener', 'description': 'Long-lasting car fresheners — crisp, clean fragrance for your drive.'},
 ]
 
 INITIAL_SETTINGS = {
@@ -73,6 +73,11 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS('[OK] Seed data complete.'))
 
     def _seed_categories(self):
+        # Remove categories not in the new list (old scent-family categories)
+        new_names = {c['name'] for c in CATEGORIES}
+        deleted, _ = Category.objects.exclude(name__in=new_names).delete()
+        if deleted:
+            self.stdout.write(f'  Categories: removed {deleted} old categories.')
         created = 0
         for cat_data in CATEGORIES:
             _, is_new = Category.objects.get_or_create(
