@@ -28,6 +28,7 @@ export interface ProductListItem {
   id: number
   name: string
   slug: string
+  description: string | null
   price: string
   volume: string | null
   category: Category | null

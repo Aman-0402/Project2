@@ -145,9 +145,14 @@ export default function FeaturedPerfumes() {
                         </div>
                       )}
 
-                      {/* Always-visible name + price */}
+                      {/* Always-visible name + tagline + price */}
                       <div className="absolute inset-x-0 bottom-0 p-4">
                         <h3 className="font-serif text-base text-ivory leading-tight mb-1">{product.name}</h3>
+                        {product.description && (
+                          <p className="font-serif text-[11px] text-ivory/50 italic leading-snug mb-1.5 line-clamp-2">
+                            {product.description}
+                          </p>
+                        )}
                         <CurrencyPrice price={product.price} className="font-sans text-xs text-gold/80" />
                       </div>
 

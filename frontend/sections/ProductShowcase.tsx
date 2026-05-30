@@ -143,9 +143,26 @@ export default function ProductShowcase() {
                     transition={{ delay: i * 0.06, duration: 0.45 }}
                     whileHover={{ y: -6, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } }}
                   >
-                    <Link href={ROUTES.product(product.slug)} className="group block cursor-pointer">
-                      <div className="relative aspect-[3/4] overflow-hidden">
-                        {product.image ? (
+                    <Link href={ROUTES.product(product.slug)} className="group block cursor-pointer transition-all duration-500 group-hover:drop-shadow-[0_20px_40px_rgba(198,161,110,0.22)]">
+                      <div className="relative aspect-[3/4] overflow-hidden rounded-xl">
+                        {product.images?.length >= 2 && product.image_layer_effect ? (
+                          <>
+                            <Image
+                              src={product.images[1]}
+                              alt=""
+                              fill
+                              className="object-cover transition-transform duration-700 group-hover:scale-105"
+                              sizes="(max-width: 768px) 50vw, 25vw"
+                            />
+                            <Image
+                              src={product.images[0]}
+                              alt={product.name}
+                              fill
+                              className="object-contain transition-transform duration-700 group-hover:scale-110"
+                              sizes="(max-width: 768px) 50vw, 25vw"
+                            />
+                          </>
+                        ) : product.image ? (
                           <Image
                             src={product.image}
                             alt={product.name}
@@ -167,27 +184,19 @@ export default function ProductShowcase() {
                           </div>
                         )}
 
-                        {/* Always-visible name + price at bottom */}
+                        {/* Always-visible name + tagline + price at bottom */}
                         <div className="absolute inset-x-0 bottom-0 p-4">
                           <h3 className="font-serif text-base text-ivory leading-tight mb-1">{product.name}</h3>
+                          {product.description && (
+                            <p className="font-serif text-[11px] text-ivory/50 italic leading-snug mb-1.5 line-clamp-2">
+                              {product.description}
+                            </p>
+                          )}
                           <CurrencyPrice price={product.price} className="font-sans text-xs text-gold/80" />
                         </div>
 
-                        {/* Hover overlay — mood tags + explore CTA */}
-                        <div className="absolute inset-0 bg-[#1C0F0A]/72 backdrop-blur-[2px] flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          {moodTags.length > 0 && (
-                            <div className="flex flex-wrap justify-center gap-1.5 px-4">
-                              {moodTags.map((tag) => (
-                                <span key={tag} className="font-sans text-[10px] uppercase tracking-luxury text-ivory/70 border border-gold/30 px-2 py-0.5">
-                                  {tag}
-                                </span>
-                              ))}
-                            </div>
-                          )}
-                          <span className="inline-flex items-center gap-2 font-sans text-xs uppercase tracking-luxury text-gold border-b border-gold/40 pb-px mt-1">
-                            Explore <span>&rarr;</span>
-                          </span>
-                        </div>
+                        {/* Hover — gold border glow */}
+                        <div className="absolute inset-0 rounded-xl ring-1 ring-transparent group-hover:ring-gold/50 transition-all duration-500 pointer-events-none" />
                       </div>
                     </Link>
                   </motion.div>
