@@ -262,6 +262,10 @@ Running `python manage.py seed_data` creates:
 
 ## Key Features
 
+### Branding
+- Logo: `frontend/public/logo.png` — displayed in Navbar and Footer beside brand name
+- Favicon: `frontend/app/icon.png` — auto-detected by Next.js App Router
+
 ### Product Images
 - Up to **4 images** per product (min 1, max 2MB each, **3:4 portrait ratio** recommended)
 - **Image Layer Effect** — image 1 (bottle PNG, transparent background) composited over image 2 (scene background) with hover zoom on product detail page
