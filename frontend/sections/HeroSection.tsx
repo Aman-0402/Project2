@@ -284,11 +284,21 @@ export default function HeroSection() {
         {/* Hero headline */}
         <motion.h1
           className="font-lavishly text-[clamp(3.5rem,7vw,7rem)] text-ivory leading-[1.15] mb-8 whitespace-nowrap"
-          initial={{ opacity: 0, y: 60 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.1, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
+          initial="hidden"
+          animate="show"
+          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.042, delayChildren: 0.25 } } }}
         >
-          The Essence of Paradise
+          {'The Essence of Paradise'.split('').map((char, i) => (
+            <motion.span
+              key={i}
+              variants={{
+                hidden: { opacity: 0, filter: 'blur(8px)' },
+                show:   { opacity: 1, filter: 'blur(0px)', transition: { duration: 0.45, ease: [0.2, 0, 0.1, 1] } },
+              }}
+            >
+              {char}
+            </motion.span>
+          ))}
         </motion.h1>
 
         {/* Gold divider — left-aligned on desktop */}

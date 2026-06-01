@@ -108,19 +108,47 @@ export default function AdminSidebar() {
         })}
       </nav>
 
-      {/* User + Logout */}
-      <div className="px-4 py-5 border-t border-ivory/10">
+      {/* User + Account + Logout */}
+      <div className="px-4 py-5 border-t border-ivory/10 space-y-1">
         {user && (
-          <p className="text-ivory/40 text-xs font-sans mb-3 truncate">
+          <p className="text-ivory/30 text-[10px] font-sans uppercase tracking-luxury mb-3 truncate px-1">
             {user.username}
           </p>
         )}
+
+        {/* Profile */}
+        <Link
+          href={ROUTES.adminProfile}
+          className={`flex items-center gap-2 px-2 py-2 text-xs font-sans uppercase tracking-luxury transition-colors duration-200 rounded-sm group ${
+            pathname === ROUTES.adminProfile ? 'text-gold' : 'text-ivory/40 hover:text-ivory/80 hover:bg-ivory/5'
+          }`}
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-4 h-4 flex-shrink-0">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          Profile
+        </Link>
+
+        {/* Change Password */}
+        <Link
+          href={ROUTES.adminChangePassword}
+          className={`flex items-center gap-2 px-2 py-2 text-xs font-sans uppercase tracking-luxury transition-colors duration-200 rounded-sm group ${
+            pathname === ROUTES.adminChangePassword ? 'text-gold' : 'text-ivory/40 hover:text-ivory/80 hover:bg-ivory/5'
+          }`}
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-4 h-4 flex-shrink-0">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+          </svg>
+          Change Password
+        </Link>
+
+        {/* Sign Out */}
         <button
           type="button"
           onClick={logout}
-          className="flex items-center gap-2 text-ivory/40 hover:text-red-400 text-xs font-sans uppercase tracking-luxury transition-colors duration-200"
+          className="w-full flex items-center gap-2 px-2 py-2 text-ivory/40 hover:text-red-400 text-xs font-sans uppercase tracking-luxury transition-colors duration-200 rounded-sm hover:bg-red-400/5"
         >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-4 h-4">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-4 h-4 flex-shrink-0">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
           </svg>
           Sign Out

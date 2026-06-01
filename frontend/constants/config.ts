@@ -27,6 +27,8 @@ export const ROUTES = {
   adminCategories: '/admin/categories',
   adminInquiries: '/admin/inquiries',
   adminSettings: '/admin/settings',
+  adminProfile: '/admin/profile',
+  adminChangePassword: '/admin/change-password',
 } as const
 
 export const AUTH_TOKEN_KEY = 'luxe_access_token'

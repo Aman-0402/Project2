@@ -51,3 +51,28 @@ class MeView(APIView):
 
     def get(self, request):
         return success_response(data=AdminUserSerializer(request.user).data)
+
+
+class ChangePasswordView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def post(self, request):
+        current_password = request.data.get('current_password', '')
+        new_password     = request.data.get('new_password', '')
+        confirm_password = request.data.get('confirm_password', '')
+
+        if not all([current_password, new_password, confirm_password]):
+            return error_response(message='All fields are required.')
+
+        if not request.user.check_password(current_password):
+            return error_response(message='Current password is incorrect.')
+
+        if new_password != confirm_password:
+            return error_response(message='New passwords do not match.')
+
+        if len(new_password) < 8:
+            return error_response(message='New password must be at least 8 characters.')
+
+        request.user.set_password(new_password)
+        request.user.save()
+        return success_response(message='Password changed successfully.')
