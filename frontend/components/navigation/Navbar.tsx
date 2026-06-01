@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -55,19 +56,28 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-18 md:h-20">
 
             {/* ── Logo ─────────────────────────────────────────────────── */}
-            <Link href={ROUTES.home} className="group flex flex-col items-start gap-[3px]">
-              <span className={`font-serif font-medium text-xl md:text-2xl tracking-[0.10em] leading-none transition-all duration-500 group-hover:tracking-[0.14em] ${
-                isLightText ? 'text-ivory' : 'text-brown'
-              }`}>
-                {CONFIG.brandName}
-              </span>
-              <span className={`font-sans font-light text-[7.5px] tracking-[0.35em] uppercase transition-colors duration-500 ${
-                isLightText
-                  ? 'text-[#C8A36A]/45 group-hover:text-[#C8A36A]/75'
-                  : 'text-gold/40 group-hover:text-gold/70'
-              }`}>
-                {CONFIG.brandTagline}
-              </span>
+            <Link href={ROUTES.home} className="group flex items-center gap-3">
+              <Image
+                src="/logo.png"
+                alt={CONFIG.brandName}
+                width={40}
+                height={40}
+                className="object-contain w-9 h-9 md:w-10 md:h-10 flex-shrink-0"
+              />
+              <div className="flex flex-col items-start gap-[3px]">
+                <span className={`font-serif font-medium text-xl md:text-2xl tracking-[0.10em] leading-none transition-all duration-500 group-hover:tracking-[0.14em] ${
+                  isLightText ? 'text-ivory' : 'text-brown'
+                }`}>
+                  {CONFIG.brandName}
+                </span>
+                <span className={`font-sans font-light text-[7.5px] tracking-[0.35em] uppercase transition-colors duration-500 ${
+                  isLightText
+                    ? 'text-[#C8A36A]/45 group-hover:text-[#C8A36A]/75'
+                    : 'text-gold/40 group-hover:text-gold/70'
+                }`}>
+                  {CONFIG.brandTagline}
+                </span>
+              </div>
             </Link>
 
             {/* ── Desktop Nav ──────────────────────────────────────────── */}

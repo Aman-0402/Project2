@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { CONFIG, ROUTES } from '@/constants/config'
 import { buildWhatsAppUrl } from '@/utils/whatsapp'
@@ -20,15 +21,6 @@ const SERVICE_LINKS = [
 ]
 
 
-function DiamondMark() {
-  return (
-    <svg viewBox="0 0 48 48" fill="none" className="w-10 h-10" aria-hidden="true">
-      <polygon points="24,2 46,24 24,46 2,24" stroke="#C6A16E" strokeWidth="1" fill="none" strokeOpacity="0.7" />
-      <polygon points="24,10 38,24 24,38 10,24" stroke="#C6A16E" strokeWidth="0.6" fill="none" strokeOpacity="0.4" />
-      <circle cx="24" cy="24" r="4" fill="#C6A16E" fillOpacity="0.5" />
-    </svg>
-  )
-}
 
 interface FooterProps {
   instagramUrl?: string
@@ -76,7 +68,7 @@ export default function Footer({ instagramUrl, facebookUrl, youtubeUrl }: Footer
           {/* Brand column */}
           <div className="sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-3 mb-6">
-              <DiamondMark />
+              <Image src="/logo.png" alt={CONFIG.brandName} width={40} height={40} className="object-contain w-10 h-10 flex-shrink-0" />
               <div>
                 <p className="font-serif text-ivory text-xl tracking-[0.12em] leading-none">{CONFIG.brandName}</p>
                 <p className="font-sans text-[9px] text-gold/55 uppercase tracking-luxury mt-1">{CONFIG.brandTagline}</p>
