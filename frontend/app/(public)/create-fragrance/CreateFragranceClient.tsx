@@ -151,7 +151,7 @@ function DarkBottle({ fillPercent, accent }: { fillPercent: number; accent: stri
 
 function StepBar({ step }: { step: number }) {
   return (
-    <div className="cf-stepbar sticky top-0 z-20 bg-[#1A120E]/92 backdrop-blur-xl border-b border-[#C8A36A]/10 px-4 py-3">
+    <div className="cf-stepbar sticky top-0 z-20 bg-[#1C1208]/90 backdrop-blur-xl border-b border-[#C8A36A]/20 px-4 py-3">
       <div className="max-w-5xl mx-auto flex items-center justify-between">
         {STEPS.map((label, i) => {
           const done = step > i + 1
@@ -381,11 +381,11 @@ export default function CreateFragranceClient() {
                         onClick={() => setProfile(p => ({ ...p, family: f.id, topNotes: [], middleNotes: [], baseNotes: [] }))}
                         className={`relative overflow-hidden rounded-lg text-left p-4 h-32 transition-all duration-300 border backdrop-blur-sm ${
                           profile.family === f.id
-                            ? 'border-[#C8A36A]/60 shadow-[0_0_24px_rgba(200,163,106,0.12)]'
-                            : 'border-white/[0.09] hover:border-[#C8A36A]/30 hover:shadow-[0_0_16px_rgba(200,163,106,0.06)]'
+                            ? 'border-[#C8A36A]/70 shadow-[0_0_32px_rgba(200,163,106,0.20)]'
+                            : 'border-white/[0.18] hover:border-[#C8A36A]/45 hover:shadow-[0_0_20px_rgba(200,163,106,0.12)]'
                         }`}
                       >
-                        <div className={`absolute inset-0 bg-gradient-to-br ${f.bg} transition-opacity duration-300 ${profile.family === f.id ? 'opacity-100' : 'opacity-60'}`} />
+                        <div className={`absolute inset-0 bg-gradient-to-br ${f.bg} transition-opacity duration-300 ${profile.family === f.id ? 'opacity-100' : 'opacity-80'}`} />
                         <div
                           className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden cf-arabic-bg"
                           style={{ fontFamily: 'Arial, sans-serif', fontSize: '64px', color: f.accent, opacity: 0.10, direction: 'rtl' }}
@@ -490,7 +490,7 @@ export default function CreateFragranceClient() {
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -8 }}
-                      className="border border-[#C8A36A]/15 bg-[#1A120E]/60 backdrop-blur-sm p-5 rounded-lg"
+                      className="border border-[#C8A36A]/30 bg-[#C8A36A]/[0.06] backdrop-blur-sm p-5 rounded-lg"
                     >
                       <p className="font-serif text-xl text-white/80 mb-1">{currentIntensity.label}</p>
                       <p className="text-white/40 font-sans text-xs mb-3">{currentIntensity.desc}</p>
@@ -556,7 +556,7 @@ export default function CreateFragranceClient() {
                       { label: 'Middle Notes',  value: profile.middleNotes.join(', ') || '—' },
                       { label: 'Base Notes',    value: profile.baseNotes.join(', ')   || '—' },
                     ].map(({ label, value }) => (
-                      <div key={label} className="border border-white/[0.08] bg-white/[0.03] p-3">
+                      <div key={label} className="border border-[#C8A36A]/20 bg-[#C8A36A]/[0.05] p-3">
                         <p className="text-white/25 text-[9px] font-sans uppercase tracking-[0.15em] mb-0.5">{label}</p>
                         <p className="text-white/60 text-xs font-sans">{value}</p>
                       </div>
@@ -576,7 +576,7 @@ export default function CreateFragranceClient() {
                           placeholder={placeholder}
                           value={profile[key as keyof Profile] as string}
                           onChange={e => setProfile(p => ({ ...p, [key]: e.target.value }))}
-                          className="w-full bg-transparent border border-white/[0.10] px-4 py-3 text-sm text-white/70 placeholder-white/[0.15] font-sans focus:outline-none focus:border-[#B08D57]/50 transition-colors"
+                          className="w-full bg-[#C8A36A]/[0.04] border border-[#C8A36A]/20 px-4 py-3 text-sm text-white/75 placeholder-white/20 font-sans focus:outline-none focus:border-[#C8A36A]/55 transition-colors"
                         />
                       </div>
                     ))}
@@ -587,7 +587,7 @@ export default function CreateFragranceClient() {
                         placeholder="Specific preferences, inspirations, or questions..."
                         value={profile.additionalNotes}
                         onChange={e => setProfile(p => ({ ...p, additionalNotes: e.target.value }))}
-                        className="w-full bg-transparent border border-white/[0.10] px-4 py-3 text-sm text-white/70 placeholder-white/[0.15] font-sans resize-none focus:outline-none focus:border-[#B08D57]/50 transition-colors"
+                        className="w-full bg-[#C8A36A]/[0.04] border border-[#C8A36A]/20 px-4 py-3 text-sm text-white/75 placeholder-white/20 font-sans resize-none focus:outline-none focus:border-[#C8A36A]/55 transition-colors"
                       />
                     </div>
                   </div>
@@ -633,7 +633,7 @@ export default function CreateFragranceClient() {
 
         {/* ── Right: Preview panel ──────────────────────────────────── */}
         <div className="w-full lg:w-60 xl:w-64 flex-shrink-0 lg:sticky lg:top-24">
-          <div className="border border-white/[0.08] bg-white/[0.02] p-5 flex flex-col items-center gap-5">
+          <div className="cf-preview-panel border border-[#C8A36A]/25 bg-[#C8A36A]/[0.04] backdrop-blur-sm p-5 flex flex-col items-center gap-5">
 
             {/* Bottle */}
             <div className="w-28 h-40">
