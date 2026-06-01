@@ -7,127 +7,193 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { CONFIG, ROUTES } from '@/constants/config'
 
 const NAV_LINKS = [
-  { label: 'Collections', href: ROUTES.collections },
+  { label: 'Collections',      href: ROUTES.collections     },
   { label: 'Create Fragrance', href: ROUTES.createFragrance },
-  { label: 'About', href: ROUTES.about },
-  { label: 'Contact', href: ROUTES.contact },
+  { label: 'About',            href: ROUTES.about           },
+  { label: 'Contact',          href: ROUTES.contact         },
 ]
 
+// Pages with dark backgrounds — keep light text + use dark glass when scrolled
+const DARK_BG_PAGES = [ROUTES.createFragrance]
+
 export default function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false)
+  const [isScrolled, setIsScrolled]     = useState(false)
   const [isMobileOpen, setIsMobileOpen] = useState(false)
   const pathname = usePathname()
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
+    const onScroll = () => setIsScrolled(window.scrollY > 24)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Close mobile menu on route change
   useEffect(() => { setIsMobileOpen(false) }, [pathname])
 
-  const isHomepage = pathname === '/'
-  const isDarkNav = isHomepage && !isScrolled
+  const isHomepage    = pathname === '/'
+  const isDarkBgPage  = DARK_BG_PAGES.includes(pathname)
+  const isDarkBg      = isHomepage || isDarkBgPage
+  const showGlass     = isScrolled || !isDarkBg
+
+  // Light text when: on dark-bg page always, OR on homepage before scroll
+  const isLightText   = isDarkBgPage || (isHomepage && !isScrolled)
+
+  const headerClass = showGlass
+    ? isDarkBgPage
+      ? 'navbar-glass-dark border-b border-[#C8A36A]/15'
+      : 'navbar-glass border-b border-[#C8A36A]/20'
+    : 'bg-transparent'
 
   return (
     <>
       <motion.header
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
-          isScrolled || !isHomepage
-            ? 'glass border-b border-beige-dark shadow-sm'
-            : 'bg-transparent'
-        }`}
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${headerClass}`}
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
       >
         <div className="container-luxury">
           <div className="flex items-center justify-between h-18 md:h-20">
-            {/* Logo */}
-            <Link href={ROUTES.home} className="group flex flex-col items-start">
-              <span className={`font-serif text-xl md:text-2xl tracking-wide leading-none transition-colors duration-500 ${isDarkNav ? 'text-ivory' : 'text-brown'}`}>
+
+            {/* ── Logo ─────────────────────────────────────────────────── */}
+            <Link href={ROUTES.home} className="group flex flex-col items-start gap-[3px]">
+              <span className={`font-serif font-medium text-xl md:text-2xl tracking-[0.10em] leading-none transition-all duration-500 group-hover:tracking-[0.14em] ${
+                isLightText ? 'text-ivory' : 'text-brown'
+              }`}>
                 {CONFIG.brandName}
               </span>
-              <span className="label-luxury text-[9px] tracking-wide-luxury opacity-60 group-hover:opacity-100 transition-opacity">
+              <span className={`font-sans font-light text-[7.5px] tracking-[0.35em] uppercase transition-colors duration-500 ${
+                isLightText
+                  ? 'text-[#C8A36A]/45 group-hover:text-[#C8A36A]/75'
+                  : 'text-gold/40 group-hover:text-gold/70'
+              }`}>
                 {CONFIG.brandTagline}
               </span>
             </Link>
 
-            {/* Desktop Nav */}
-            <nav className="hidden md:flex items-center gap-8">
-              {NAV_LINKS.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`
-                    label-luxury text-[11px] transition-colors duration-300 relative group
-                    ${pathname === link.href ? 'text-gold' : isDarkNav ? 'text-ivory/80 hover:text-gold' : 'text-brown hover:text-gold'}
-                  `}
-                >
-                  {link.label}
-                  <span className={`
-                    absolute -bottom-1 left-0 h-px bg-gold transition-all duration-300
-                    ${pathname === link.href ? 'w-full' : 'w-0 group-hover:w-full'}
-                  `} />
-                </Link>
-              ))}
+            {/* ── Desktop Nav ──────────────────────────────────────────── */}
+            <nav className="hidden md:flex items-center gap-10">
+              {NAV_LINKS.map((link) => {
+                const active = pathname === link.href
+                return (
+                  <Link key={link.href} href={link.href} className="relative group py-2">
+
+                    {/* Active indicator dot — slides between links via layoutId */}
+                    {active && (
+                      <motion.span
+                        layoutId="nav-active-dot"
+                        className="absolute -top-1 left-1/2 -translate-x-1/2 w-[3px] h-[3px] rounded-full bg-gold"
+                        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                      />
+                    )}
+
+                    {/* Underline — grows from center on hover; solid on active */}
+                    <span className={`absolute bottom-0 left-0 right-0 h-px origin-center transition-transform duration-500 ease-out ${
+                      active
+                        ? 'scale-x-100 bg-gold'
+                        : 'scale-x-0 group-hover:scale-x-75 bg-gold/45'
+                    }`} />
+
+                    {/* Label */}
+                    <motion.span
+                      className={`block text-[11px] font-sans font-medium uppercase tracking-[0.18em] transition-colors duration-300 ${
+                        active
+                          ? 'text-gold'
+                          : isLightText
+                          ? 'text-ivory/82 group-hover:text-ivory'
+                          : 'text-brown/80 group-hover:text-brown'
+                      }`}
+                      whileHover={{ y: -1.5 }}
+                      transition={{ type: 'spring', stiffness: 500, damping: 24 }}
+                    >
+                      {link.label}
+                    </motion.span>
+                  </Link>
+                )
+              })}
             </nav>
 
-            {/* Mobile hamburger */}
+            {/* ── Mobile Hamburger ─────────────────────────────────────── */}
             <button
               type="button"
-              className="md:hidden flex flex-col gap-1.5 p-2 cursor-pointer"
-              onClick={() => setIsMobileOpen((prev) => !prev)}
+              className="md:hidden flex flex-col justify-center gap-[5px] p-2 cursor-pointer"
+              onClick={() => setIsMobileOpen((p) => !p)}
               aria-label="Toggle menu"
             >
               <motion.span
-                className={`block w-6 h-px origin-center transition-colors duration-500 ${isDarkNav ? 'bg-ivory' : 'bg-brown'}`}
-                animate={isMobileOpen ? { rotate: 45, y: 4 } : { rotate: 0, y: 0 }}
-                transition={{ duration: 0.3 }}
+                className={`block h-px origin-left rounded-full transition-colors duration-500 ${isLightText ? 'bg-ivory/75' : 'bg-brown'}`}
+                animate={isMobileOpen ? { rotate: 45, y: 6, width: 22 } : { rotate: 0, y: 0, width: 22 }}
+                transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
               />
               <motion.span
-                className="block w-6 h-px bg-brown"
-                animate={isMobileOpen ? { opacity: 0 } : { opacity: 1 }}
-                transition={{ duration: 0.2 }}
+                className={`block h-px rounded-full transition-colors duration-500 ${isLightText ? 'bg-ivory/75' : 'bg-brown'}`}
+                animate={isMobileOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1, width: 14 }}
+                transition={{ duration: 0.22 }}
               />
               <motion.span
-                className={`block w-6 h-px origin-center transition-colors duration-500 ${isDarkNav ? 'bg-ivory' : 'bg-brown'}`}
-                animate={isMobileOpen ? { rotate: -45, y: -4 } : { rotate: 0, y: 0 }}
-                transition={{ duration: 0.3 }}
+                className={`block h-px origin-left rounded-full transition-colors duration-500 ${isLightText ? 'bg-ivory/75' : 'bg-brown'}`}
+                animate={isMobileOpen ? { rotate: -45, y: -6, width: 22 } : { rotate: 0, y: 0, width: 22 }}
+                transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
               />
             </button>
           </div>
         </div>
       </motion.header>
 
-      {/* Mobile Menu */}
+      {/* ── Mobile Menu ──────────────────────────────────────────────────── */}
       <AnimatePresence>
         {isMobileOpen && (
           <motion.div
-            className="fixed inset-0 z-30 pt-20 bg-ivory md:hidden"
+            className="fixed inset-0 z-30 bg-[#120900] md:hidden flex flex-col"
             initial={{ opacity: 0, x: '100%' }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '100%' }}
-            transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+            transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
           >
-            <nav className="flex flex-col items-center justify-center h-full gap-10">
+            {/* Top bar */}
+            <div className="flex items-center justify-between h-18 px-6 border-b border-[#C8A36A]/10">
+              <span className="font-serif font-light text-ivory/75 text-lg tracking-[0.12em]">
+                {CONFIG.brandName}
+              </span>
+              <button
+                type="button"
+                onClick={() => setIsMobileOpen(false)}
+                className="text-ivory/25 hover:text-ivory/65 transition-colors p-2"
+                aria-label="Close menu"
+              >
+                <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Nav links */}
+            <nav className="flex flex-col items-center justify-center flex-1 gap-0">
               {NAV_LINKS.map((link, i) => (
-                <motion.div
-                  key={link.href}
-                  initial={{ opacity: 0, y: 20 }}
+                <motion.div key={link.href}
+                  initial={{ opacity: 0, y: 28 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
+                  transition={{ delay: 0.06 + i * 0.08, duration: 0.45, ease: [0.4, 0, 0.2, 1] }}
                 >
-                  <Link
-                    href={link.href}
-                    className="font-serif text-3xl text-brown hover:text-gold transition-colors"
+                  <Link href={link.href}
+                    className={`group relative block py-5 px-10 text-center font-serif font-light text-4xl tracking-[0.06em] transition-colors duration-300 ${
+                      pathname === link.href ? 'text-[#C8A36A]' : 'text-ivory/38 hover:text-ivory/85'
+                    }`}
                   >
                     {link.label}
+                    <span className="absolute bottom-3 left-1/2 -translate-x-1/2 h-px bg-[#C8A36A]/35 w-0 group-hover:w-1/3 transition-all duration-500 ease-out" />
                   </Link>
                 </motion.div>
               ))}
             </nav>
+
+            {/* Bottom ornament */}
+            <div className="flex items-center justify-center pb-12 gap-4">
+              <div className="h-px w-10 bg-[#C8A36A]/12" />
+              <span className="text-[#C8A36A]/25 text-[8px] font-sans font-light uppercase tracking-[0.32em]">
+                {CONFIG.brandTagline}
+              </span>
+              <div className="h-px w-10 bg-[#C8A36A]/12" />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

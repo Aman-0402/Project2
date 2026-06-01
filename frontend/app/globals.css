@@ -414,6 +414,22 @@
     backdrop-filter: blur(12px);
   }
 
+  /* Navbar glass — light pages (collections, about, homepage scrolled) */
+  .navbar-glass {
+    background: rgba(245, 239, 231, 0.93);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    backdrop-filter: blur(24px) saturate(180%);
+    box-shadow: 0 1px 0 rgba(200, 163, 106, 0.12), 0 4px 24px rgba(59, 36, 25, 0.05);
+  }
+
+  /* Navbar glass — dark pages (create-fragrance scrolled) */
+  .navbar-glass-dark {
+    background: rgba(16, 8, 2, 0.90);
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
+    backdrop-filter: blur(24px) saturate(150%);
+    box-shadow: 0 1px 0 rgba(200, 163, 106, 0.10), 0 4px 32px rgba(0, 0, 0, 0.45);
+  }
+
   /* Testimonials carousel */
   .testimonials-track {
     animation: testimonials-scroll 60s linear infinite;
@@ -779,6 +795,12 @@
 }
 .cf-preview-panel {
   box-shadow: 0 8px 48px rgba(0,0,0,0.4), inset 0 1px 0 rgba(200,163,106,0.08);
+}
+.cf-showcase-canvas {
+  height: 300px;
+}
+.cf-showcase-glow {
+  background-color: var(--cf-accent, #B08D57);
 }
 
 /* ── Family Cards ────────────────────────────────────────────────────────── */

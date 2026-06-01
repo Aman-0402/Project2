@@ -117,8 +117,12 @@ function FragranceArt() {
         <line x1="126" y1="175" x2="194" y2="175" stroke="#C6A16E" strokeOpacity="0.6" strokeWidth="0.7" />
         {/* Glass shine */}
         <rect x="132" y="136" width="5" height="88" rx="2.5" fill="white" fillOpacity="0.05" />
-        {/* Brand letter */}
-        <text x="160" y="162" textAnchor="middle" fontFamily="Georgia, serif" fontSize="18" fontStyle="italic" fill="#C6A16E" fillOpacity="0.35">L</text>
+        {/* Brand label */}
+        <line x1="136" y1="145" x2="184" y2="145" stroke="#C6A16E" strokeOpacity="0.30" strokeWidth="0.5" />
+        <text x="160" y="156" textAnchor="middle" fontFamily="Georgia, serif" fontSize="7" letterSpacing="3" fill="#C6A16E" fillOpacity="0.70">M.M</text>
+        <text x="160" y="163" textAnchor="middle" fontFamily="Georgia, serif" fontSize="4" fill="#C6A16E" fillOpacity="0.30">◆</text>
+        <text x="160" y="171" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="4.5" letterSpacing="2" fill="#C6A16E" fillOpacity="0.55">ATTARWALA</text>
+        <line x1="136" y1="175" x2="184" y2="175" stroke="#C6A16E" strokeOpacity="0.30" strokeWidth="0.5" />
         {/* Base */}
         <ellipse cx="160" cy="238" rx="36" ry="5" fill="#C6A16E" fillOpacity="0.06" stroke="#C6A16E" strokeOpacity="0.15" strokeWidth="0.6" />
         {/* Base shadow */}
@@ -244,12 +248,12 @@ export default function BrandStory() {
                 {CONFIG.brandName} is a boutique fragrance house dedicated to the art of extraordinary scent.
               </p>
               <p>
-                Each fragrance is a composition of the world&apos;s finest raw materials — hand-selected
+                Each fragrance is a composition of the world&apos;s finest raw materials - hand-selected
                 oud from the forests of Assam, rose absolutes from the valleys of Grasse, and rare
                 ambers from the shores of the Baltic.
               </p>
               <p>
-                We believe a truly exceptional fragrance does not just smell beautiful —
+                We believe a truly exceptional fragrance does not just smell beautiful -
                 it tells a story, evokes a memory, and defines who you are.
               </p>
             </motion.div>

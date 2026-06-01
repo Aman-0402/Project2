@@ -243,6 +243,12 @@ function DarkBottle({ fillPercent, accent }: { fillPercent: number; accent: stri
       <rect x="18" y={BY} width="84" height={BH} rx="10" fill="url(#dk-shine)" />
       <rect x="26" y={BY + 8} width="6" height={BH - 22} rx="3" fill="white" opacity="0.05" />
       <rect x="18" y={BY} width="84" height={BH} rx="10" stroke={accent} strokeWidth="1" strokeOpacity="0.35" fill="none" />
+      {/* Label */}
+      <line x1="34" y1={BY + 14} x2="86" y2={BY + 14} stroke={accent} strokeWidth="0.5" strokeOpacity="0.35" />
+      <text x="60" y={BY + 27} textAnchor="middle" fontFamily="Georgia, serif" fontSize="9" letterSpacing="4" fill={accent} fillOpacity="0.75">M.M</text>
+      <text x="60" y={BY + 35} textAnchor="middle" fontFamily="Georgia, serif" fontSize="5" fill={accent} fillOpacity="0.35">◆</text>
+      <text x="60" y={BY + 45} textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="5" letterSpacing="2.5" fill={accent} fillOpacity="0.55">ATTARWALA</text>
+      <line x1="34" y1={BY + 50} x2="86" y2={BY + 50} stroke={accent} strokeWidth="0.5" strokeOpacity="0.35" />
       <ellipse cx="60" cy={BY + BH + 6} rx="36" ry="4" fill={accent} opacity="0.07" />
     </svg>
   )
@@ -307,31 +313,88 @@ function RightPanel({ profile, step }: { profile: Profile; step: number }) {
     : Math.max(0, (step / 9) * 18)
   const allNotes = [...profile.topNotes, ...profile.heartNotes, ...profile.baseNotes]
 
+  // Notes to show around bottle — prefer selected notes, fallback to personality recommendations
+  const displayNotes = (allNotes.length > 0 ? allNotes : selPersonality?.notes ?? []).slice(0, 4)
+
+  // Label helpers for note positions
+  const notePositions = [
+    { top: 'top-8',    side: 'left-3',  align: 'items-start text-left',  icon: '◆', layer: 'Top'    },
+    { top: 'top-8',    side: 'right-3', align: 'items-end text-right',   icon: '○', layer: 'Heart'  },
+    { top: 'bottom-8', side: 'left-3',  align: 'items-start text-left',  icon: '≋', layer: 'Base'   },
+    { top: 'bottom-8', side: 'right-3', align: 'items-end text-right',   icon: '▲', layer: 'Base'   },
+  ]
+
   return (
     <div className="w-full lg:w-72 xl:w-80 flex-shrink-0 lg:sticky lg:top-[180px] space-y-3">
 
-      {/* Bottle */}
-      <div className="cf-preview-panel border border-[#C8A36A]/25 bg-[#C8A36A]/[0.04] backdrop-blur-sm p-5 flex flex-col items-center gap-3">
-        <div className="relative w-28 h-40">
-          {selPersonality && (
-            <div className="absolute inset-0 rounded-full blur-3xl opacity-15 pointer-events-none"
-              style={{ backgroundColor: selPersonality.accent }} />
-          )}
-          <DarkBottle fillPercent={fill} accent={accent} />
+      {/* ── Bottle showcase ─────────────────────────────────────────── */}
+      <div className="cf-preview-panel border border-[#C8A36A]/22 bg-[#0E0804]/60 backdrop-blur-sm overflow-hidden">
+
+        {/* Showcase canvas */}
+        <div className="cf-showcase-canvas relative flex items-center justify-center">
+
+          {/* Corner brackets */}
+          <div className="absolute top-4 left-4 w-7 h-7 border-t border-l border-[#C8A36A]/30 pointer-events-none" />
+          <div className="absolute top-4 right-4 w-7 h-7 border-t border-r border-[#C8A36A]/30 pointer-events-none" />
+          <div className="absolute bottom-4 left-4 w-7 h-7 border-b border-l border-[#C8A36A]/30 pointer-events-none" />
+          <div className="absolute bottom-4 right-4 w-7 h-7 border-b border-r border-[#C8A36A]/30 pointer-events-none" />
+
+          {/* Circular decorative rings */}
+          <div className="absolute w-52 h-52 rounded-full border border-[#C8A36A]/07 pointer-events-none" />
+          <div className="absolute w-40 h-40 rounded-full border border-[#C8A36A]/05 pointer-events-none" />
+
+          {/* Ambient glow */}
+          <div className="cf-showcase-glow absolute w-36 h-36 rounded-full blur-3xl opacity-10 pointer-events-none transition-colors duration-700"
+            style={{ '--cf-accent': accent } as React.CSSProperties} />
+
+          {/* Scattered dots */}
+          <div className="absolute top-10 left-10 w-[3px] h-[3px] rounded-full bg-[#C8A36A]/25 pointer-events-none" />
+          <div className="absolute top-14 right-12 w-[2px] h-[2px] rounded-full bg-[#C8A36A]/18 pointer-events-none" />
+          <div className="absolute bottom-12 left-14 w-[2px] h-[2px] rounded-full bg-[#C8A36A]/20 pointer-events-none" />
+          <div className="absolute bottom-10 right-10 w-[3px] h-[3px] rounded-full bg-[#C8A36A]/15 pointer-events-none" />
+          <div className="absolute top-1/2 left-5 w-[2px] h-[2px] rounded-full bg-[#C8A36A]/12 pointer-events-none" />
+          <div className="absolute top-1/3 right-6 w-[2px] h-[2px] rounded-full bg-[#C8A36A]/12 pointer-events-none" />
+
+          {/* Note labels (4 corners around bottle) */}
+          {displayNotes.map((note, i) => {
+            const pos = notePositions[i]
+            return (
+              <motion.div key={note}
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                transition={{ delay: i * 0.1 }}
+                className={`absolute ${pos.top} ${pos.side} flex flex-col ${pos.align} gap-1 pointer-events-none`}
+              >
+                <div className="w-6 h-6 border border-[#C8A36A]/25 flex items-center justify-center">
+                  <span className="text-[#C8A36A]/45 text-[8px]">{pos.icon}</span>
+                </div>
+                <p className="text-[#C8A36A]/65 text-[7.5px] font-sans uppercase tracking-[0.18em] leading-none">{note}</p>
+                <p className="text-white/18 text-[6.5px] font-sans">{pos.layer}</p>
+              </motion.div>
+            )
+          })}
+
+          {/* Bottle */}
+          <div className="relative w-32 h-52 z-10">
+            <DarkBottle fillPercent={fill} accent={accent} />
+          </div>
         </div>
-        {profile.fragranceName ? (
-          <div className="text-center">
-            <p className="font-serif text-white/75 text-base italic">{profile.fragranceName}</p>
-            <p className="text-[#C8A36A]/35 text-[8px] font-sans uppercase tracking-[0.22em] mt-0.5">M.M ATTARWALA</p>
-          </div>
-        ) : selGender ? (
-          <div className="text-center">
-            <p className="text-white/25 text-[9px] font-sans uppercase tracking-[0.2em]">{selGender.label}</p>
-            <p className="text-white/12 text-[8px] font-sans mt-0.5">{selGender.mood}</p>
-          </div>
-        ) : (
-          <p className="text-white/15 text-[10px] font-sans uppercase tracking-[0.15em] text-center">Choose your identity</p>
-        )}
+
+        {/* Bottom label */}
+        <div className="px-5 pb-5 pt-3 text-center border-t border-[#C8A36A]/08">
+          {profile.fragranceName ? (
+            <>
+              <p className="font-serif text-white/70 text-base italic mb-1">{profile.fragranceName}</p>
+              <p className="text-[#C8A36A]/30 text-[8px] font-sans uppercase tracking-[0.25em]">M.M ATTARWALA</p>
+            </>
+          ) : selGender ? (
+            <>
+              <p className="text-white/22 text-[9px] font-sans uppercase tracking-[0.22em] mb-0.5">{selGender.label} · {selGender.mood.split('·')[0].trim()}</p>
+              <p className="text-[#C8A36A]/25 text-[7px] font-sans uppercase tracking-[0.25em]">M.M ATTARWALA</p>
+            </>
+          ) : (
+            <p className="text-white/15 text-[9px] font-sans uppercase tracking-[0.2em]">Your Signature Fragrance</p>
+          )}
+        </div>
       </div>
 
       {/* DNA card */}
