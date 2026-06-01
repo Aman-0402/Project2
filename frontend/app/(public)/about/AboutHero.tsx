@@ -99,7 +99,7 @@ export default function AboutHero() {
         >
           <div className="h-px w-12 bg-[#C8A36A]/40" />
           <p className="text-[#C8A36A] text-[10px] font-sans uppercase tracking-[0.35em]">
-            Est. Vadodara, India
+            Born in Vadodara. Felt everywhere.
           </p>
           <div className="h-px w-12 bg-[#C8A36A]/40" />
         </motion.div>
@@ -136,7 +136,7 @@ export default function AboutHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 1, ease: [0.4, 0, 0.2, 1] }}
         >
-          The Legacy of {CONFIG.brandName}
+          A story told in scent, worn by those who feel deeply.
         </motion.p>
 
         {/* Scroll indicator */}

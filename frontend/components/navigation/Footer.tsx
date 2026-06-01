@@ -128,7 +128,7 @@ export default function Footer({ instagramUrl, facebookUrl, youtubeUrl }: Footer
             </p>
 
             <Link href="/admin"
-              className="inline-flex items-center gap-2 border border-ivory/12 text-ivory/35 hover:border-gold/45 hover:text-gold font-sans uppercase px-4 py-2.5 transition-all duration-300 hover:-translate-y-px whitespace-nowrap ft-link-sm">
+              className="inline-flex items-center gap-2 border border-gold/35 text-gold/70 hover:border-gold hover:text-gold font-sans uppercase px-4 py-2.5 transition-all duration-300 hover:-translate-y-px whitespace-nowrap ft-link-sm">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-3.5 h-3.5 flex-shrink-0">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
               </svg>

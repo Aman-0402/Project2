@@ -14,7 +14,7 @@ const PILLARS = [
   {
     num: '01',
     title: 'Rare Ingredients',
-    body: 'We source only the finest raw materials — oud from Assam, rose from Grasse, amber from the Baltic — each selected for depth, longevity, and character.',
+    body: 'Oud harvested at dawn in Assam. Rose from the valleys of Grasse. Amber aged for years. Each ingredient chosen not for its price — but for the feeling only it can create.',
     stat: { value: '100+', label: 'Unique Botanicals' },
     icon: (
       <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth={1.2} className="w-8 h-8">
@@ -26,7 +26,7 @@ const PILLARS = [
   {
     num: '02',
     title: 'Master Craftsmanship',
-    body: 'Every fragrance is composed by hand, drawing on centuries-old perfumery traditions blended with a modern sensibility that is distinctly our own.',
+    body: 'We have never rushed a single bottle. The hands that compose each fragrance carry knowledge passed down through generations — a rhythm learned not in a classroom, but in a family that believed in doing it right or not at all.',
     quote: '"Unhurried. Uncompromising. Crafted by hand."',
     icon: (
       <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth={1.2} className="w-8 h-8">
@@ -40,7 +40,7 @@ const PILLARS = [
   {
     num: '03',
     title: 'Bespoke Creation',
-    body: 'For those who desire something truly unique, we offer an intimate bespoke service — a personal fragrance crafted to your story, your memory, your identity.',
+    body: 'Tell us about a morning that changed you. A person you cannot forget. A place you want to return to. We will translate it into something you can wear — made once, for you alone.',
     cta: true,
     icon: (
       <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth={1.2} className="w-8 h-8">
@@ -68,7 +68,7 @@ export default function AboutPage() {
               <div className="absolute -top-4 -left-4 w-16 h-16 border-t border-l border-gold/25 z-10 pointer-events-none" />
 
               {/* Main tall image */}
-              <div className="relative aspect-[3/4] overflow-hidden">
+              <div className="relative aspect-[3/4] overflow-hidden border-2 border-gold/40 ring-4 ring-brown/30">
                 <Image
                   src="/images/person.png"
                   alt="M.M Attarwala Atelier"
@@ -82,7 +82,7 @@ export default function AboutPage() {
               </div>
 
               {/* Smaller offset image */}
-              <div className="absolute -bottom-6 -right-4 lg:-right-8 w-[42%] aspect-[4/5] overflow-hidden border-2 border-ivory shadow-2xl z-10">
+              <div className="absolute -bottom-6 -right-4 lg:-right-8 w-[42%] aspect-[4/5] overflow-hidden border-2 border-gold/40 ring-4 ring-brown/30 shadow-2xl z-10">
                 <Image
                   src="/images/perfume.png"
                   alt="M.M Attarwala Perfume"
@@ -115,22 +115,22 @@ export default function AboutPage() {
 
               <div className="space-y-5 font-sans text-base text-brown/65 leading-[1.85]">
                 <p>
-                  {CONFIG.brandName} was founded on a singular belief: that truly exceptional
-                  fragrance transcends the ordinary. It does not merely smell beautiful —
-                  it speaks, it tells a story, it becomes part of who you are.
+                  You know the moment. A scent catches you off guard — in a crowded bazaar,
+                  in someone&apos;s embrace, in a room long after they&apos;ve left. Before a
+                  thought forms, a memory already has. That is the only fragrance worth creating.
                 </p>
                 <p>
-                  We began as a small atelier with a master perfumer and a collection of rare
-                  ingredients gathered from across the world. Today, every bottle we create
-                  carries that same intimate dedication — unhurried, uncompromising, and crafted
-                  for those who recognize the difference.
+                  {CONFIG.brandName} was born in the lanes of Vadodara, where a family
+                  refused to let the art of real attar disappear. No shortcuts. No synthetic
+                  substitutes. Every bottle still carries what the first one did — something
+                  made for people who feel things deeply.
                 </p>
               </div>
 
               {/* Signature quote */}
               <blockquote className="mt-10 pl-6 border-l-2 border-gold/35">
                 <p className="font-serif text-xl md:text-2xl text-brown/75 italic leading-relaxed">
-                  &ldquo;The finest things in life are rarely found,<br className="hidden sm:block" /> and always felt.&rdquo;
+                  &ldquo;We do not sell perfume.<br className="hidden sm:block" /> We give you back a moment you almost forgot.&rdquo;
                 </p>
                 <p className="mt-3 text-[10px] font-sans uppercase tracking-[0.25em] text-gold/60">
                   — {CONFIG.brandName}
