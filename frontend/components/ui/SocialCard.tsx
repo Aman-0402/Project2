@@ -72,15 +72,14 @@ export default function SocialCard({ instagramUrl, facebookUrl, youtubeUrl }: So
   )
   return (
     <motion.div
-      className="relative flex items-center justify-center h-11 w-44 overflow-hidden border border-ivory/10 cursor-pointer"
-      style={{ background: '#0E0704' }}
+      className="relative flex items-center justify-center h-11 w-44 overflow-hidden border border-gold/30 bg-[#0E0704] cursor-pointer"
       initial="rest"
       whileHover="hover"
       aria-label="Follow us on social media"
     >
       {/* Label — fades out on hover */}
       <motion.span
-        className="absolute font-sans text-[10px] text-ivory/40 uppercase tracking-luxury pointer-events-none select-none"
+        className="absolute font-sans text-[10px] text-ivory/75 uppercase tracking-luxury pointer-events-none select-none"
         variants={labelVariants}
         transition={{ duration: 0.18 }}
       >

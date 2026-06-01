@@ -123,7 +123,7 @@ export default function Footer({ instagramUrl, facebookUrl, youtubeUrl }: Footer
           {/* Admin + Social */}
           <div>
             <h4 className="label-luxury text-gold mb-6">Manage</h4>
-            <p className="text-ivory/28 mb-5 ft-body">
+            <p className="text-ivory/60 mb-5 ft-body">
               Admin access for store management and product updates.
             </p>
 
