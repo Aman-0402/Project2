@@ -101,41 +101,43 @@ export default function AboutPage() {
 
             {/* ── Right: Story text ─────────────────────────────────── */}
             <div className="order-1 lg:order-2">
-              <p className="label-luxury mb-5">The Philosophy</p>
+              <div className="about-glass-text p-8 lg:p-10">
+                <p className="label-luxury mb-5">The Philosophy</p>
 
-              {/* Two-line heading */}
-              <h2 className="about-heading-primary font-display font-bold text-brown leading-[1.05] mb-1">
-                Fragrance Is Not Worn
-              </h2>
-              <h2 className="about-heading-italic font-serif font-light italic text-gradient-gold leading-[1.1] mb-8">
-                It Is Remembered
-              </h2>
+                {/* Two-line heading */}
+                <h2 className="about-heading-primary font-display font-bold text-brown leading-[1.05] mb-1">
+                  Fragrance Is Not Worn
+                </h2>
+                <h2 className="about-heading-italic font-serif font-light italic text-gradient-gold leading-[1.1] mb-8">
+                  It Is Remembered
+                </h2>
 
-              <div className="w-12 h-px bg-gold mb-8" />
+                <div className="w-12 h-px bg-gold mb-8" />
 
-              <div className="space-y-5 font-sans text-base text-brown/65 leading-[1.85]">
-                <p>
-                  You know the moment. A scent catches you off guard — in a crowded bazaar,
-                  in someone&apos;s embrace, in a room long after they&apos;ve left. Before a
-                  thought forms, a memory already has. That is the only fragrance worth creating.
-                </p>
-                <p>
-                  {CONFIG.brandName} was born in the lanes of Vadodara, where a family
-                  refused to let the art of real attar disappear. No shortcuts. No synthetic
-                  substitutes. Every bottle still carries what the first one did — something
-                  made for people who feel things deeply.
-                </p>
+                <div className="space-y-5 font-sans text-base text-brown/65 leading-[1.85]">
+                  <p>
+                    You know the moment. A scent catches you off guard — in a crowded bazaar,
+                    in someone&apos;s embrace, in a room long after they&apos;ve left. Before a
+                    thought forms, a memory already has. That is the only fragrance worth creating.
+                  </p>
+                  <p>
+                    {CONFIG.brandName} was born in the lanes of Vadodara, where a family
+                    refused to let the art of real attar disappear. No shortcuts. No synthetic
+                    substitutes. Every bottle still carries what the first one did — something
+                    made for people who feel things deeply.
+                  </p>
+                </div>
+
+                {/* Signature quote */}
+                <blockquote className="about-glass-quote mt-10 p-6">
+                  <p className="font-serif text-xl md:text-2xl text-brown/75 italic leading-relaxed">
+                    &ldquo;We do not sell perfume.<br className="hidden sm:block" /> We give you back a moment you almost forgot.&rdquo;
+                  </p>
+                  <p className="mt-3 text-[10px] font-sans uppercase tracking-[0.25em] text-gold/60">
+                    — {CONFIG.brandName}
+                  </p>
+                </blockquote>
               </div>
-
-              {/* Signature quote */}
-              <blockquote className="mt-10 pl-6 border-l-2 border-gold/35">
-                <p className="font-serif text-xl md:text-2xl text-brown/75 italic leading-relaxed">
-                  &ldquo;We do not sell perfume.<br className="hidden sm:block" /> We give you back a moment you almost forgot.&rdquo;
-                </p>
-                <p className="mt-3 text-[10px] font-sans uppercase tracking-[0.25em] text-gold/60">
-                  — {CONFIG.brandName}
-                </p>
-              </blockquote>
             </div>
 
           </div>
@@ -154,7 +156,7 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
             {PILLARS.map((pillar) => (
               <div key={pillar.title}
-                className="pillar-card group relative bg-ivory/75 border border-gold/18 backdrop-blur-sm p-8 transition-all duration-500 ease-out hover:-translate-y-2 hover:bg-ivory hover:border-gold/40 cursor-default"
+                className="pillar-card group relative bg-white/65 border border-white/80 backdrop-blur-xl p-8 transition-all duration-500 ease-out hover:-translate-y-2 hover:bg-white/80 hover:border-gold/35 cursor-default"
               >
                 {/* Hover glow layer */}
                 <div className="pillar-card-glow absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />

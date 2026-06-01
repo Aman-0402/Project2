@@ -73,7 +73,7 @@ export default function AboutCTA() {
 
       {/* Vertical light shaft from top */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-2/3 bg-gradient-to-b from-[#C8A36A]/25 to-transparent pointer-events-none" />
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1/2 bg-gradient-to-b from-[#C8A36A]/05 to-transparent pointer-events-none" style={{ filter: 'blur(24px)' }} />
+      <div className="cta-light-shaft absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1/2 bg-gradient-to-b from-[#C8A36A]/05 to-transparent pointer-events-none" />
 
       {/* Warm bottom glow */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_35%_at_50%_100%,_rgba(160,80,20,0.15)_0%,_transparent_60%)] pointer-events-none" />
@@ -82,9 +82,7 @@ export default function AboutCTA() {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_100%_100%_at_50%_50%,_transparent_35%,_rgba(6,3,0,0.88)_100%)] pointer-events-none" />
 
       {/* Grain */}
-      <div className="absolute inset-0 opacity-[0.032] pointer-events-none"
-        style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E\")" }}
-      />
+      <div className="cta-grain absolute inset-0 opacity-[0.032] pointer-events-none" />
 
       {/* Horizon lines */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C8A36A]/30 to-transparent" />
@@ -138,6 +136,7 @@ export default function AboutCTA() {
 
       {/* ── Content ──────────────────────────────────────────────────── */}
       <div className="relative z-10 container-luxury mx-auto px-6">
+      <div className="cta-glass-panel px-8 py-14 md:px-16 md:py-20 max-w-3xl mx-auto">
 
         {/* Eyebrow */}
         <motion.div className="flex items-center justify-center gap-4 mb-10"
@@ -150,16 +149,14 @@ export default function AboutCTA() {
 
         {/* Heading lines */}
         <motion.h2
-          className="font-display font-bold text-ivory leading-[1.05] mb-2"
-          style={{ fontSize: 'clamp(1.8rem, 4vw, 3.2rem)' }}
+          className="cta-heading font-display font-bold text-ivory leading-[1.05] mb-2"
           initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }} transition={{ duration: 0.9, delay: 0.15 }}>
           Discover A Scent
         </motion.h2>
 
         <motion.h2
-          className="font-display font-bold text-ivory leading-[1.05] mb-3"
-          style={{ fontSize: 'clamp(1.8rem, 4vw, 3.2rem)' }}
+          className="cta-heading font-display font-bold text-ivory leading-[1.05] mb-3"
           initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }} transition={{ duration: 0.9, delay: 0.25 }}>
           That Becomes Your
@@ -215,6 +212,7 @@ export default function AboutCTA() {
           </MagneticBtn>
 
         </motion.div>
+      </div>
       </div>
     </section>
   )
