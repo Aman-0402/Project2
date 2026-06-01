@@ -345,3 +345,35 @@ npm run build                                   # Production build (0 errors req
 | Password | `admin123` |
 
 > **Change before production deployment.**
+
+---
+
+## FEATURE SUMMARY
+
+| # | Feature | Description |
+|---|---------|-------------|
+| 1 | **Homepage** | 9-section cinematic landing page with hero, featured products, brand story, testimonials |
+| 2 | **Collections Page** | Product grid with category filter chips and skeleton loading |
+| 3 | **Product Detail** | Image slider, fragrance pyramid, layered bottle/background composite |
+| 4 | **About Page** | Brand pillars, philosophy text, WhatsApp CTA |
+| 5 | **Contact Page** | 3 WhatsApp contact cards for buying, enquiry, and custom orders |
+| 6 | **Create Fragrance Wizard** | 9-step bespoke fragrance builder with live preview panel |
+| 7 | **WhatsApp Dual Routing** | Buy Now → M. Roeesh, Ask Details → M. Munavvar (separate numbers) |
+| 8 | **Currency Auto-Detection** | INR for India (IST timezone), USD for all others — client-side, no API |
+| 9 | **Image Layer Effect** | Bottle PNG composited over scene background on product detail |
+| 10 | **Admin Login** | JWT-protected login with auto-refresh and token blacklist on logout |
+| 11 | **Admin Dashboard** | Stat cards (products, categories) + recent products table |
+| 12 | **Product Management** | Full CRUD with multi-image upload (4 images), fragrance notes, volume select |
+| 13 | **NeoToggle** | Animated inline toggle for active/featured status in products table |
+| 14 | **Category Management** | Inline create, edit, delete with confirm modal |
+| 15 | **Site Settings** | Live-editable brand name, tagline, WhatsApp number, hero text, feature flags |
+| 16 | **Fragrance Request (Inquiries)** | Backend stores custom fragrance requests with status tracking (new/contacted/completed) |
+| 17 | **Fragrance DNA Preview** | Right panel in wizard shows live bottle fill, personality, notes, intensity, climate |
+| 18 | **Personality System** | 24 personalities (8 per gender) each with recommended notes and visual identity |
+| 19 | **Notes Pyramid Builder** | Top / Heart / Base layer selection, up to 3 per layer, with recommended highlights |
+| 20 | **Projection Intensity Meter** | 4 strength levels with animated signal bars and sillage radius |
+| 21 | **SEO** | Dynamic Open Graph on product pages, sitemap.xml, robots.txt, branded 404 |
+| 22 | **Skeleton Loaders** | Loading states for collections, product detail, public routes |
+| 23 | **Responsive Admin Sidebar** | Mobile slide-in overlay with backdrop and route-change auto-close |
+| 24 | **Film Grain Texture** | Subtle SVG noise overlay on body for depth and luxury feel |
+| 25 | **Deployment Ready** | Vercel (frontend) + Render/Docker (backend) configs with production security settings |
