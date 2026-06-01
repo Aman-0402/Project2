@@ -12,26 +12,26 @@ const config: Config = {
     extend: {
       colors: {
         ivory: {
-          DEFAULT: '#F5EFE7',
-          50: '#FDFCF9',
-          100: '#F5EFE7',
-          200: '#EDE3D5',
+          DEFAULT: '#F6F1EA',   // Primary Background
+          50:  '#FDFCFA',
+          100: '#F6F1EA',
+          200: '#EDE4D5',
         },
         gold: {
-          DEFAULT: '#C6A16E',
-          light: '#D4AF7F',
-          dark: '#A07848',
+          DEFAULT: '#C6A062',   // Luxury Gold
+          light:   '#D4AE74',
+          dark:    '#A07240',
         },
         brown: {
-          DEFAULT: '#3B2419',
-          light: '#5C3A2A',
-          dark: '#2A1812',
-          deeper: '#1C0F0A',
+          DEFAULT: '#2A1610',   // Deep Chocolate
+          light:   '#4A2A1C',
+          dark:    '#1E1008',
+          deeper:  '#140B08',   // Rich Espresso
         },
         beige: {
-          DEFAULT: '#E9DED1',
-          light: '#F0E8DC',
-          dark: '#D0BDA8',
+          DEFAULT: '#E9D8BE',   // Soft Champagne
+          light:   '#F2E6CE',
+          dark:    '#D0BC9A',
         },
       },
       fontFamily: {

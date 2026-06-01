@@ -3,14 +3,15 @@
 @tailwind utilities;
 
 :root {
-  --color-ivory: #F5EFE7;
-  --color-gold: #C6A16E;
-  --color-gold-light: #D4AF7F;
-  --color-gold-dark: #A07848;
-  --color-brown: #3B2419;
-  --color-brown-light: #5C3A2A;
-  --color-brown-dark: #2A1812;
-  --color-beige: #E9DED1;
+  --color-ivory:       #F6F1EA;   /* Primary Background */
+  --color-gold:        #C6A062;   /* Luxury Gold */
+  --color-gold-light:  #D4AE74;
+  --color-gold-dark:   #A07240;
+  --color-brown:       #2A1610;   /* Deep Chocolate */
+  --color-brown-light: #4A2A1C;
+  --color-brown-dark:  #1E1008;
+  --color-espresso:    #140B08;   /* Rich Espresso */
+  --color-beige:       #E9D8BE;   /* Soft Champagne */
 }
 
 @layer base {
@@ -813,6 +814,22 @@
 }
 
 /* About CTA — animated border outline button */
+/* ── Footer typography classes ──────────────────────────────────────────── */
+.ig-tile-glow { background: var(--ig-glow); }
+.ig-glow-1 { background: radial-gradient(ellipse 80% 80% at 30% 30%, rgba(198,160,98,0.35) 0%, transparent 65%); }
+.ig-glow-2 { background: radial-gradient(ellipse 70% 70% at 70% 40%, rgba(198,160,98,0.28) 0%, transparent 60%); }
+.ig-glow-3 { background: radial-gradient(ellipse 90% 60% at 50% 70%, rgba(198,160,98,0.32) 0%, transparent 65%); }
+.ig-glow-4 { background: radial-gradient(ellipse 60% 90% at 25% 60%, rgba(198,160,98,0.30) 0%, transparent 60%); }
+.ig-glow-5 { background: radial-gradient(ellipse 80% 70% at 75% 30%, rgba(198,160,98,0.33) 0%, transparent 65%); }
+.ig-glow-6 { background: radial-gradient(ellipse 75% 80% at 50% 50%, rgba(198,160,98,0.26) 0%, transparent 60%); }
+.ft-body     { font-size: 13px; line-height: 1.9; letter-spacing: 1px; }
+.ft-input    { font-size: 13px; letter-spacing: 0.5px; }
+.ft-label-xs { font-size: 10px; letter-spacing: 2px; }
+.ft-link-sm  { font-size: 11px; letter-spacing: 1.5px; }
+.ft-copy     { font-size: 12px; letter-spacing: 0.5px; }
+.ft-tagline  { font-size: 10px; letter-spacing: 2px; }
+.ft-nav-link { font-size: 13px; line-height: 1.9; letter-spacing: 1px; }
+
 .about-cta-outline {
   position: relative;
   -webkit-backdrop-filter: blur(6px);
