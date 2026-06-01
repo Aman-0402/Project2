@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { CONFIG, ROUTES } from '@/constants/config'
 import AboutHero from './AboutHero'
@@ -66,28 +67,29 @@ export default function AboutPage() {
               {/* Corner accent */}
               <div className="absolute -top-4 -left-4 w-16 h-16 border-t border-l border-gold/25 z-10 pointer-events-none" />
 
-              {/* Main tall image — bottle / atelier */}
-              <div className="relative aspect-[3/4] overflow-hidden bg-gradient-to-br from-brown-dark via-brown to-[#3B2419]">
-                <div className="absolute inset-0 bg-dot-pattern opacity-[0.04]" />
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_70%_at_50%_40%,_rgba(198,161,110,0.10)_0%,_transparent_70%)]" />
-                {/* Centre ornament */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
-                  <div className="w-8 h-px bg-gold/30" />
-                  <p className="font-serif text-ivory/15 text-sm uppercase tracking-[0.3em]">Atelier</p>
-                  <div className="w-8 h-px bg-gold/30" />
-                </div>
+              {/* Main tall image */}
+              <div className="relative aspect-[3/4] overflow-hidden">
+                <Image
+                  src="/images/person.png"
+                  alt="M.M Attarwala Atelier"
+                  fill
+                  sizes="(max-width:1024px) 100vw, 50vw"
+                  className="object-cover"
+                  priority
+                />
                 {/* Bottom vignette */}
-                <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-brown-dark/60 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-brown-dark/40 to-transparent" />
               </div>
 
-              {/* Smaller offset image — ingredient / detail */}
-              <div className="absolute -bottom-6 -right-4 lg:-right-8 w-[42%] aspect-[4/5] overflow-hidden bg-gradient-to-br from-[#3B2419] to-brown-dark border-2 border-ivory shadow-2xl z-10">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_50%,_rgba(198,161,110,0.09)_0%,_transparent_70%)]" />
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
-                  <div className="w-6 h-px bg-gold/30" />
-                  <p className="font-serif text-ivory/12 text-[10px] uppercase tracking-[0.25em]">Ingredient</p>
-                  <div className="w-6 h-px bg-gold/30" />
-                </div>
+              {/* Smaller offset image */}
+              <div className="absolute -bottom-6 -right-4 lg:-right-8 w-[42%] aspect-[4/5] overflow-hidden border-2 border-ivory shadow-2xl z-10">
+                <Image
+                  src="/images/perfume.png"
+                  alt="M.M Attarwala Perfume"
+                  fill
+                  sizes="20vw"
+                  className="object-cover"
+                />
               </div>
 
               {/* Floating stat badge */}
