@@ -151,7 +151,7 @@ function DarkBottle({ fillPercent, accent }: { fillPercent: number; accent: stri
 
 function StepBar({ step }: { step: number }) {
   return (
-    <div className="cf-stepbar sticky top-0 z-20 bg-[#1C1208]/90 backdrop-blur-xl border-b border-[#C8A36A]/20 px-4 py-3">
+    <div className="cf-stepbar sticky top-[72px] md:top-[80px] z-20 bg-[#1C1208]/90 backdrop-blur-xl border-b border-[#C8A36A]/20 px-4 py-3">
       <div className="max-w-5xl mx-auto flex items-center justify-between">
         {STEPS.map((label, i) => {
           const done = step > i + 1
@@ -349,7 +349,7 @@ export default function CreateFragranceClient() {
 
   // ── Main builder ──────────────────────────────────────────────────────────
   return (
-    <div className="cf-page-bg min-h-screen" ref={topRef}>
+    <div className="cf-page-bg min-h-screen pt-[72px] md:pt-[80px]" ref={topRef}>
       <StepBar step={step} />
 
       <div className="max-w-5xl mx-auto px-4 py-8 flex flex-col lg:flex-row gap-6 lg:gap-10 items-start">
@@ -656,7 +656,7 @@ export default function CreateFragranceClient() {
         </div>
 
         {/* ── Right: Preview panel ──────────────────────────────────── */}
-        <div className="w-full lg:w-60 xl:w-64 flex-shrink-0 lg:sticky lg:top-24">
+        <div className="w-full lg:w-60 xl:w-64 flex-shrink-0 lg:sticky lg:top-[180px]">
           <div className="cf-preview-panel border border-[#C8A36A]/25 bg-[#C8A36A]/[0.04] backdrop-blur-sm p-5 flex flex-col items-center gap-5">
 
             {/* Bottle */}
