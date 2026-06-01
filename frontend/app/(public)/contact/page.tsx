@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { CONFIG } from '@/constants/config'
 import { buildWhatsAppUrl, buildWhatsAppUrl2 } from '@/utils/whatsapp'
+import ContactHero from './ContactHero'
 
 export const metadata: Metadata = {
   title: 'Contact',
@@ -16,18 +17,7 @@ const WA_ICON = (
 export default function ContactPage() {
   return (
     <div className="min-h-screen bg-ivory">
-      {/* Header */}
-      <div className="bg-brown py-32 relative overflow-hidden">
-        <div className="absolute inset-0 bg-dot-pattern opacity-5" />
-        <div className="container-luxury text-center relative">
-          <p className="label-luxury text-gold mb-4">Reach Us</p>
-          <h1 className="font-serif text-5xl md:text-6xl text-ivory tracking-wide">Contact</h1>
-          <div className="w-12 h-px bg-gold mx-auto mt-6" />
-          <p className="font-sans text-sm text-ivory/50 mt-4">
-            GF 154/155, Nazarbaug Palace, Mandvi, Vadodara — 390017
-          </p>
-        </div>
-      </div>
+      <ContactHero />
 
       {/* Contact persons */}
       <section className="section-padding">
