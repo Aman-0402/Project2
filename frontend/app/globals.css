@@ -849,6 +849,29 @@
   0%, 100% { border-color: rgba(200,163,106,0.20); }
   50%       { border-color: rgba(200,163,106,0.48); }
 }
+.cta-signature {
+  font-size: clamp(4.5rem, 13vw, 10.5rem);
+  letter-spacing: -0.02em;
+  filter: drop-shadow(0 0 40px rgba(198,161,110,0.25));
+}
+.btn-cta-gold {
+  background: linear-gradient(135deg, #D4A857 0%, #C8A36A 50%, #B8903A 100%);
+  color: #1a0e02;
+  border-radius: 2px;
+  box-shadow: 0 4px 28px rgba(200,163,106,0.50), inset 0 1px 0 rgba(255,255,255,0.18);
+}
+.btn-cta-glass {
+  border-radius: 2px;
+  border: 1px solid rgba(200,163,106,0.45);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  background: rgba(200,163,106,0.04);
+  color: #C8A36A;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.35);
+}
+.btn-cta-glass-fill {
+  background: linear-gradient(135deg, #D4A857 0%, #C8A36A 50%, #B8903A 100%);
+}
 .cf-showcase-glow {
   background-color: var(--cf-accent, #B08D57);
 }
