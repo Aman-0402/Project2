@@ -139,20 +139,6 @@ export default function AboutHero() {
           A story told in scent, worn by those who feel deeply.
         </motion.p>
 
-        {/* Scroll indicator */}
-        <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.6, duration: 1 }}
-        >
-          <span className="text-[#C8A36A]/25 text-[8px] font-sans uppercase tracking-[0.25em]">Scroll</span>
-          <motion.div
-            className="w-px h-8 bg-gradient-to-b from-[#C8A36A]/35 to-transparent"
-            animate={{ scaleY: [0.3, 1, 0.3], opacity: [0.3, 0.7, 0.3] }}
-            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          />
-        </motion.div>
 
       </div>
     </section>

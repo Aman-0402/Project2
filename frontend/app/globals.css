@@ -854,6 +854,16 @@
 .cta-heading {
   font-size: clamp(2.2rem, 5vw, 4rem);
 }
+.contact-hero-heading {
+  font-size: clamp(2.8rem, 7vw, 6rem);
+}
+.contact-hero-sub {
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+}
+.amber-blob {
+  background: radial-gradient(ellipse, rgba(198,140,60,1) 0%, transparent 70%);
+  filter: blur(48px);
+}
 .cta-light-shaft {
   filter: blur(24px);
 }
