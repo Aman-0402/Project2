@@ -864,6 +864,35 @@
   background: radial-gradient(ellipse, rgba(198,140,60,1) 0%, transparent 70%);
   filter: blur(48px);
 }
+.contact-card {
+  background: rgba(255,255,255,0.62);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.78);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.92) inset,
+    0 4px 24px rgba(176,141,87,0.10),
+    0 2px 6px rgba(0,0,0,0.05);
+  transition: box-shadow 0.5s ease, border-color 0.5s ease;
+}
+.contact-card:hover {
+  border-color: rgba(198,161,110,0.40);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.92) inset,
+    0 12px 40px rgba(198,161,110,0.18),
+    0 4px 12px rgba(0,0,0,0.07);
+}
+.contact-card-glow {
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(198,161,110,0.08) 0%, transparent 70%);
+}
+.consult-card {
+  background: rgba(255,255,255,0.03);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.consult-heading {
+  font-size: clamp(2rem, 4.5vw, 3.5rem);
+}
 .cta-light-shaft {
   filter: blur(24px);
 }
