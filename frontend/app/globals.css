@@ -799,6 +799,39 @@
 .cf-showcase-canvas {
   height: 300px;
 }
+.about-heading-primary {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+}
+.about-heading-italic {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+}
+.pillar-card {
+  box-shadow: 0 2px 16px rgba(198,161,110,0.06), 0 0 0 0.5px rgba(198,161,110,0.08);
+}
+.pillar-card-glow {
+  box-shadow: inset 0 1px 0 rgba(198,161,110,0.15), 0 20px 60px rgba(198,161,110,0.14);
+}
+
+/* About CTA — animated border outline button */
+.about-cta-outline {
+  position: relative;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  background: rgba(200,163,106,0.04);
+  border: 1px solid rgba(200,163,106,0.25);
+  transition: border-color 0.4s ease, background 0.4s ease;
+  animation: cta-border-pulse 3s ease-in-out infinite;
+}
+.about-cta-outline:hover {
+  background: rgba(200,163,106,0.09);
+  border-color: rgba(200,163,106,0.65);
+  animation-play-state: paused;
+  box-shadow: 0 0 28px rgba(200,163,106,0.18);
+}
+@keyframes cta-border-pulse {
+  0%, 100% { border-color: rgba(200,163,106,0.20); }
+  50%       { border-color: rgba(200,163,106,0.48); }
+}
 .cf-showcase-glow {
   background-color: var(--cf-accent, #B08D57);
 }
