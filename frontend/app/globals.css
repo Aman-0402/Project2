@@ -780,6 +780,121 @@
 .cf-preview-panel {
   box-shadow: 0 8px 48px rgba(0,0,0,0.4), inset 0 1px 0 rgba(200,163,106,0.08);
 }
+
+/* ── Family Cards ────────────────────────────────────────────────────────── */
+.cf-family-card {
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.40), inset 0 1px 0 rgba(255,255,255,0.05);
+  transition: box-shadow 0.35s ease, border-color 0.35s ease;
+}
+.cf-family-card:hover {
+  box-shadow: 0 8px 36px rgba(0,0,0,0.55), 0 0 24px color-mix(in srgb, var(--cf-accent) 18%, transparent), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+.cf-family-card--selected {
+  box-shadow: 0 10px 48px rgba(0,0,0,0.60), 0 0 40px color-mix(in srgb, var(--cf-accent) 28%, transparent), inset 0 1px 0 rgba(255,255,255,0.10);
+}
+/* Top-gloss sheen — always present, more visible on hover */
+.cf-family-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(255,255,255,0.08) 0%, transparent 45%);
+  opacity: 0.6;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  border-radius: inherit;
+}
+.cf-family-card:hover::after { opacity: 1; }
+/* Shimmer sweep on hover — translateX only (compositor-only, no layout) */
+.cf-card-shimmer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.10), transparent);
+  transform: translateX(-280%) skewX(-18deg);
+  pointer-events: none;
+}
+.cf-family-card:hover .cf-card-shimmer {
+  animation: cf-shimmer-sweep 0.65s ease forwards;
+}
+@keyframes cf-shimmer-sweep {
+  from { transform: translateX(-280%) skewX(-18deg); }
+  to   { transform: translateX(350%) skewX(-18deg); }
+}
+/* Per-family accent colour — eliminates all inline style props */
+.cf-family-oud      { --cf-accent: #D4943A; }
+.cf-family-floral   { --cf-accent: #C084FC; }
+.cf-family-musk     { --cf-accent: #93C5FD; }
+.cf-family-fresh    { --cf-accent: #6EE7B7; }
+.cf-family-oriental { --cf-accent: #FCA5A5; }
+.cf-family-woody    { --cf-accent: #86EFAC; }
+
+/* Arabic watermark */
+.cf-arabic-wm {
+  position: absolute;
+  bottom: 4px;
+  right: 8px;
+  font-family: Arial, sans-serif;
+  font-size: 76px;
+  direction: rtl;
+  line-height: 1;
+  color: var(--cf-accent);
+  opacity: 0.12;
+  pointer-events: none;
+  -webkit-user-select: none;
+  user-select: none;
+  overflow: hidden;
+  transition: opacity 0.4s ease;
+}
+.cf-family-card--selected .cf-arabic-wm { opacity: 0.22; }
+
+/* Symbol + mood labels */
+.cf-family-symbol {
+  font-size: 10px;
+  color: var(--cf-accent);
+  opacity: 0.75;
+}
+.cf-family-mood {
+  font-family: var(--font-poppins), sans-serif;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--cf-accent);
+  opacity: 0.55;
+  margin-bottom: 4px;
+}
+
+/* Selected ring + checkmark circle */
+.cf-selected-ring {
+  border: 1px solid var(--cf-accent);
+  opacity: 0.55;
+}
+.cf-check-circle {
+  background: color-mix(in srgb, var(--cf-accent) 13%, transparent);
+  border: 1px solid var(--cf-accent);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cf-check-circle svg {
+  color: var(--cf-accent);
+}
+
+/* Selected pulse ring animation */
+@keyframes cf-ring-pulse {
+  0%   { opacity: 0.35; transform: scale(1); }
+  50%  { opacity: 0.80; transform: scale(1.005); }
+  100% { opacity: 0.35; transform: scale(1); }
+}
+.cf-selected-ring {
+  animation: cf-ring-pulse 2.2s ease-in-out infinite;
+}
 .cf-page-bg::before {
   content: '';
   position: fixed;

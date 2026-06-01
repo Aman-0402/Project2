@@ -29,12 +29,12 @@ const EMPTY: Profile = {
 // ── Data ──────────────────────────────────────────────────────────────────────
 
 const FAMILIES = [
-  { id: 'oud',      name: 'Oud',      arabic: 'عود',   desc: 'Deep, smoky, ancient resins',   bg: 'from-amber-950 via-stone-900 to-yellow-950',   accent: '#D4943A' },
-  { id: 'floral',   name: 'Floral',   arabic: 'زهور',  desc: 'Blooming petals, romantic',      bg: 'from-purple-950 via-rose-950 to-pink-950',     accent: '#C084FC' },
-  { id: 'musk',     name: 'Musk',     arabic: 'مسك',   desc: 'Clean, celestial, skin-close',   bg: 'from-slate-900 via-blue-950 to-indigo-950',    accent: '#93C5FD' },
-  { id: 'fresh',    name: 'Fresh',    arabic: 'نضارة', desc: 'Bright, airy, invigorating',     bg: 'from-emerald-950 via-teal-950 to-cyan-950',    accent: '#6EE7B7' },
-  { id: 'oriental', name: 'Oriental', arabic: 'شرقي',  desc: 'Exotic spices, warm amber',      bg: 'from-red-950 via-orange-950 to-amber-950',     accent: '#FCA5A5' },
-  { id: 'woody',    name: 'Woody',    arabic: 'خشب',   desc: 'Earthy warmth, forest depth',    bg: 'from-green-950 via-stone-900 to-lime-950',     accent: '#86EFAC' },
+  { id: 'oud',      name: 'Oud',      arabic: 'عود',   symbol: '◆', mood: 'Ancient · Smoky · Regal',     desc: 'Deep, smoky, ancient resins',   bg: 'from-amber-950 via-stone-900 to-yellow-950',   accent: '#D4943A' },
+  { id: 'floral',   name: 'Floral',   arabic: 'زهور',  symbol: '✿', mood: 'Romantic · Soft · Blooming',  desc: 'Blooming petals, romantic',      bg: 'from-purple-950 via-rose-950 to-pink-950',     accent: '#C084FC' },
+  { id: 'musk',     name: 'Musk',     arabic: 'مسك',   symbol: '◇', mood: 'Clean · Celestial · Bare',    desc: 'Clean, celestial, skin-close',   bg: 'from-slate-900 via-blue-950 to-indigo-950',    accent: '#93C5FD' },
+  { id: 'fresh',    name: 'Fresh',    arabic: 'نضارة', symbol: '◎', mood: 'Airy · Bright · Free',        desc: 'Bright, airy, invigorating',     bg: 'from-emerald-950 via-teal-950 to-cyan-950',    accent: '#6EE7B7' },
+  { id: 'oriental', name: 'Oriental', arabic: 'شرقي',  symbol: '✦', mood: 'Exotic · Spiced · Warm',      desc: 'Exotic spices, warm amber',      bg: 'from-red-950 via-orange-950 to-amber-950',     accent: '#FCA5A5' },
+  { id: 'woody',    name: 'Woody',    arabic: 'خشب',   symbol: '▲', mood: 'Earthy · Grounded · Wild',    desc: 'Earthy warmth, forest depth',    bg: 'from-green-950 via-stone-900 to-lime-950',     accent: '#86EFAC' },
 ]
 
 const FAMILY_NOTES: Record<string, { top: string[]; middle: string[]; base: string[] }> = {
@@ -374,41 +374,65 @@ export default function CreateFragranceClient() {
                   <h2 className="font-serif text-3xl text-white/90 mb-1">Choose Your Family</h2>
                   <p className="text-white/25 font-sans text-xs mb-8">The soul of your fragrance.</p>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                    {FAMILIES.map(f => (
-                      <button
-                        type="button"
-                        key={f.id}
-                        onClick={() => setProfile(p => ({ ...p, family: f.id, topNotes: [], middleNotes: [], baseNotes: [] }))}
-                        className={`relative overflow-hidden rounded-lg text-left p-4 h-32 transition-all duration-300 border backdrop-blur-sm ${
-                          profile.family === f.id
-                            ? 'border-[#C8A36A]/70 shadow-[0_0_32px_rgba(200,163,106,0.20)]'
-                            : 'border-white/[0.18] hover:border-[#C8A36A]/45 hover:shadow-[0_0_20px_rgba(200,163,106,0.12)]'
-                        }`}
-                      >
-                        <div className={`absolute inset-0 bg-gradient-to-br ${f.bg} transition-opacity duration-300 ${profile.family === f.id ? 'opacity-100' : 'opacity-80'}`} />
-                        <div
-                          className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden cf-arabic-bg"
-                          style={{ fontFamily: 'Arial, sans-serif', fontSize: '64px', color: f.accent, opacity: 0.10, direction: 'rtl' }}
-                          aria-hidden="true"
+                    {FAMILIES.map(f => {
+                      const selected = profile.family === f.id
+                      return (
+                        <motion.button
+                          type="button"
+                          key={f.id}
+                          onClick={() => setProfile(p => ({ ...p, family: f.id, topNotes: [], middleNotes: [], baseNotes: [] }))}
+                          whileHover={{ y: -5, scale: 1.025 }}
+                          whileTap={{ scale: 0.97 }}
+                          transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+                          className={`cf-family-card cf-family-${f.id}${selected ? ' cf-family-card--selected' : ''} relative overflow-hidden rounded-lg text-left p-4 h-36 border cursor-pointer ${
+                            selected
+                              ? 'border-[#C8A36A]/65'
+                              : 'border-white/[0.15] hover:border-[#C8A36A]/35'
+                          }`}
                         >
-                          {f.arabic}
-                        </div>
-                        <div className="relative z-10 flex flex-col h-full justify-between">
-                          <div>
-                            <p className="font-serif text-white/90 text-base leading-tight">{f.name}</p>
-                            <p className="text-white/30 text-[10px] font-sans mt-0.5 leading-tight">{f.desc}</p>
-                          </div>
-                          {profile.family === f.id && (
-                            <div className="w-4 h-4 rounded-full border border-[#B08D57] flex items-center justify-center self-start">
-                              <div className="w-2 h-2 rounded-full bg-[#B08D57]" />
-                            </div>
+                          {/* Gradient bg */}
+                          <div className={`absolute inset-0 bg-gradient-to-br ${f.bg} transition-opacity duration-500 ${selected ? 'opacity-100' : 'opacity-75'}`} />
+
+                          {/* Shimmer sweep */}
+                          <div className="cf-card-shimmer" aria-hidden="true" />
+
+                          {/* Arabic watermark */}
+                          <div className="cf-arabic-wm" aria-hidden="true">{f.arabic}</div>
+
+                          {/* Selected pulse ring */}
+                          {selected && (
+                            <div className="cf-selected-ring absolute inset-0 rounded-lg pointer-events-none" />
                           )}
-                        </div>
-                        {profile.family === f.id && (
-                          <div className="absolute inset-0 rounded ring-1 ring-[#B08D57]/50 ring-inset pointer-events-none" />
-                        )}
-                      </button>
-                    ))}
+
+                          {/* Content */}
+                          <div className="relative z-10 flex flex-col h-full justify-between">
+                            <div>
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="font-serif text-white/95 text-base leading-tight">{f.name}</span>
+                                <span className="cf-family-symbol">{f.symbol}</span>
+                              </div>
+                              <p className="cf-family-mood">{f.mood}</p>
+                              <p className="text-white/35 text-[10px] font-sans leading-snug">{f.desc}</p>
+                            </div>
+                            <AnimatePresence>
+                              {selected && (
+                                <motion.div
+                                  initial={{ scale: 0, opacity: 0 }}
+                                  animate={{ scale: 1, opacity: 1 }}
+                                  exit={{ scale: 0, opacity: 0 }}
+                                  transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+                                  className="cf-check-circle"
+                                >
+                                  <svg viewBox="0 0 16 16" className="w-2.5 h-2.5" fill="none" stroke="currentColor" strokeWidth={2.5}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 8.5l3.5 3.5 6.5-7" />
+                                  </svg>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </div>
+                        </motion.button>
+                      )
+                    })}
                   </div>
                 </div>
               )}
