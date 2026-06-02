@@ -801,10 +801,10 @@
     radial-gradient(ellipse 50% 30% at 10% 80%, rgba(198,140,60,0.08) 0%, transparent 55%),
     linear-gradient(160deg, #EAE0D2 0%, #E4D8C6 40%, #E2D5C0 70%, #E8DDD0 100%);
 }
-.cf-intensity-glow-0 { background: radial-gradient(ellipse 60% 80% at 0% 50%, rgba(200,163,106,0.15) 0%, transparent 70%); }
-.cf-intensity-glow-1 { background: radial-gradient(ellipse 60% 80% at 0% 50%, rgba(200,163,106,0.25) 0%, transparent 70%); }
-.cf-intensity-glow-2 { background: radial-gradient(ellipse 60% 80% at 0% 50%, rgba(200,163,106,0.35) 0%, transparent 70%); }
-.cf-intensity-glow-3 { background: radial-gradient(ellipse 60% 80% at 0% 50%, rgba(200,163,106,0.50) 0%, transparent 70%); }
+.cf-intensity-glow-0 { background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(255,255,255,0.06) 0%, transparent 70%); }
+.cf-intensity-glow-1 { background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(255,255,255,0.07) 0%, transparent 70%); }
+.cf-intensity-glow-2 { background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(255,255,255,0.08) 0%, transparent 70%); }
+.cf-intensity-glow-3 { background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(255,255,255,0.10) 0%, transparent 70%); }
 .cf-note-bar-top   { background: rgba(252,211,77,0.70); }
 .cf-note-bar-heart { background: rgba(192,132,252,0.60); }
 .cf-note-bar-base  { background: rgba(200,163,106,0.70); }

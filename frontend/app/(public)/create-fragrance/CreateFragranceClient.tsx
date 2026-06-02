@@ -913,12 +913,12 @@ export default function CreateFragranceClient() {
                             transition={{ type: 'spring', stiffness: 250, damping: 20 }}
                             className={`w-full text-left relative overflow-hidden border transition-all duration-500 ${
                               sel
-                                ? 'border-[#C8A36A]/55 shadow-[0_4px_24px_rgba(200,163,106,0.18)]'
+                                ? 'border-[#C8A36A]/80 shadow-[0_4px_32px_rgba(0,0,0,0.40),_0_0_0_1px_rgba(200,163,106,0.30)]'
                                 : 'border-brown/12 hover:border-gold/30'
                             }`}
                           >
                             {/* Card bg */}
-                            <div className={`absolute inset-0 bg-gradient-to-br ${int.gradient} transition-opacity duration-500 ${sel ? 'opacity-100' : 'opacity-40'}`} />
+                            <div className={`absolute inset-0 bg-gradient-to-br ${int.gradient} transition-opacity duration-500 ${sel ? 'opacity-100' : 'opacity-85'}`} />
                             {/* Top rim */}
                             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
                             {/* Glow */}
@@ -936,12 +936,12 @@ export default function CreateFragranceClient() {
                                       />
                                     ))}
                                   </div>
-                                  <p className={`font-serif text-xl leading-tight transition-colors ${sel ? 'text-white/92' : 'text-white/45'}`}>{int.label}</p>
+                                  <p className={`font-serif text-xl leading-tight transition-colors ${sel ? 'text-white/95' : 'text-white/80'}`}>{int.label}</p>
                                 </div>
-                                <p className={`text-[10px] font-sans uppercase tracking-[0.16em] mb-1.5 transition-colors ${sel ? 'text-[#C8A36A]/72' : 'text-white/22'}`}>{int.sublabel}</p>
-                                <p className={`text-xs font-sans leading-relaxed transition-colors ${sel ? 'text-white/55' : 'text-white/22'}`}>{int.desc}</p>
+                                <p className={`text-[10px] font-sans uppercase tracking-[0.16em] mb-1.5 transition-colors ${sel ? 'text-[#C8A36A]/80' : 'text-[#C8A36A]/65'}`}>{int.sublabel}</p>
+                                <p className={`text-xs font-sans leading-relaxed transition-colors ${sel ? 'text-white/65' : 'text-white/55'}`}>{int.desc}</p>
                               </div>
-                              <span className={`text-[10px] font-sans uppercase tracking-[0.12em] whitespace-nowrap transition-colors ${sel ? 'text-[#C8A36A]/55' : 'text-white/18'}`}>
+                              <span className={`text-[10px] font-sans uppercase tracking-[0.12em] whitespace-nowrap transition-colors ${sel ? 'text-[#C8A36A]/70' : 'text-white/55'}`}>
                                 {int.sillage}
                               </span>
                             </div>
