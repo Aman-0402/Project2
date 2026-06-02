@@ -15,7 +15,7 @@ const NAV_LINKS = [
 ]
 
 // Pages with dark backgrounds — keep light text + use dark glass when scrolled
-const DARK_BG_PAGES = [ROUTES.createFragrance]
+const DARK_BG_PAGES: string[] = []
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled]     = useState(false)
