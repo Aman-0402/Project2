@@ -10,37 +10,37 @@ import type { ProductListItem, Category } from '@/types'
 // Visual identity per collection slug
 const COLLECTION_META: Record<string, { gradient: string; tagline: string; icon: string; order: number }> = {
   attar: {
-    gradient: 'linear-gradient(135deg, #1C0A05 0%, #3B1A0A 50%, #5C2D12 100%)',
+    gradient: 'linear-gradient(135deg, #5a3927 0%, #3d2518 50%, #2b1a12 100%)',
     tagline: 'Pure concentrated fragrance oils',
     icon: '◉',
     order: 1,
   },
   perfume: {
-    gradient: 'linear-gradient(135deg, #0D0810 0%, #2A1530 50%, #4A2050 100%)',
+    gradient: 'linear-gradient(135deg, #6a3f58 0%, #4d2d40 50%, #3a2230 100%)',
     tagline: 'Premium long-lasting sprays',
     icon: '◈',
     order: 2,
   },
   agarbatti: {
-    gradient: 'linear-gradient(135deg, #080C0A 0%, #142218 50%, #1E3524 100%)',
+    gradient: 'linear-gradient(135deg, #476754 0%, #354e3f 50%, #21352a 100%)',
     tagline: 'Sacred incense sticks',
     icon: '◇',
     order: 3,
   },
   'room-fragrance': {
-    gradient: 'linear-gradient(135deg, #0C0D10 0%, #1A2030 50%, #253048 100%)',
+    gradient: 'linear-gradient(135deg, #465a6d 0%, #334455 50%, #202d38 100%)',
     tagline: 'Transform your living space',
     icon: '◆',
     order: 4,
   },
   'car-perfume': {
-    gradient: 'linear-gradient(135deg, #0A0A0A 0%, #1C1C1C 50%, #2E2E2E 100%)',
+    gradient: 'linear-gradient(135deg, #3c3a3a 0%, #2d2b2b 50%, #1f1d1d 100%)',
     tagline: 'Luxury for every journey',
     icon: '◑',
     order: 5,
   },
   'car-freshener': {
-    gradient: 'linear-gradient(135deg, #080C06 0%, #14200E 50%, #1E3016 100%)',
+    gradient: 'linear-gradient(135deg, #3d5f38 0%, #2d4829 50%, #1e301d 100%)',
     tagline: 'Fresh crisp drive experience',
     icon: '◐',
     order: 6,
@@ -49,7 +49,7 @@ const COLLECTION_META: Record<string, { gradient: string; tagline: string; icon:
 
 function getFallbackMeta(slug: string) {
   return COLLECTION_META[slug] ?? {
-    gradient: 'linear-gradient(135deg, #1C1008 0%, #3B2410 50%, #5C3820 100%)',
+    gradient: 'linear-gradient(135deg, #5a3927 0%, #3d2518 50%, #2b1a12 100%)',
     tagline: 'Explore our collection',
     icon: '◎',
   }
@@ -80,7 +80,7 @@ export default function CollectionsClient() {
     : catProducts
 
   return (
-    <div className="min-h-screen bg-[#0E0704]">
+    <div className="min-h-screen bg-[#f5eee5]">
 
       {/* Hero */}
       <div className="collections-hero relative overflow-hidden flex items-center justify-center">
@@ -129,7 +129,7 @@ export default function CollectionsClient() {
               {activecat ? activecat.name : 'Collections'}
             </h1>
             <motion.div className="collections-hero-divider w-16 h-px mx-auto" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 0.4 }} />
-            <motion.p className="font-sans text-sm text-ivory/35 mt-5 tracking-widest uppercase"
+            <motion.p className="font-sans text-sm text-ivory/60 mt-5 tracking-widest uppercase"
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }}>
               {activecat
                 ? `${filtered.length} ${filtered.length === 1 ? 'Product' : 'Products'}`
@@ -149,7 +149,7 @@ export default function CollectionsClient() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4 }}
-            className="bg-[#0E0704] py-16 md:py-20 px-4 md:px-8 lg:px-16"
+            className="bg-[#f5eee5] py-16 md:py-20 px-4 md:px-8 lg:px-16"
           >
             <div className="container-luxury">
               {isLoading ? (
@@ -189,8 +189,8 @@ export default function CollectionsClient() {
                         {/* Content */}
                         <div className="absolute inset-0 p-7 flex flex-col justify-between">
                           <div className="flex items-start justify-between">
-                            <span className="text-gold/30 text-2xl font-serif select-none">{meta.icon}</span>
-                            <span className="font-sans text-[9px] text-gold/40 uppercase tracking-luxury border border-gold/15 px-2 py-0.5 rounded-sm">
+                            <span className="text-white/50 text-2xl font-serif select-none">{meta.icon}</span>
+                            <span className="font-sans text-[9px] text-white/60 uppercase tracking-luxury border border-white/20 px-2 py-0.5 rounded-sm">
                               {count} {count === 1 ? 'product' : 'products'}
                             </span>
                           </div>
@@ -198,7 +198,7 @@ export default function CollectionsClient() {
                             <h2 className="font-serif text-2xl text-ivory leading-tight mb-1.5 group-hover:text-gold transition-colors duration-300">
                               {cat.name}
                             </h2>
-                            <p className="font-sans text-xs text-ivory/35 leading-relaxed">
+                            <p className="font-sans text-xs text-white/60 leading-relaxed">
                               {meta.tagline}
                             </p>
                             <div className="flex items-center gap-2 mt-4 opacity-0 group-hover:opacity-100 transition-all duration-400 translate-y-1 group-hover:translate-y-0">

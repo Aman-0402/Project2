@@ -96,8 +96,11 @@ export default function AdminDashboardPage() {
   const [stats, setStats] = useState<Stats>({ total: 0, active: 0, featured: 0, categories: 0, newInquiries: 0 })
   const [recentProducts, setRecentProducts] = useState<Product[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [isRefreshing, setIsRefreshing] = useState(false)
 
-  useEffect(() => {
+  function fetchData(silent = false) {
+    if (!silent) setIsLoading(true)
+    else setIsRefreshing(true)
     Promise.all([
       productService.adminGetAll(),
       categoryService.getAll(),
@@ -113,8 +116,10 @@ export default function AdminDashboardPage() {
         newInquiries: inquiries.filter((i) => i.status === 'new').length,
       })
       setRecentProducts(products.slice(0, 5))
-    }).finally(() => setIsLoading(false))
-  }, [])
+    }).finally(() => { setIsLoading(false); setIsRefreshing(false) })
+  }
+
+  useEffect(() => { fetchData() }, [])
 
   const today = new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' })
 
@@ -139,7 +144,23 @@ export default function AdminDashboardPage() {
           <p className="label-luxury mb-1">Welcome back</p>
           <h1 className="font-serif text-3xl text-brown">{user?.username ?? 'Admin'}</h1>
         </div>
-        <p className="font-sans text-xs text-brown/35 uppercase tracking-luxury hidden sm:block">{today}</p>
+        <div className="flex items-center gap-4">
+          <p className="font-sans text-xs text-brown/35 uppercase tracking-luxury hidden sm:block">{today}</p>
+          <button
+            type="button"
+            onClick={() => fetchData(true)}
+            disabled={isRefreshing}
+            title="Refresh dashboard data"
+            className="inline-flex items-center gap-1.5 text-brown/40 hover:text-gold border border-brown/20 hover:border-gold/40 px-3 py-1.5 text-[10px] font-sans uppercase tracking-luxury transition-all duration-300 disabled:opacity-50"
+          >
+            <svg
+              viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}
+              className={`w-3 h-3 ${isRefreshing ? 'animate-spin' : ''}`}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            {isRefreshing ? 'Refreshing...' : 'Refresh'}
+          </button>
+        </div>
       </motion.div>
 
       {/* Stat cards */}
