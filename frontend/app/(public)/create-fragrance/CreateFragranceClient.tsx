@@ -441,11 +441,11 @@ function RightPanel({ profile, step }: { profile: Profile; step: number }) {
                 transition={{ delay: i * 0.12, type: 'spring', stiffness: 300 }}
                 className={`absolute ${pos.top} ${pos.side} flex flex-col ${pos.align} gap-1 pointer-events-none`}
               >
-                <div className="w-5 h-5 border border-[#C8A36A]/22 flex items-center justify-center">
-                  <span className="text-[#C8A36A]/40 text-[7px]">{pos.icon}</span>
+                <div className="w-5 h-5 border border-[#C8A36A]/45 flex items-center justify-center">
+                  <span className="text-[#C8A36A]/80 text-[7px]">{pos.icon}</span>
                 </div>
-                <p className="text-[#C8A36A]/65 text-[7px] font-sans uppercase tracking-[0.18em] leading-none">{note}</p>
-                <p className="text-white/18 text-[6px] font-sans">{pos.layer}</p>
+                <p className="text-[#C8A36A] text-[7px] font-sans uppercase tracking-[0.18em] leading-none">{note}</p>
+                <p className="text-white/55 text-[6px] font-sans">{pos.layer}</p>
               </motion.div>
             )
           })}
@@ -461,17 +461,17 @@ function RightPanel({ profile, step }: { profile: Profile; step: number }) {
           <AnimatePresence mode="wait">
             {profile.fragranceName ? (
               <motion.div key="named" initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }}>
-                <p className="font-serif text-white/75 text-base italic mb-0.5">{profile.fragranceName}</p>
-                <p className="text-[#C8A36A]/30 text-[8px] font-sans uppercase tracking-[0.28em]">M.M ATTARWALA</p>
+                <p className="font-serif text-white/90 text-base italic mb-0.5">{profile.fragranceName}</p>
+                <p className="text-[#C8A36A]/70 text-[8px] font-sans uppercase tracking-[0.28em]">M.M ATTARWALA</p>
               </motion.div>
             ) : selGender ? (
               <motion.div key="gender" initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }}>
-                <p className="text-white/28 text-[9px] font-sans uppercase tracking-[0.22em] mb-0.5">{selGender.label} · {selGender.mood.split('·')[0].trim()}</p>
-                <p className="text-[#C8A36A]/25 text-[7px] font-sans uppercase tracking-[0.28em]">M.M ATTARWALA</p>
+                <p className="text-white/72 text-[9px] font-sans uppercase tracking-[0.22em] mb-0.5">{selGender.label} · {selGender.mood.split('·')[0].trim()}</p>
+                <p className="text-[#C8A36A]/60 text-[7px] font-sans uppercase tracking-[0.28em]">M.M ATTARWALA</p>
               </motion.div>
             ) : (
               <motion.p key="default" initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                className="text-white/18 text-[9px] font-sans uppercase tracking-[0.2em]">
+                className="text-white/55 text-[9px] font-sans uppercase tracking-[0.2em]">
                 Your Signature Fragrance
               </motion.p>
             )}
@@ -486,43 +486,43 @@ function RightPanel({ profile, step }: { profile: Profile; step: number }) {
           className="cf-preview-panel-glass cf-preview-panel border p-5 space-y-3.5">
           <div className="flex items-center gap-2 mb-1">
             <div className="w-4 h-px bg-[#C8A36A]/40" />
-            <p className="text-[#C8A36A]/55 text-[8px] font-sans uppercase tracking-[0.25em]">Fragrance DNA</p>
+            <p className="text-[#C8A36A]/90 text-[8px] font-sans uppercase tracking-[0.25em]">Fragrance DNA</p>
           </div>
           {selPersonality && (
             <div>
-              <p className="text-white/20 text-[8px] font-sans uppercase tracking-[0.18em] mb-1">Personality</p>
-              <p className="font-serif text-white/82 text-sm leading-tight">{selPersonality.name}</p>
-              <p className="text-white/30 text-[9px] font-sans mt-0.5">{selPersonality.mood}</p>
+              <p className="text-white/55 text-[8px] font-sans uppercase tracking-[0.18em] mb-1">Personality</p>
+              <p className="font-serif text-white/95 text-sm leading-tight">{selPersonality.name}</p>
+              <p className="text-white/65 text-[9px] font-sans mt-0.5">{selPersonality.mood}</p>
             </div>
           )}
           {selImpression && step >= 4 && (
             <div>
-              <div className="w-full h-px bg-[#C8A36A]/08 mb-3" />
-              <p className="text-white/20 text-[8px] font-sans uppercase tracking-[0.18em] mb-1">Impression</p>
-              <p className="text-white/68 text-xs font-sans">{selImpression.label}</p>
+              <div className="w-full h-px bg-[#C8A36A]/20 mb-3" />
+              <p className="text-white/55 text-[8px] font-sans uppercase tracking-[0.18em] mb-1">Impression</p>
+              <p className="text-white/85 text-xs font-sans">{selImpression.label}</p>
             </div>
           )}
           {selFamily && step >= 5 && (
             <div>
-              <div className="w-full h-px bg-[#C8A36A]/08 mb-3" />
-              <p className="text-white/20 text-[8px] font-sans uppercase tracking-[0.18em] mb-1">Family</p>
-              <p className="text-white/68 text-xs font-sans">{selFamily.name}</p>
+              <div className="w-full h-px bg-[#C8A36A]/20 mb-3" />
+              <p className="text-white/55 text-[8px] font-sans uppercase tracking-[0.18em] mb-1">Family</p>
+              <p className="text-white/85 text-xs font-sans">{selFamily.name}</p>
             </div>
           )}
           {selClimate && step >= 7 && (
             <div>
-              <div className="w-full h-px bg-[#C8A36A]/08 mb-3" />
-              <p className="text-white/20 text-[8px] font-sans uppercase tracking-[0.18em] mb-1">Climate</p>
-              <p className="text-white/68 text-xs font-sans">{selClimate.label}</p>
+              <div className="w-full h-px bg-[#C8A36A]/20 mb-3" />
+              <p className="text-white/55 text-[8px] font-sans uppercase tracking-[0.18em] mb-1">Climate</p>
+              <p className="text-white/85 text-xs font-sans">{selClimate.label}</p>
             </div>
           )}
           {allNotes.length > 0 && step >= 8 && (
             <div>
-              <div className="w-full h-px bg-[#C8A36A]/08 mb-3" />
-              <p className="text-white/20 text-[8px] font-sans uppercase tracking-[0.18em] mb-2">Notes</p>
+              <div className="w-full h-px bg-[#C8A36A]/20 mb-3" />
+              <p className="text-white/55 text-[8px] font-sans uppercase tracking-[0.18em] mb-2">Notes</p>
               <div className="flex flex-wrap gap-1">
                 {allNotes.map(n => (
-                  <span key={n} className="px-1.5 py-0.5 border border-[#C8A36A]/18 text-white/45 text-[8px] font-sans">{n}</span>
+                  <span key={n} className="px-1.5 py-0.5 border border-[#C8A36A]/35 text-white/75 text-[8px] font-sans">{n}</span>
                 ))}
               </div>
             </div>
@@ -534,7 +534,7 @@ function RightPanel({ profile, step }: { profile: Profile; step: number }) {
       <div className="cf-preview-panel-glass cf-preview-panel border p-5">
         <div className="flex items-center gap-2 mb-4">
           <div className="w-4 h-px bg-[#C8A36A]/40" />
-          <p className="text-[#C8A36A]/55 text-[8px] font-sans uppercase tracking-[0.25em]">Projection</p>
+          <p className="text-[#C8A36A]/90 text-[8px] font-sans uppercase tracking-[0.25em]">Projection</p>
         </div>
         <div className="flex items-end justify-center gap-2.5 mb-3">
           {INTENSITIES.map((intens, i) => (
@@ -557,8 +557,8 @@ function RightPanel({ profile, step }: { profile: Profile; step: number }) {
             </div>
           ))}
         </div>
-        <p className="text-white/40 text-[9px] font-sans uppercase tracking-[0.15em] text-center">{selIntensity.label}</p>
-        <p className="text-white/20 text-[8px] font-sans text-center mt-0.5">{selIntensity.sillage}</p>
+        <p className="text-white/80 text-[9px] font-sans uppercase tracking-[0.15em] text-center">{selIntensity.label}</p>
+        <p className="text-white/55 text-[8px] font-sans text-center mt-0.5">{selIntensity.sillage}</p>
       </div>
 
     </div>
@@ -1073,17 +1073,20 @@ export default function CreateFragranceClient() {
             <div className="flex items-center justify-between mt-12 pt-6 border-t border-brown/10">
               {step > 1 ? (
                 <motion.button type="button" onClick={() => go(step - 1)}
-                  className="group flex items-center gap-2 text-[#5A3927] text-[11px] font-sans uppercase tracking-[0.16em] hover:text-brown transition-colors duration-300">
-                  <motion.span
-                    className="inline-block"
+                  whileHover={{ x: -2 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+                  className="group relative flex items-center gap-3 px-5 py-2.5 border border-brown/18 text-[#5A3927] text-[10px] font-sans uppercase tracking-[0.20em] hover:border-gold/45 hover:text-brown transition-all duration-400 overflow-hidden">
+                  {/* Hover fill */}
+                  <span className="absolute inset-0 bg-gold/[0.06] opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
+                  {/* Animated arrow */}
+                  <motion.svg viewBox="0 0 16 16" className="relative z-10 w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={1.8}
                     animate={{ x: 0 }}
-                    whileHover={{ x: -4 }}
+                    whileHover={{ x: -3 }}
                     transition={{ type: 'spring', stiffness: 400, damping: 20 }}>
-                    ←
-                  </motion.span>
-                  Back
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 8H3M7 4l-4 4 4 4" />
+                  </motion.svg>
+                  <span className="relative z-10">Back</span>
                 </motion.button>
-
               ) : <span />}
 
               {step < 9 ? (
