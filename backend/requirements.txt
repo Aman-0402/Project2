@@ -31,6 +31,7 @@ filetype==1.2.0
 # Production
 gunicorn==22.0.0
 whitenoise==6.7.0
+sentry-sdk[django]==2.8.0
 
 # Development only — install separately: pip install pylint autopep8
 # pylint==3.2.5
