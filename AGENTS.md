@@ -88,31 +88,52 @@ All brand constants live in `frontend/constants/config.ts`:
 
 ```
 backend/
-├── api/
-│   ├── models.py      # Product, Category, SiteSettings, CustomFragranceInquiry
-│   ├── views.py       # All API views
-│   ├── serializers.py
-│   ├── urls.py        # URL routing
-│   └── management/commands/seed_data.py  # Seeds categories + admin user
-├── project/
-│   └── settings.py    # Django settings — reads from .env
-└── requirements.txt
+├── config/
+│   ├── settings/
+│   │   ├── base.py          # Shared settings — JWT, DRF, throttling, GZip
+│   │   ├── development.py   # Debug=True, CORS_ALLOW_ALL_ORIGINS
+│   │   └── production.py    # SSL, HSTS, Cloudinary storage, Sentry init
+│   ├── urls.py              # Root URL config
+│   └── wsgi.py
+├── apps/
+│   ├── authentication/      # Login, logout, token refresh, change-password
+│   ├── products/            # Product CRUD + image upload (filetype MIME validation)
+│   ├── categories/          # Category + subcategory management
+│   ├── site_settings/       # Key/value site settings (8-key allowlist on write)
+│   └── inquiries/           # Custom fragrance requests (rate-limited public submit)
+├── utils/
+│   ├── response.py          # success_response(), error_response(), etc.
+│   └── exceptions.py        # Custom DRF exception handler (no stack trace leaks)
+├── tests/                   # test_auth.py, test_products.py, test_categories.py
+├── requirements.txt
+└── Dockerfile
 ```
 
 ### Models
 
 | Model | Key Fields |
 |-------|-----------|
-| `Category` | name, slug |
-| `Product` | name, slug, category, price_inr, price_usd, images (up to 4), is_active, is_featured |
-| `SiteSettings` | key, value (flat key/value store) |
-| `CustomFragranceInquiry` | name, phone, fragrance_details, status |
+| `Category` | name, slug (auto-generated) |
+| `SubCategory` | name, slug, category (FK) |
+| `Product` | name, slug, category (FK), subcategories (M2M), price, volume_prices (JSON), images (JSON, max 4), fragrance_notes (JSON), is_active, is_featured, image_layer_effect |
+| `SiteSetting` | key, value (flat EAV store) |
+| `FragranceRequest` | customer_name, customer_phone (validated), notes (JSON), status |
 
 ### Auth
 
-- SimpleJWT — access + refresh tokens
-- Admin-only: `IsAdminUser` permission on all `/api/admin/*` endpoints
-- Frontend stores JWT in memory (AuthContext), refresh token in httpOnly cookie
+- SimpleJWT — access (60 min) + refresh (7 days) tokens with rotation + blacklist
+- `IsAdminUser` permission: `is_authenticated AND is_staff`
+- Frontend stores tokens in cookies with `secure: true`, `sameSite: strict`
+- Auto-refresh on 401 via Axios interceptor — redirects to `/admin/login` on failure
+- Login rate-limited: **5 requests/minute**
+
+### Security Conventions
+
+- **Django admin:** URL is `/_panel/mma-internal/` — not `/admin/` or `/django-admin/`
+- **Image uploads:** `filetype` library validates actual file bytes — not the `Content-Type` header
+- **Inquiry endpoint:** Rate-limited **3 requests/minute** — public but throttled
+- **Settings write:** Key allowlist enforced — only 8 known keys accepted
+- **SECRET_KEY:** Raises `RuntimeError` if unset in non-dev mode
 
 ---
 
@@ -174,32 +195,35 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ### Public
 
 ```
-GET  /api/products/              List active products (?category=slug)
-GET  /api/products/featured/     Featured products
+GET  /api/health/                Health check (Render uses this)
+GET  /api/products/              Active products — paginated (24/page, ?category=slug, ?page=N)
+GET  /api/products/featured/     Featured products (max 8, unpaginated)
 GET  /api/products/{slug}/       Product detail
-GET  /api/categories/            All categories
-GET  /api/settings/              Site settings
-POST /api/inquiries/             Submit fragrance inquiry
+GET  /api/categories/            All categories (with product_count, subcategories)
+GET  /api/settings/              Site settings (key:value dict)
+POST /api/inquiries/             Submit fragrance inquiry [rate limit: 3/min]
 ```
 
 ### Auth
 
 ```
-POST /api/auth/login/
+POST /api/auth/login/            Login [rate limit: 5/min]
 POST /api/auth/token/refresh/
-POST /api/auth/logout/
+POST /api/auth/logout/           Blacklists refresh token
 GET  /api/auth/me/
+POST /api/auth/change-password/
 ```
 
-### Admin (JWT required)
+### Admin (JWT required — `is_staff`)
 
 ```
-GET|POST              /api/admin/products/
+GET|POST              /api/admin/products/         Paginated (50/page)
 GET|PUT|PATCH|DELETE  /api/admin/products/{id}/
+POST                  /api/admin/upload-image/     MIME-validated image upload
 POST                  /api/categories/
 PUT|DELETE            /api/admin/categories/{id}/
-PUT                   /api/admin/settings/
-GET                   /api/admin/inquiries/
+PUT                   /api/admin/settings/         Key allowlist enforced
+GET                   /api/admin/inquiries/        Paginated (25/page, ?status=new|contacted|completed)
 GET|PATCH|DELETE      /api/admin/inquiries/{id}/
 ```
 
@@ -210,10 +234,14 @@ GET|PATCH|DELETE      /api/admin/inquiries/{id}/
 1. **No customer accounts** — admin-only, never add customer auth
 2. **WhatsApp over cart** — all conversions go through WhatsApp (`buildWhatsAppUrl()`)
 3. **Currency via timezone** — IST offset → INR, else USD. No IP APIs.
-4. **Images local in dev** — `media/products/` served by Django; Cloudinary for production
+4. **Images local in dev** — `media/products/` served by Django; Cloudinary active in production via `DEFAULT_FILE_STORAGE`
 5. **`use client`** — mark components client-side only if they use hooks/browser APIs
 6. **Framer Motion** — used for nav animations; avoid adding heavy motion to non-nav components unless intentional
-7. **Admin route guard** — all `/admin/*` pages check `AuthContext` and redirect to `/admin/login` if unauthenticated
+7. **Admin route guard** — `frontend/middleware.ts` protects all `/admin/*` — checks cookie existence; API interceptor handles 401
+8. **Throttling** — login: 5/min, inquiry create: 3/min, anon global: 200/day — do not remove these
+9. **MIME validation** — image uploads use `filetype.guess(header)` on actual bytes — never trust `file.content_type`
+10. **Settings allowlist** — `site_settings/serializers.py` has `ALLOWED_SETTING_KEYS` — add new keys there before using them
+11. **Test setUp pattern** — admin tests use `client.force_authenticate(user=self.admin)` not API login (avoids throttle in test suite)
 
 ---
 
@@ -221,3 +249,6 @@ GET|PATCH|DELETE      /api/admin/inquiries/{id}/
 
 URL: `http://localhost:3000/admin/login`
 Username: `admin` | Password: `admin123`
+
+> **Django built-in admin** (database-level): `http://localhost:8000/_panel/mma-internal/`  
+> Same credentials. Change password before production go-live.

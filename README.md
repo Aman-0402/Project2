@@ -11,9 +11,12 @@ Luxury perfume brand showcase website for M.M Attarwala, Vadodara, Gujarat. Admi
 | Frontend | Next.js 14 (App Router, TypeScript) |
 | Styling | Tailwind CSS + Framer Motion |
 | Backend | Django 5 + Django REST Framework |
-| Auth | SimpleJWT (admin-only) |
-| Database | MySQL 8 |
-| Images | Local filesystem (media/products/) |
+| Auth | SimpleJWT (admin-only, rate-limited) |
+| Database | MySQL 8 (with performance indexes) |
+| Images | Cloudinary (production) / Local filesystem (dev) |
+| File Validation | `filetype` — byte-level MIME detection |
+| Error Tracking | Sentry (production) |
+| CI/CD | GitHub Actions |
 | Currency | Auto-detect INR/USD via timezone offset |
 | Frontend Deploy | Vercel |
 | Backend Deploy | Render / VPS (Docker) |
@@ -27,7 +30,9 @@ Project2/
 ├── frontend/          # Next.js 14 app
 ├── backend/           # Django REST API
 ├── assets/            # Design assets
-└── docs/              # Architecture docs
+├── docs/              # Architecture docs
+├── Report.md          # Security & scalability audit report
+└── .github/workflows/ # CI/CD — GitHub Actions
 ```
 
 ---
@@ -101,7 +106,9 @@ Navigate to `http://localhost:3000/admin/login`
 | Username | `admin` |
 | Password | `admin123` |
 
-> **Change this password before deploying to production.**
+> **Change this password before deploying to production** via `/admin/change-password`.
+
+Django built-in admin (database-level): `http://localhost:8000/_panel/mma-internal/`
 
 ---
 
@@ -145,21 +152,23 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ### Public Endpoints
 
 ```
-GET  /api/products/              Active products (filter: ?category=slug)
-GET  /api/products/featured/     Featured products for homepage
+GET  /api/health/                Health check → {"status": "ok"}
+GET  /api/products/              Active products — paginated (filter: ?category=slug&page=N)
+GET  /api/products/featured/     Featured products for homepage (max 8)
 GET  /api/products/{slug}/       Product detail
-GET  /api/categories/            All categories
+GET  /api/categories/            All categories (with product count)
 GET  /api/settings/              Site settings (key:value)
-POST /api/inquiries/             Submit custom fragrance request
+POST /api/inquiries/             Submit custom fragrance request [3/min rate limit]
 ```
 
 ### Auth Endpoints
 
 ```
-POST /api/auth/login/            Login → {access, refresh, user}
+POST /api/auth/login/            Login → {access, refresh, user} [5/min rate limit]
 POST /api/auth/token/refresh/    Refresh token
 POST /api/auth/logout/           Logout (blacklists token)
 GET  /api/auth/me/               Current admin user (JWT required)
+POST /api/auth/change-password/  Change password (JWT required)
 ```
 
 ### Admin Endpoints (JWT required)
@@ -232,10 +241,18 @@ Body:     Poppins (clean sans-serif)
 1. Push to GitHub
 2. New Web Service → connect repo
 3. Render auto-detects `render.yaml`
-4. Set the secret env vars in Render dashboard (DB, Cloudinary, CORS)
-5. Deploy
+4. Set secret env vars in Render dashboard:
+   - `SECRET_KEY` (required — app refuses to start without it)
+   - `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_HOST`
+   - `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`
+   - `CORS_ALLOWED_ORIGINS` (your Vercel URL)
+   - `SENTRY_DSN` (optional — from sentry.io project)
+5. **Upgrade plan from free to Starter** — free tier has no persistent disk and spins down
+6. Deploy
 
 See `backend/.env.production.example` and `frontend/.env.production.example` for all required production variables.
+
+> **Health check:** Render monitors `GET /api/health/` — configure this in the Render dashboard under Health & Alerts.
 
 ---
 
@@ -243,10 +260,12 @@ See `backend/.env.production.example` and `frontend/.env.production.example` for
 
 ```bash
 cd backend
-venv/Scripts/python manage.py test tests --verbosity=2
+venv\Scripts\python manage.py test tests --verbosity=2
 ```
 
 21 tests — auth (5), products (9), categories (7).
+
+Tests run automatically on every push to `main` via GitHub Actions (`.github/workflows/ci.yml`).
 
 ---
 
