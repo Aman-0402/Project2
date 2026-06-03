@@ -3,12 +3,15 @@ from rest_framework.permissions import AllowAny
 from apps.authentication.permissions import IsAdminUser
 from utils.response import success_response, error_response
 from .models import SiteSetting
-from .serializers import SiteSettingSerializer, SiteSettingsBulkSerializer
+from .serializers import SiteSettingSerializer, SiteSettingsBulkSerializer, ALLOWED_SETTING_KEYS
+
+# Keys excluded from the public GET /api/settings/ response
+_PRIVATE_SETTING_KEYS: frozenset[str] = frozenset()
 
 
 class SiteSettingsView(APIView):
     """
-    GET /api/settings/   — public, returns all key-value pairs as flat dict
+    GET /api/settings/   — public, returns allowed key-value pairs as flat dict
     PUT /api/admin/settings/ — admin, bulk update settings
     """
 
@@ -18,7 +21,8 @@ class SiteSettingsView(APIView):
         return [AllowAny()]
 
     def get(self, request):
-        settings = SiteSetting.objects.all()
+        # Public endpoint: only expose keys in the known allowlist
+        settings = SiteSetting.objects.filter(key__in=ALLOWED_SETTING_KEYS)
         data = {s.key: s.value for s in settings}
         return success_response(data=data)
 

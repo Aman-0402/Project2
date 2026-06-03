@@ -1,5 +1,14 @@
 """Development settings — extends base.py."""
+import os
 from .base import *  # noqa
+
+# Guard: refuse to load development settings in a production-like environment
+_dsm = os.environ.get('DJANGO_SETTINGS_MODULE', '')
+if _dsm and not _dsm.endswith('development') and os.environ.get('DJANGO_ENV') != 'development':
+    raise RuntimeError(
+        f"development.py loaded but DJANGO_SETTINGS_MODULE='{_dsm}'. "
+        "Set DJANGO_ENV=development or fix DJANGO_SETTINGS_MODULE."
+    )
 
 DEBUG = True
 

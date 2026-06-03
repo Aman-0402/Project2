@@ -43,8 +43,10 @@ class ProductListView(APIView):
         category_slug = request.query_params.get('category')
         if category_slug:
             products = products.filter(category__slug=category_slug)
-        serializer = ProductListSerializer(products, many=True)
-        return success_response(data=serializer.data)
+        paginator = ProductPagination()
+        page = paginator.paginate_queryset(products, request)
+        serializer = ProductListSerializer(page, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
 
 class FeaturedProductsView(APIView):
@@ -78,8 +80,10 @@ class AdminProductListView(APIView):
 
     def get(self, request):
         products = Product.objects.all().select_related('category').prefetch_related('subcategories')
-        serializer = ProductDetailSerializer(products, many=True)
-        return success_response(data=serializer.data)
+        paginator = AdminProductPagination()
+        page = paginator.paginate_queryset(products, request)
+        serializer = ProductDetailSerializer(page, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
     def post(self, request):
         serializer = ProductWriteSerializer(data=request.data)
