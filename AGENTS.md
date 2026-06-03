@@ -144,11 +144,11 @@ backend/
 
 ### Auth
 
-- SimpleJWT — access (60 min) + refresh (7 days) tokens with rotation + blacklist
+- SimpleJWT — access (**15 min**) + refresh (7 days) tokens with rotation + blacklist
 - `IsAdminUser` permission: `is_authenticated AND is_staff`
 - Frontend stores tokens in cookies with `secure: true`, `sameSite: strict`
 - Auto-refresh on 401 via Axios interceptor — redirects to `/admin/login` on failure
-- Login rate-limited: **5 requests/minute**
+- Login rate-limited: **5/min** | Token refresh rate-limited: **10/min**
 
 ### Security Conventions
 
@@ -265,10 +265,12 @@ GET|PATCH|DELETE      /api/admin/inquiries/{id}/
 5. **`use client`** — mark components client-side only if they use hooks/browser APIs
 6. **Framer Motion** — used for nav animations; avoid adding heavy motion to non-nav components unless intentional
 7. **Admin route guard** — `frontend/middleware.ts` protects all `/admin/*` — checks cookie existence; API interceptor handles 401
-8. **Throttling** — login: 5/min, inquiry create: 3/min, anon global: 200/day — do not remove these
+8. **Throttling** — login: 5/min, inquiry create: 3/min, token refresh: 10/min — applied per-view via `ScopedRateThrottle`; no global default throttle class
 9. **MIME validation** — image uploads use `filetype.guess(header)` on actual bytes — never trust `file.content_type`
-10. **Settings allowlist** — `site_settings/serializers.py` has `ALLOWED_SETTING_KEYS` — add new keys there before using them
+10. **Settings allowlist** — `site_settings/serializers.py` has `ALLOWED_SETTING_KEYS` — add new keys there before using them; public GET also filters to this allowlist
 11. **Test setUp pattern** — admin tests use `client.force_authenticate(user=self.admin)` not API login (avoids throttle in test suite)
+12. **Paginated API responses** — `GET /api/products/` and admin list endpoints return `{ count, next, previous, results }`. Frontend service layer normalizes this via `normalizePaginated()` in `services/products.ts` and `services/inquiries.ts`. Components always receive `{ success, data: [...] }` shape — never touch raw paginated format in components.
+13. **Product detail ISR** — `app/(public)/products/[slug]/page.tsx` is an async server component with `generateStaticParams` (pre-builds all product pages) and `revalidate = 300` (5 min ISR). `ProductDetailClient` accepts `initialProduct` prop — skips client fetch when provided.
 
 ---
 

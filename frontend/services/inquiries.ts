@@ -21,7 +21,11 @@ export const inquiryService = {
   async adminGetAll(status?: string) {
     const params = status ? { status } : {}
     const response = await api.get('/admin/inquiries/', { params })
-    return response.data
+    const body = response.data
+    if (body && typeof body === 'object' && 'results' in body) {
+      return { success: true, message: 'Success', data: body.results, errors: null }
+    }
+    return body
   },
 
   async adminUpdateStatus(id: number, status: string) {

@@ -11,7 +11,7 @@ Luxury perfume brand showcase website for M.M Attarwala, Vadodara, Gujarat. Admi
 | Frontend | Next.js 14 (App Router, TypeScript) |
 | Styling | Tailwind CSS + Framer Motion |
 | Backend | Django 5 + Django REST Framework |
-| Auth | SimpleJWT (admin-only, rate-limited) |
+| Auth | SimpleJWT (admin-only, 15min access token, rate-limited) |
 | Database | MySQL 8 (with performance indexes) |
 | Images | Cloudinary (production) / Local filesystem (dev) |
 | File Validation | `filetype` — byte-level MIME detection |
@@ -165,7 +165,7 @@ POST /api/inquiries/             Submit custom fragrance request [3/min rate lim
 
 ```
 POST /api/auth/login/            Login → {access, refresh, user} [5/min rate limit]
-POST /api/auth/token/refresh/    Refresh token
+POST /api/auth/token/refresh/    Refresh token [10/min rate limit]
 POST /api/auth/logout/           Logout (blacklists token)
 GET  /api/auth/me/               Current admin user (JWT required)
 POST /api/auth/change-password/  Change password (JWT required)
