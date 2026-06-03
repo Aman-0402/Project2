@@ -1,6 +1,6 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import { CONFIG, AUTH_TOKEN_KEY, REFRESH_TOKEN_KEY } from '@/constants/config'
+import { CONFIG, AUTH_TOKEN_KEY, REFRESH_TOKEN_KEY, COOKIE_OPTIONS_ACCESS, COOKIE_OPTIONS_REFRESH } from '@/constants/config'
 
 const api = axios.create({
   baseURL: CONFIG.apiUrl,
@@ -36,9 +36,9 @@ api.interceptors.response.use(
         try {
           const { data } = await axios.post(`${CONFIG.apiUrl}/auth/token/refresh/`, { refresh })
           const newAccess = data.access
-          Cookies.set(AUTH_TOKEN_KEY, newAccess, { expires: 1 / 24 }) // 1 hour
+          Cookies.set(AUTH_TOKEN_KEY, newAccess, COOKIE_OPTIONS_ACCESS)
           if (data.refresh) {
-            Cookies.set(REFRESH_TOKEN_KEY, data.refresh, { expires: 7 })
+            Cookies.set(REFRESH_TOKEN_KEY, data.refresh, COOKIE_OPTIONS_REFRESH)
           }
           original.headers.Authorization = `Bearer ${newAccess}`
           return api(original)

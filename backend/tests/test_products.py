@@ -32,7 +32,7 @@ class ProductPublicTests(TestCase):
     def test_list_products_returns_only_active(self):
         response = self.client.get('/api/products/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        names = [p['name'] for p in response.data['data']]
+        names = [p['name'] for p in response.data['results']]
         self.assertIn('Royal Oudh', names)
         self.assertNotIn('Hidden Gem', names)
 
@@ -53,7 +53,7 @@ class ProductPublicTests(TestCase):
     def test_filter_by_category(self):
         response = self.client.get('/api/products/?category=oud')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data['data']), 1)
+        self.assertEqual(len(response.data['results']), 1)
 
 
 class ProductAdminTests(TestCase):
@@ -63,12 +63,7 @@ class ProductAdminTests(TestCase):
             username='admin', password='admin123', email='a@test.com'
         )
         self.category = Category.objects.create(name='Floral')
-        # Get token
-        response = self.client.post('/api/auth/login/', {
-            'username': 'admin', 'password': 'admin123'
-        })
-        token = response.data['data']['access']
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
+        self.client.force_authenticate(user=self.admin)
 
     def test_admin_create_product(self):
         response = self.client.post('/api/admin/products/', {
@@ -102,7 +97,7 @@ class ProductAdminTests(TestCase):
         self.assertFalse(Product.objects.filter(id=product.id).exists())
 
     def test_unauthenticated_cannot_create(self):
-        self.client.credentials()
+        self.client.force_authenticate(user=None)
         response = self.client.post('/api/admin/products/', {'name': 'X', 'price': '10.00'})
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 

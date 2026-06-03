@@ -25,10 +25,13 @@ python-dotenv==1.0.1
 # Slugify
 python-slugify==8.0.4
 
-# Development
-pylint==3.2.5
-autopep8==2.3.1
+# File type detection — pure Python, no system dependencies
+filetype==1.2.0
 
 # Production
 gunicorn==22.0.0
 whitenoise==6.7.0
+
+# Development only — install separately: pip install pylint autopep8
+# pylint==3.2.5
+# autopep8==2.3.1

@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react'
 import Cookies from 'js-cookie'
 import { authService } from '@/services/auth'
-import { AUTH_TOKEN_KEY, REFRESH_TOKEN_KEY, ROUTES } from '@/constants/config'
+import { AUTH_TOKEN_KEY, REFRESH_TOKEN_KEY, ROUTES, COOKIE_OPTIONS_ACCESS, COOKIE_OPTIONS_REFRESH } from '@/constants/config'
 import type { AdminUser, LoginCredentials } from '@/types'
 import { useRouter } from 'next/navigation'
 
@@ -44,8 +44,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const res = await authService.login(credentials)
       if (res.success && res.data) {
-        Cookies.set(AUTH_TOKEN_KEY, res.data.access, { expires: 1 / 24, sameSite: 'strict' })
-        Cookies.set(REFRESH_TOKEN_KEY, res.data.refresh, { expires: 7, sameSite: 'strict' })
+        Cookies.set(AUTH_TOKEN_KEY, res.data.access, COOKIE_OPTIONS_ACCESS)
+        Cookies.set(REFRESH_TOKEN_KEY, res.data.refresh, COOKIE_OPTIONS_REFRESH)
         setUser(res.data.user)
         return { success: true }
       }

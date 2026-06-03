@@ -3,6 +3,7 @@ Base Django settings for LUXE PARFUM backend.
 All environments inherit from this.
 """
 import os
+import sys
 from pathlib import Path
 from datetime import timedelta
 from dotenv import load_dotenv
@@ -12,7 +13,20 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-SECRET_KEY = os.environ.get('SECRET_KEY', 'change-me-in-production')
+_secret_key = os.environ.get('SECRET_KEY')
+_is_dev_command = any(cmd in sys.argv for cmd in ('runserver', 'shell', 'migrate', 'makemigrations', 'seed_data', 'test', 'collectstatic'))
+_settings_module = os.environ.get('DJANGO_SETTINGS_MODULE', '')
+
+if not _secret_key:
+    if _is_dev_command or _settings_module.endswith('development'):
+        _secret_key = 'dev-only-insecure-key-do-not-use-in-production'
+    else:
+        raise RuntimeError(
+            "SECRET_KEY environment variable is not set. "
+            "Refusing to start in non-development mode."
+        )
+
+SECRET_KEY = _secret_key
 
 DEBUG = False
 
@@ -51,6 +65,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django.middleware.gzip.GZipMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -142,6 +157,17 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 12,
+    'EXCEPTION_HANDLER': 'utils.exceptions.custom_exception_handler',
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '200/day',
+        'user': '1000/day',
+        'login': '5/minute',
+        'inquiry_create': '3/minute',
+    },
 }
 
 # ---- JWT ----

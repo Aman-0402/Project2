@@ -1,7 +1,9 @@
 import os
 import uuid
+import filetype
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
+from rest_framework.pagination import PageNumberPagination
 from django.conf import settings
 from apps.authentication.permissions import IsAdminUser
 from utils.response import (
@@ -10,8 +12,26 @@ from utils.response import (
 from .models import Product
 from .serializers import ProductListSerializer, ProductDetailSerializer, ProductWriteSerializer
 
+
+class ProductPagination(PageNumberPagination):
+    page_size = 24
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+
+class AdminProductPagination(PageNumberPagination):
+    page_size = 50
+    page_size_query_param = 'page_size'
+    max_page_size = 200
+
 MAX_IMAGE_SIZE = 2 * 1024 * 1024  # 2 MB
-ALLOWED_IMAGE_TYPES = ('image/jpeg', 'image/jpg', 'image/png', 'image/webp')
+
+# Maps validated MIME type (from file bytes) to safe extension
+MIME_TO_EXT = {
+    'image/jpeg': '.jpg',
+    'image/png': '.png',
+    'image/webp': '.webp',
+}
 
 
 class ProductListView(APIView):
@@ -19,12 +39,14 @@ class ProductListView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        products = Product.objects.filter(is_active=True).select_related('category')
+        products = Product.objects.filter(is_active=True).select_related('category').prefetch_related('subcategories')
         category_slug = request.query_params.get('category')
         if category_slug:
             products = products.filter(category__slug=category_slug)
-        serializer = ProductListSerializer(products, many=True)
-        return success_response(data=serializer.data)
+        paginator = ProductPagination()
+        page = paginator.paginate_queryset(products, request)
+        serializer = ProductListSerializer(page, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
 
 class FeaturedProductsView(APIView):
@@ -57,9 +79,11 @@ class AdminProductListView(APIView):
     permission_classes = [IsAdminUser]
 
     def get(self, request):
-        products = Product.objects.all().select_related('category')
-        serializer = ProductDetailSerializer(products, many=True)
-        return success_response(data=serializer.data)
+        products = Product.objects.all().select_related('category').prefetch_related('subcategories')
+        paginator = AdminProductPagination()
+        page = paginator.paginate_queryset(products, request)
+        serializer = ProductDetailSerializer(page, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
     def post(self, request):
         serializer = ProductWriteSerializer(data=request.data)
@@ -131,14 +155,19 @@ class AdminImageUploadView(APIView):
         if not file:
             return error_response(message='No image file provided.')
 
-        if file.content_type not in ALLOWED_IMAGE_TYPES:
-            return error_response(message='Invalid file type. Use JPEG, PNG, or WebP.')
-
         if file.size > MAX_IMAGE_SIZE:
             return error_response(message='Image exceeds 2 MB limit.')
 
+        # Validate actual file content — not the user-supplied Content-Type header
+        header = file.read(512)
+        file.seek(0)
+        kind = filetype.guess(header)
+        detected_mime = kind.mime if kind else None
+        ext = MIME_TO_EXT.get(detected_mime)
+        if not ext:
+            return error_response(message='Invalid file type. Use JPEG, PNG, or WebP.')
+
         try:
-            ext = os.path.splitext(file.name)[1].lower() or '.jpg'
             filename = f"{uuid.uuid4().hex}{ext}"
             upload_dir = os.path.join(settings.MEDIA_ROOT, 'products')
             os.makedirs(upload_dir, exist_ok=True)

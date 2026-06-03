@@ -33,3 +33,16 @@ export const ROUTES = {
 
 export const AUTH_TOKEN_KEY = 'luxe_access_token'
 export const REFRESH_TOKEN_KEY = 'luxe_refresh_token'
+
+// Secure cookie options — `secure` only on HTTPS (production)
+export const COOKIE_OPTIONS_ACCESS = {
+  expires: 1 / 24,
+  sameSite: 'strict' as const,
+  secure: process.env.NODE_ENV === 'production',
+}
+
+export const COOKIE_OPTIONS_REFRESH = {
+  expires: 7,
+  sameSite: 'strict' as const,
+  secure: process.env.NODE_ENV === 'production',
+}

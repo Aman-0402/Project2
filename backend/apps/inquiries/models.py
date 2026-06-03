@@ -25,6 +25,10 @@ class FragranceRequest(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['status'], name='idx_inquiry_status'),
+            models.Index(fields=['-created_at'], name='idx_inquiry_created_at'),
+        ]
 
     def __str__(self):
         return f'"{self.fragrance_name}" by {self.customer_name}'

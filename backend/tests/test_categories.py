@@ -31,11 +31,7 @@ class CategoryAdminTests(TestCase):
         self.admin = User.objects.create_superuser(
             username='admin', password='admin123', email='a@test.com'
         )
-        response = self.client.post('/api/auth/login/', {
-            'username': 'admin', 'password': 'admin123'
-        })
-        token = response.data['data']['access']
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
+        self.client.force_authenticate(user=self.admin)
 
     def test_admin_create_category(self):
         response = self.client.post('/api/categories/', {'name': 'Oriental'})

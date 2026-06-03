@@ -18,6 +18,9 @@ class CategorySerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'slug', 'created_at']
 
     def get_product_count(self, obj):
+        # Prefer annotated value (set by CategoryListView) to avoid N+1
+        if hasattr(obj, 'active_product_count'):
+            return obj.active_product_count
         return obj.products.filter(is_active=True).count()
 
 

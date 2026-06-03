@@ -1,3 +1,4 @@
+from django.db.models import Count, Q
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from apps.authentication.permissions import IsAdminUser
@@ -17,7 +18,9 @@ class CategoryListView(APIView):
         return [AllowAny()]
 
     def get(self, request):
-        categories = Category.objects.all()
+        categories = Category.objects.annotate(
+            active_product_count=Count('products', filter=Q(products__is_active=True))
+        ).prefetch_related('subcategories')
         serializer = CategorySerializer(categories, many=True)
         return success_response(data=serializer.data)
 

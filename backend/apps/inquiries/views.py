@@ -1,5 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
+from rest_framework.throttling import ScopedRateThrottle
+from rest_framework.pagination import PageNumberPagination
 from apps.authentication.permissions import IsAdminUser
 from utils.response import (
     success_response, error_response, created_response, not_found_response
@@ -12,9 +14,17 @@ from .serializers import (
 )
 
 
+class InquiryPagination(PageNumberPagination):
+    page_size = 25
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+
 class FragranceRequestCreateView(APIView):
     """POST — public, no auth required. Saves custom fragrance inquiry."""
     permission_classes = [AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'inquiry_create'
 
     def post(self, request):
         serializer = FragranceRequestWriteSerializer(data=request.data)
@@ -36,8 +46,10 @@ class AdminFragranceRequestListView(APIView):
         status_filter = request.query_params.get('status')
         if status_filter in [FragranceRequest.STATUS_NEW, FragranceRequest.STATUS_CONTACTED, FragranceRequest.STATUS_COMPLETED]:
             inquiries = inquiries.filter(status=status_filter)
-        serializer = FragranceRequestSerializer(inquiries, many=True)
-        return success_response(data=serializer.data)
+        paginator = InquiryPagination()
+        page = paginator.paginate_queryset(inquiries, request)
+        serializer = FragranceRequestSerializer(page, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
 
 class AdminFragranceRequestDetailView(APIView):

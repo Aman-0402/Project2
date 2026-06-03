@@ -3,9 +3,16 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.http import JsonResponse
+
+
+def health_check(request):
+    return JsonResponse({'status': 'ok'})
+
 
 urlpatterns = [
-    path('django-admin/', admin.site.urls),
+    path('_panel/mma-internal/', admin.site.urls),
+    path('api/health/', health_check),
 
     # API routes — all app routers mount at /api/
     path('api/auth/', include('apps.authentication.urls')),

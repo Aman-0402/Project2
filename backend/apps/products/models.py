@@ -33,6 +33,11 @@ class Product(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['is_active', 'is_featured'], name='idx_product_active_featured'),
+            models.Index(fields=['is_active', 'category'], name='idx_product_active_category'),
+            models.Index(fields=['-created_at'], name='idx_product_created_at'),
+        ]
 
     def __str__(self):
         return self.name
