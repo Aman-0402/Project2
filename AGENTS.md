@@ -47,12 +47,21 @@ frontend/
 │   ├── admin/               # Admin-specific components
 │   └── whatsapp/            # WhatsApp float button
 ├── sections/          # Homepage sections (Hero, BrandStory, WhatsAppCTA, etc.)
+├── services/
+│   ├── api.ts         # Axios instance — JWT interceptor, auto-refresh on 401
+│   ├── auth.ts        # authService.login(), logout(), getMe()
+│   ├── products.ts    # Product API calls
+│   ├── categories.ts  # Category API calls
+│   ├── inquiries.ts   # Fragrance request API calls
+│   └── settings.ts    # Site settings API calls
 ├── constants/
-│   └── config.ts      # CONFIG object (brandName, brandTagline, social URLs, ROUTES)
+│   └── config.ts      # CONFIG, ROUTES, AUTH_TOKEN_KEY, COOKIE_OPTIONS_ACCESS/REFRESH
 ├── context/
 │   └── AuthContext.tsx  # JWT auth state, login/logout
+├── types/             # TypeScript interfaces (api.ts, auth.ts, product.ts, etc.)
 ├── utils/
-│   └── whatsapp.ts    # buildWhatsAppUrl() helper
+│   └── whatsapp.ts    # buildWhatsAppUrl(), buildProductBuyUrl(), etc.
+├── middleware.ts      # Protects /admin/* routes — cookie existence check
 └── public/
     └── logo.png       # Brand logo — used in Navbar and Footer
 ```
@@ -64,8 +73,22 @@ All brand constants live in `frontend/constants/config.ts`:
 - `CONFIG.brandTagline` — "THE ART OF SCENT"
 - `CONFIG.instagram`, `CONFIG.facebook`, `CONFIG.youtube`
 - `ROUTES.*` — all page routes
+- `AUTH_TOKEN_KEY` / `REFRESH_TOKEN_KEY` — cookie names
+- `COOKIE_OPTIONS_ACCESS` — `{ expires: 1/24, sameSite: 'strict', secure: true in prod }`
+- `COOKIE_OPTIONS_REFRESH` — `{ expires: 7, sameSite: 'strict', secure: true in prod }`
 
-**Never hardcode brand name or routes. Always use CONFIG / ROUTES.**
+**Never hardcode brand name, routes, or cookie options. Always use CONFIG / ROUTES / COOKIE_OPTIONS_*.**
+
+### Security Headers
+
+`next.config.mjs` sets security headers on all routes:
+- `Content-Security-Policy` — `default-src 'self'`, Cloudinary images, backend connect
+- `X-Frame-Options: DENY`
+- `X-Content-Type-Options: nosniff`
+- `Referrer-Policy: strict-origin-when-cross-origin`
+- `Permissions-Policy: camera=(), microphone=()`
+
+CSP uses `unsafe-eval` in dev (HMR) and drops it in production. Do not add `unsafe-inline` for scripts in production.
 
 ### Styling
 
@@ -143,12 +166,16 @@ backend/
 
 ```bash
 cd backend
-venv\Scripts\activate          # Windows
-python manage.py runserver     # http://localhost:8000
+venv\Scripts\activate                        # Windows
+# source venv/bin/activate                  # macOS/Linux
+
+python manage.py runserver                   # http://localhost:8000 — defaults to development settings
 python manage.py migrate
-python manage.py seed_data     # Creates admin + categories
-python manage.py test tests --verbosity=2
+python manage.py seed_data                   # Creates admin + 6 categories
+python manage.py test tests --verbosity=2    # 21 tests — also runs on push via GitHub Actions
 ```
+
+`manage.py` defaults `DJANGO_SETTINGS_MODULE` to `config.settings.development`. Production uses `config.settings.production` set via Render env vars.
 
 ### Frontend
 

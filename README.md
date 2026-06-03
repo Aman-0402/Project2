@@ -127,7 +127,7 @@ DB_PASSWORD=
 DB_HOST=localhost
 DB_PORT=3306
 
-# Cloudinary (optional — not active in dev, images stored locally)
+# Cloudinary — not used in dev (local media), required in production
 CLOUDINARY_CLOUD_NAME=
 CLOUDINARY_API_KEY=
 CLOUDINARY_API_SECRET=
@@ -174,14 +174,15 @@ POST /api/auth/change-password/  Change password (JWT required)
 ### Admin Endpoints (JWT required)
 
 ```
-GET|POST        /api/admin/products/
+GET|POST              /api/admin/products/                    Paginated list + create
 GET|PUT|PATCH|DELETE  /api/admin/products/{id}/
-POST            /api/categories/
-PUT             /api/admin/categories/{id}/
-DELETE          /api/admin/categories/{id}/
-PUT             /api/admin/settings/
-GET             /api/admin/inquiries/           (filter: ?status=new|contacted|completed)
-GET|PATCH|DELETE  /api/admin/inquiries/{id}/
+POST                  /api/admin/upload-image/                MIME-validated image upload (max 2MB)
+POST                  /api/categories/
+PUT                   /api/admin/categories/{id}/
+DELETE                /api/admin/categories/{id}/
+PUT                   /api/admin/settings/                    Key allowlist enforced
+GET                   /api/admin/inquiries/                   Paginated (filter: ?status=new|contacted|completed)
+GET|PATCH|DELETE      /api/admin/inquiries/{id}/
 ```
 
 ---
