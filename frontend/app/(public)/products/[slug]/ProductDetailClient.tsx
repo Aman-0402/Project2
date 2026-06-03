@@ -21,10 +21,14 @@ const NOTE_LABELS: Record<string, string> = {
   base: 'Base Notes',
 }
 
-export default function ProductDetailClient() {
+interface Props {
+  initialProduct?: Product
+}
+
+export default function ProductDetailClient({ initialProduct }: Props) {
   const params = useParams<{ slug: string }>()
-  const [product, setProduct] = useState<Product | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [product, setProduct] = useState<Product | null>(initialProduct ?? null)
+  const [isLoading, setIsLoading] = useState(!initialProduct)
   const [notFound, setNotFound] = useState(false)
   const [activeSlot, setActiveSlot] = useState(0)
   const [direction, setDirection] = useState(0)
@@ -42,6 +46,8 @@ export default function ProductDetailClient() {
   }, [])
 
   useEffect(() => {
+    // Skip client fetch — data already provided by SSR via initialProduct prop
+    if (initialProduct) return
     if (!params.slug) return
     productService.getBySlug(params.slug)
       .then((res) => {
@@ -50,7 +56,7 @@ export default function ProductDetailClient() {
       })
       .catch(() => setNotFound(true))
       .finally(() => setIsLoading(false))
-  }, [params.slug])
+  }, [params.slug, initialProduct])
 
   if (isLoading) {
     return (
