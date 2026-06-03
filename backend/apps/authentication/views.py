@@ -3,9 +3,15 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.throttling import ScopedRateThrottle
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework_simplejwt.views import TokenRefreshView
 from utils.response import success_response, error_response, unauthorized_response
 from .serializers import LoginSerializer, AdminUserSerializer
 from .permissions import IsAdminUser
+
+
+class ThrottledTokenRefreshView(TokenRefreshView):
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'token_refresh'
 
 
 class LoginView(APIView):

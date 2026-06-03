@@ -158,22 +158,18 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 12,
     'EXCEPTION_HANDLER': 'utils.exceptions.custom_exception_handler',
-    'DEFAULT_THROTTLE_CLASSES': [
-        'rest_framework.throttling.AnonRateThrottle',
-        'rest_framework.throttling.UserRateThrottle',
-    ],
+    # No global DEFAULT_THROTTLE_CLASSES — throttling applied per-view via ScopedRateThrottle
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '200/day',
-        'user': '1000/day',
         'login': '5/minute',
         'inquiry_create': '3/minute',
+        'token_refresh': '10/minute',
     },
 }
 
 # ---- JWT ----
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(
-        minutes=int(os.environ.get('JWT_ACCESS_TOKEN_LIFETIME_MINUTES', 60))
+        minutes=int(os.environ.get('JWT_ACCESS_TOKEN_LIFETIME_MINUTES', 15))
     ),
     'REFRESH_TOKEN_LIFETIME': timedelta(
         days=int(os.environ.get('JWT_REFRESH_TOKEN_LIFETIME_DAYS', 7))
