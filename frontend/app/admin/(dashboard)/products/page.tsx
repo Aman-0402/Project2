@@ -4,18 +4,16 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
+import Swal from 'sweetalert2'
 import { productService } from '@/services/products'
 import { ROUTES } from '@/constants/config'
 import { formatPrice } from '@/utils/formatters'
-import { ConfirmModal } from '@/components/ui/Modal'
 import NeoToggle from '@/components/admin/NeoToggle'
 import type { Product } from '@/types'
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [deleteTarget, setDeleteTarget] = useState<Product | null>(null)
-  const [isDeleting, setIsDeleting] = useState(false)
   const [error, setError] = useState('')
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive' | 'featured'>('all')
@@ -30,14 +28,23 @@ export default function AdminProductsPage() {
 
   useEffect(() => { loadProducts() }, [loadProducts])
 
-  async function handleDelete() {
-    if (!deleteTarget) return
-    setIsDeleting(true)
-    const res = await productService.adminDelete(deleteTarget.id)
-    setIsDeleting(false)
+  async function handleDelete(product: Product) {
+    const result = await Swal.fire({
+      title: 'Delete Product?',
+      text: `"${product.name}" will be permanently deleted. This cannot be undone.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#b91c1c',
+      cancelButtonColor: '#6b7280',
+      reverseButtons: true,
+    })
+    if (!result.isConfirmed) return
+    const res = await productService.adminDelete(product.id)
     if (res.success) {
-      setProducts((prev) => prev.filter((p) => p.id !== deleteTarget.id))
-      setDeleteTarget(null)
+      setProducts((prev) => prev.filter((p) => p.id !== product.id))
+      Swal.fire({ title: 'Deleted!', text: `"${product.name}" has been removed.`, icon: 'success', timer: 2000, showConfirmButton: false })
     } else {
       setError('Failed to delete product.')
     }
@@ -263,19 +270,27 @@ export default function AdminProductsPage() {
 
                     {/* Actions */}
                     <td className="px-5 py-4 text-right">
-                      <div className="flex items-center justify-end gap-4">
+                      <div className="flex items-center justify-end gap-3">
+                        {/* Edit — named group so hover is isolated */}
                         <Link
                           href={ROUTES.adminProductEdit(product.id)}
-                          className="text-brown/40 hover:text-gold text-xs font-sans uppercase tracking-luxury transition-colors"
+                          className="group/edit relative flex items-center justify-start w-[90px] h-9 px-4 bg-black text-white font-bold text-xs rounded-[10px] shadow-[4px_4px_0px_#000] overflow-hidden transition-all duration-300 active:translate-x-[3px] active:translate-y-[3px] active:shadow-[2px_2px_0px_#fff]"
                         >
-                          Edit
+                          <span className="transition-colors duration-300 group-hover/edit:text-transparent select-none">Edit</span>
+                          <svg viewBox="0 0 512 512" className="absolute right-4 w-3 fill-white transition-all duration-300 group-hover/edit:left-1/2 group-hover/edit:-translate-x-1/2 group-hover/edit:right-auto">
+                            <path d="M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1v32c0 8.8 7.2 16 16 16h32zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z" />
+                          </svg>
                         </Link>
+                        {/* Delete — named group so hover is isolated */}
                         <button
                           type="button"
-                          onClick={() => setDeleteTarget(product)}
-                          className="text-brown/40 hover:text-red-500 text-xs font-sans uppercase tracking-luxury transition-colors"
+                          onClick={() => handleDelete(product)}
+                          className="group/delete relative flex items-center justify-start w-[90px] h-9 px-4 bg-red-700 text-white font-bold text-xs rounded-[10px] shadow-[4px_4px_0px_#7f1d1d] overflow-hidden transition-all duration-300 active:translate-x-[3px] active:translate-y-[3px] active:shadow-[2px_2px_0px_#fff]"
                         >
-                          Delete
+                          <span className="transition-colors duration-300 group-hover/delete:text-transparent select-none">Delete</span>
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="absolute right-4 w-3 stroke-white transition-all duration-300 group-hover/delete:left-1/2 group-hover/delete:-translate-x-1/2 group-hover/delete:right-auto">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
                         </button>
                       </div>
                     </td>
@@ -287,15 +302,6 @@ export default function AdminProductsPage() {
         )}
       </div>
 
-      <ConfirmModal
-        isOpen={!!deleteTarget}
-        onClose={() => setDeleteTarget(null)}
-        onConfirm={handleDelete}
-        title="Delete Product"
-        message={`Are you sure you want to delete "${deleteTarget?.name}"? This action cannot be undone.`}
-        confirmLabel="Delete"
-        isLoading={isDeleting}
-      />
     </div>
   )
 }
